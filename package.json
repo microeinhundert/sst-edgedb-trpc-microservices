@@ -17,8 +17,7 @@
     "sst-console": "sst console",
     "sst-deploy": "sst deploy",
     "sst-remove": "sst remove",
-    "sst-start": "sst start",
-    "watch": "turbo run watch --parallel"
+    "sst-start": "sst start"
   },
   "eslintConfig": {
     "extends": [

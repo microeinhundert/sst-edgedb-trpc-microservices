@@ -1,5 +1,5 @@
 {
   "name": "my-sst-app",
   "region": "eu-central-1",
-  "main": "packages/sst/stacks/dist/index.js"
+  "main": "packages/sst/stacks/src/index.ts"
 }
