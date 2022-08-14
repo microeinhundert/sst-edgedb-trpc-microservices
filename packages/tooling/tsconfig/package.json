@@ -7,17 +7,17 @@
     ".": {
       "default": "./src/index.js"
     },
-    "./presets/react-package.json": {
-      "default": "./presets/react-package.json"
+    "./presets/package-preset.json": {
+      "default": "./presets/package-preset.json"
     },
-    "./presets/typescript-package.json": {
-      "default": "./presets/typescript-package.json"
+    "./presets/service-preset.json": {
+      "default": "./presets/service-preset.json"
     },
-    "./presets/vite-app.json": {
-      "default": "./presets/vite-app.json"
-    },
-    "./presets/service.json": {
-      "default": "./presets/service.json"
+    "./presets/vite-app-preset.json": {
+      "default": "./presets/vite-app-preset.json"
     }
+  },
+  "dependencies": {
+    "typescript": "^4.7.4"
   }
 }

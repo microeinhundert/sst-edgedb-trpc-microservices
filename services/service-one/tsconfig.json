@@ -1,5 +1,5 @@
 {
-  "extends": "@sst-app/tsconfig/presets/service.json",
+  "extends": "@sst-app/tsconfig/presets/service-preset.json",
   "compilerOptions": {
     "baseUrl": "."
   },

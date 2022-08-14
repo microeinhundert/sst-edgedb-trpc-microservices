@@ -1,5 +1,5 @@
 {
-  "extends": "@sst-app/tsconfig/presets/typescript-package.json",
+  "extends": "@sst-app/tsconfig/presets/package-preset.json",
   "compilerOptions": {
     "baseUrl": "."
   },

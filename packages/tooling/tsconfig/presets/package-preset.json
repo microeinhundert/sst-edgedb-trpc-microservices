@@ -1,10 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "React Package",
-  "extends": "./base.json",
+  "display": "Package Preset",
+  "extends": "./base-preset.json",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es2020",
+    "lib": ["esnext"],
     "module": "esnext",
     "jsx": "react-jsx"
   }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Default",
+  "display": "Base Preset",
   "compilerOptions": {
     "baseUrl": ".",
     "composite": false,
@@ -16,13 +16,8 @@
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "resolveJsonModule": true,
     "strict": true
-  },
-  "watchOptions": {
-    "watchFile": "useFsEvents",
-    "watchDirectory": "useFsEvents",
-    "fallbackPolling": "dynamicPriority",
-    "excludeDirectories": ["**/node_modules", "**/.turbo", "**/dist"]
   },
   "exclude": ["node_modules"]
 }

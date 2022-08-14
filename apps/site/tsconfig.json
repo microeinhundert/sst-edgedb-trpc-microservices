@@ -1,5 +1,5 @@
 {
-  "extends": "@sst-app/tsconfig/presets/vite-app.json",
+  "extends": "@sst-app/tsconfig/presets/vite-app-preset.json",
   "compilerOptions": {
     "baseUrl": "."
   },

@@ -31,8 +31,12 @@ function Test() {
   };
 
   return (
-    <div className="p-10 space-y-10">
-      {greet.data ? <div className="text-md">{greet.data.message}</div> : <div className="text-md">Loading...</div>}
+    <div className="space-y-10 p-10">
+      {greet.data ? (
+        <div className="text-md">{greet.data.message}</div>
+      ) : (
+        <div className="text-md">Loading...</div>
+      )}
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <input {...register("firstName", { required: true })} type="text" />

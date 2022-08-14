@@ -1,6 +1,6 @@
 import type { TRPCLink } from "@trpc/client";
 
-import { createMuxLinksForServers } from "../createMuxLinks";
+import { createMuxLinksForServers } from "../createMuxLinksForServers";
 import type { Router } from "../routers/site";
 
 /**

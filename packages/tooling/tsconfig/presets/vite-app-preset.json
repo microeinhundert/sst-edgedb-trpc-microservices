@@ -1,12 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Vite App",
-  "extends": "./base.json",
+  "display": "Vite App Preset",
+  "extends": "./base-preset.json",
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
-    "resolveJsonModule": true,
     "jsx": "react-jsx"
   }
 }
