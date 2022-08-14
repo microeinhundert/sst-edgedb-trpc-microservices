@@ -1,8 +1,7 @@
 {
   "extends": "@sst-app/tsconfig/presets/typescript-package.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist"
+    "baseUrl": "."
   },
   "include": ["src"]
 }

@@ -12,6 +12,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "sst-build": "sst build",
     "sst-console": "sst console",

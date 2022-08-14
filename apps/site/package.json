@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "sst-env -- vite",
-    "build": "tsc && vite build",
-    "lint": "eslint 'src/**/*.ts' 'src/**/*.tsx'"
+    "build": "vite build",
+    "typecheck": "tsc",
+    "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@sst-app/trpc-mux": "^0.0.0",

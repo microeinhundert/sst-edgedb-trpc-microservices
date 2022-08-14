@@ -15,6 +15,9 @@
     },
     "./presets/vite-app.json": {
       "default": "./presets/vite-app.json"
+    },
+    "./presets/service.json": {
+      "default": "./presets/service.json"
     }
   }
 }
