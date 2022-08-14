@@ -1,0 +1,5 @@
+{
+  "extends": "@sst-app/tsconfig/presets/vite-app.json",
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

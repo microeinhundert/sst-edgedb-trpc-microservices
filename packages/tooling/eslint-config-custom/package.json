@@ -1,0 +1,22 @@
+{
+  "name": "@sst-app/eslint-config-custom",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    }
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-turbo": "^0.0.3",
+    "eslint-import-resolver-typescript": "^3.4.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-react": "7.30.1",
+    "eslint-plugin-simple-import-sort": "^7.0.0"
+  }
+}

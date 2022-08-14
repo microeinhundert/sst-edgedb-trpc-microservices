@@ -1,0 +1,16 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.exclude": {
+    ".build": true,
+    ".sst": true,
+    "**/node_modules": true,
+    "**/.turbo": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

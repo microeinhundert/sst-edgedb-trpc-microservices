@@ -1,0 +1,38 @@
+{
+  "name": "@sst-app/trpc-mux",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint 'src/**/*.ts'",
+    "watch": "tsc -w"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@sst-app/eslint-config-custom"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off"
+    },
+    "root": true
+  },
+  "dependencies": {
+    "@sst-app/service-one": "^0.0.0",
+    "@trpc/client": "^9.27.0",
+    "@trpc/server": "^9.27.0"
+  },
+  "devDependencies": {
+    "@sst-app/eslint-config-custom": "^0.0.0",
+    "@sst-app/tsconfig": "^0.0.0",
+    "eslint": "^8.22.0",
+    "typescript": "^4.7.4"
+  }
+}

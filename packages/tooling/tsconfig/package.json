@@ -1,0 +1,20 @@
+{
+  "name": "@sst-app/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    },
+    "./presets/react-package.json": {
+      "default": "./presets/react-package.json"
+    },
+    "./presets/typescript-package.json": {
+      "default": "./presets/typescript-package.json"
+    },
+    "./presets/vite-app.json": {
+      "default": "./presets/vite-app.json"
+    }
+  }
+}

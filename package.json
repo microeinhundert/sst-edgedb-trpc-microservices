@@ -1,26 +1,50 @@
 {
-  "name": "my-turborepo",
+  "name": "sst-app-monorepo",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "services/*",
+    "packages/**/*"
   ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "sst-build": "sst build",
+    "sst-console": "sst console",
+    "sst-deploy": "sst deploy",
+    "sst-remove": "sst remove",
+    "sst-start": "sst start",
+    "watch": "turbo run watch --parallel"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@sst-app/eslint-config-custom"
+    ],
+    "root": true
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "printWidth": 100,
+    "quoteProps": "consistent",
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "useTabs": false
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
-    "prettier": "latest",
-    "turbo": "latest"
+    "@serverless-stack/cli": "1.7.0",
+    "@sst-app/eslint-config-custom": "^0.0.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
+    "turbo": "^1.4.3"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
-  },
-  "dependencies": {},
-  "packageManager": "pnpm@7.2.1"
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
 }
