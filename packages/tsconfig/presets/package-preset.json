@@ -1,10 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Service Preset",
+  "display": "Package Preset",
   "extends": "./base-preset.json",
   "compilerOptions": {
     "target": "es2020",
     "lib": ["esnext"],
-    "module": "esnext"
+    "jsx": "react-jsx"
   }
 }

@@ -17,6 +17,7 @@
       "default": "./presets/vite-app-preset.json"
     }
   },
+  "main": "./src/index.js",
   "dependencies": {
     "typescript": "^4.7.4"
   }

@@ -1,5 +1,5 @@
 {
-  "name": "@sst-app/lambda-utils",
+  "name": "@sst-app/sst-constructs",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,10 +9,11 @@
       "types": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "typecheck": "tsc",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "eslint 'src/**/*.ts'",
+    "typecheck": "tsc"
   },
   "eslintConfig": {
     "extends": [
@@ -21,12 +22,12 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.145.0",
-    "@sst-app/lambda-env": "^0.0.0"
+    "aws-cdk-lib": "2.32.0",
+    "constructs": "^10.1.76"
   },
   "devDependencies": {
-    "@sst-app/eslint-config-custom": "^0.0.0",
-    "@sst-app/tsconfig": "^0.0.0",
+    "@sst-app/eslint-config-custom": "*",
+    "@sst-app/tsconfig": "*",
     "@types/node": "^16"
   }
 }

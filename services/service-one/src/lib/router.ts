@@ -1,27 +1,35 @@
 import { ConfirmSignUpCommand, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
 import { env } from "@sst-app/lambda-env";
+import {
+  confirmSignUpInputSchema,
+  greetInputSchema,
+  signInInputSchema,
+  signUpInputSchema,
+} from "@sst-app/service-one-validators";
 import * as trpc from "@trpc/server";
 import superjson from "superjson";
-import { z } from "zod";
 
 import type { Context } from "./utils/trpc";
 
 export const router = trpc
   .router<Context>()
   .transformer(superjson)
+
+  /**
+   * Greet
+   */
   .query("greet", {
-    input: z.string(),
+    input: greetInputSchema,
     async resolve({ input }) {
-      return { id: input, message: `Hello from service one` };
+      return { id: input, message: "Hello from service one" };
     },
   })
+
+  /**
+   * Sign Up
+   */
   .mutation("signUp", {
-    input: z.object({
-      firstName: z.string(),
-      lastName: z.string(),
-      email: z.string().email(),
-      password: z.string().min(6),
-    }),
+    input: signUpInputSchema,
     async resolve({ input, ctx }) {
       const signUpOutput = await ctx.auth.send(
         new SignUpCommand({
@@ -44,11 +52,12 @@ export const router = trpc
       return signUpOutput;
     },
   })
+
+  /**
+   * Confirm Sign Up
+   */
   .mutation("confirmSignUp", {
-    input: z.object({
-      email: z.string().email(),
-      confirmationCode: z.string().length(6),
-    }),
+    input: confirmSignUpInputSchema,
     async resolve({ input, ctx }) {
       const confirmSignUpOutput = await ctx.auth.send(
         new ConfirmSignUpCommand({
@@ -61,15 +70,20 @@ export const router = trpc
       return confirmSignUpOutput;
     },
   })
+
+  /**
+   * Sign In
+   */
   .mutation("signIn", {
-    input: z.object({
-      email: z.string().email(),
-      password: z.string().min(6),
-    }),
+    input: signInInputSchema,
     async resolve() {
       return {};
     },
   })
+
+  /**
+   * Sign Out
+   */
   .mutation("signOut", {
     async resolve() {
       return {};

@@ -9,10 +9,11 @@
       "types": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "typecheck": "tsc",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "eslint 'src/**/*.ts'",
+    "typecheck": "tsc"
   },
   "eslintConfig": {
     "extends": [
@@ -24,12 +25,12 @@
     "root": true
   },
   "dependencies": {
-    "@sst-app/service-one": "^0.0.0",
+    "@sst-app/service-one": "*",
     "@trpc/client": "^9.27.0",
     "@trpc/server": "^9.27.0"
   },
   "devDependencies": {
-    "@sst-app/eslint-config-custom": "^0.0.0",
-    "@sst-app/tsconfig": "^0.0.0"
+    "@sst-app/eslint-config-custom": "*",
+    "@sst-app/tsconfig": "*"
   }
 }

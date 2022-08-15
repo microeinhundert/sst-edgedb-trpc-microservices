@@ -31,6 +31,8 @@ module.exports = {
     "import/extensions": [
       "error",
       {
+        js: "never",
+        jsx: "never",
         ts: "never",
         tsx: "never",
       },
