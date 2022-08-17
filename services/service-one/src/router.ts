@@ -5,23 +5,12 @@ import superjson from "superjson";
 
 import type { Context } from "./utils/trpc";
 import { confirmSignUpInputSchema } from "./validators/confirmSignUp";
-import { greetInputSchema } from "./validators/greet";
 import { signInInputSchema } from "./validators/signIn";
 import { signUpInputSchema } from "./validators/signUp";
 
 export const router = trpc
   .router<Context>()
   .transformer(superjson)
-
-  /**
-   * Greet
-   */
-  .query("greet", {
-    input: greetInputSchema,
-    async resolve({ input }) {
-      return { id: input, message: "Hello from service one" };
-    },
-  })
 
   /**
    * Sign Up
@@ -37,11 +26,11 @@ export const router = trpc
           UserAttributes: [
             {
               Name: "given_name",
-              Value: input.firstName,
+              Value: input.givenName,
             },
             {
               Name: "family_name",
-              Value: input.lastName,
+              Value: input.familyName,
             },
           ],
         })

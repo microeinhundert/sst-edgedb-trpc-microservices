@@ -11,6 +11,7 @@ const resolver = zodResolver(signUpInputSchema);
 
 export function SignUp() {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -18,17 +19,18 @@ export function SignUp() {
   } = useForm<SignUpInput>({ resolver });
 
   const signUpMutation = trpc.useMutation(["serviceOne.signUp"], {
-    onSuccess: () => {
-      navigate("/auth/confirmSignUp");
+    onSuccess: (_, { email }) => {
+      navigate("/auth/confirmSignUp", { state: { email } });
     }
   });
 
   const onSubmit: SubmitHandler<SignUpInput> = (data) => {
     signUpMutation.mutate({
-      firstName: data.firstName,
-      lastName: data.lastName,
+      givenName: data.givenName,
+      familyName: data.familyName,
       email: data.email,
       password: data.password,
+      passwordConfirmation: data.password,
     });
   };
 
@@ -36,30 +38,36 @@ export function SignUp() {
     <div className="space-y-10 p-10">
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="firstName" className="block mb-2">First Name</label>
-          <input id="firstName" {...register("firstName", { required: true })} type="text" />
-          {errors.firstName?.message && <span className="block text-red-500">{errors.firstName.message}</span>}
+          <label htmlFor="given-name" className="block mb-2">First Name</label>
+          <input id="given-name" {...register("givenName", { required: true })} type="text" autoComplete="given-name" />
+          {errors.givenName?.message && <span className="block text-red-500">{errors.givenName.message}</span>}
         </div>
 
         <div>
-          <label htmlFor="lastName" className="block mb-2">Last Name</label>
-          <input id="lastName" {...register("lastName", { required: true })} type="text" />
-          {errors.lastName?.message && <span className="block text-red-500">{errors.lastName.message}</span>}
+          <label htmlFor="family-name" className="block mb-2">Last Name</label>
+          <input id="family-name" {...register("familyName", { required: true })} type="text" autoComplete="family-name" />
+          {errors.familyName?.message && <span className="block text-red-500">{errors.familyName.message}</span>}
         </div>
 
         <div>
           <label htmlFor="email" className="block mb-2">Email</label>
-          <input id="email" {...register("email", { required: true })} type="email" />
+          <input id="email" {...register("email", { required: true })} type="email" autoComplete="email" />
           {errors.email?.message && <span className="block text-red-500">{errors.email.message}</span>}
         </div>
 
         <div>
           <label htmlFor="password" className="block mb-2">Password</label>
-          <input id="password" {...register("password", { required: true })} type="password" />
+          <input id="password" {...register("password", { required: true })} type="password" autoComplete="new-password" />
           {errors.password?.message && <span className="block text-red-500">{errors.password.message}</span>}
         </div>
 
-        <button type="submit">Sign Up</button>
+        <div>
+          <label htmlFor="password-confirmation" className="block mb-2">Confirm Password</label>
+          <input id="password-confirmation" {...register("passwordConfirmation", { required: true })} type="password" autoComplete="new-password" />
+          {errors.passwordConfirmation?.message && <span className="block text-red-500">{errors.passwordConfirmation.message}</span>}
+        </div>
+
+        <button type="submit">{signUpMutation.isLoading ? 'Signing Up...' : 'Sign Up'}</button>
       </form>
     </div>
   );
