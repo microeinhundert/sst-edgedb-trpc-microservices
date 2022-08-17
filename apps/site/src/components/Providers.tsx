@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { trpc, trpcClient } from "../utils/trpc.js";
+import { trpc, trpcClient } from "../utils/trpc";
 
 const queryClient = new QueryClient();
 
