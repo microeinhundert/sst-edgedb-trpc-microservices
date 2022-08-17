@@ -1,15 +1,13 @@
 import { ConfirmSignUpCommand, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
 import { env } from "@sst-app/lambda-env";
-import {
-  confirmSignUpInputSchema,
-  greetInputSchema,
-  signInInputSchema,
-  signUpInputSchema,
-} from "@sst-app/service-one-validators";
 import * as trpc from "@trpc/server";
 import superjson from "superjson";
 
 import type { Context } from "./utils/trpc";
+import { confirmSignUpInputSchema } from "./validators/confirmSignUp";
+import { greetInputSchema } from "./validators/greet";
+import { signInInputSchema } from "./validators/signIn";
+import { signUpInputSchema } from "./validators/signUp";
 
 export const router = trpc
   .router<Context>()

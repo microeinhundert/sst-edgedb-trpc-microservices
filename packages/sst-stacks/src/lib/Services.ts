@@ -42,7 +42,7 @@ export function ServicesStack({ stack }: StackContext) {
 
   const serviceOneFunction = new Function(stack, "ServiceOne", {
     srcPath: "services/service-one",
-    handler: "src/handlers.main",
+    handler: "handlers.main",
   });
 
   api.addRoutes(

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod/dist/zod.js';
-import type { SignUpInput } from "@sst-app/service-one-validators";
-import { signUpInputSchema } from "@sst-app/service-one-validators";
+import type { SignUpInput } from "@sst-app/service-one/validators";
+import { signUpInputSchema } from "@sst-app/service-one/validators";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
@@ -8,7 +8,7 @@ import { trpc } from "../utils/trpc.js";
 
 const resolver = zodResolver(signUpInputSchema);
 
-function Test() {
+export function SignUp() {
   const {
     register,
     handleSubmit,
@@ -16,8 +16,6 @@ function Test() {
   } = useForm<SignUpInput>({ resolver });
 
   const signUpMutation = trpc.useMutation(["serviceOne.signUp"]);
-
-  const greet = trpc.useQuery(["serviceOne.greet", "Test"]);
 
   const onSubmit: SubmitHandler<SignUpInput> = (data) => {
     signUpMutation.mutate({
@@ -30,11 +28,6 @@ function Test() {
 
   return (
     <div className="space-y-10 p-10">
-      {greet.data ? (
-        <div className="text-md">{greet.data.message}</div>
-      ) : (
-        <div className="text-md">Loading...</div>
-      )}
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <input {...register("firstName", { required: true })} type="text" />
@@ -61,5 +54,3 @@ function Test() {
     </div>
   );
 }
-
-export { Test };

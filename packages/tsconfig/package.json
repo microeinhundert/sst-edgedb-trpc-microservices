@@ -3,20 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "type": "commonjs",
-  "exports": {
-    ".": {
-      "default": "./src/index.js"
-    },
-    "./presets/package-preset.json": {
-      "default": "./presets/package-preset.json"
-    },
-    "./presets/service-preset.json": {
-      "default": "./presets/service-preset.json"
-    },
-    "./presets/vite-app-preset.json": {
-      "default": "./presets/vite-app-preset.json"
-    }
-  },
   "main": "./src/index.js",
   "dependencies": {
     "typescript": "^4.7.4"

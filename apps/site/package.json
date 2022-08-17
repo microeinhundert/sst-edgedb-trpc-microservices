@@ -11,15 +11,17 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.7",
-    "@sst-app/service-one-validators": "*",
+    "@sst-app/service-one": "*",
     "@sst-app/trpc-mux": "*",
     "@trpc/client": "^9.27.0",
     "@trpc/react": "^9.27.0",
     "@trpc/server": "^9.27.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.34.1",
+    "react-hook-form": "^7.34.2",
     "react-query": "^3.39.2",
+    "react-router": "^6.4.0-pre.12",
+    "react-router-dom": "^6.4.0-pre.12",
     "superjson": "^1.9.1",
     "zod": "^3.18.0"
   },
@@ -35,7 +37,7 @@
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8",
-    "vite": "^3.0.7"
+    "vite": "^3.0.8"
   },
   "postcss": {
     "plugins": {

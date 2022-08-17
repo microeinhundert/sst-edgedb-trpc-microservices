@@ -1,10 +1,10 @@
 import { Providers } from "./components/Providers";
-import { Test } from "./components/Test";
+import { SignUp } from "./components/SignUp";
 
 function App() {
   return (
     <Providers>
-      <Test />
+      <SignUp />
     </Providers>
   );
 }

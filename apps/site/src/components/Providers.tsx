@@ -9,12 +9,10 @@ export interface ProvidersProps {
   children: ReactNode;
 }
 
-function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: ProvidersProps) {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </trpc.Provider>
   );
 }
-
-export { Providers };

@@ -3,16 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": {
-      "default": "./src/index.ts",
-      "types": "./src/index.ts"
-    }
-  },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts'",
+    "lint": "eslint 'src/**/*.ts' '*.ts'",
     "typecheck": "tsc"
   },
   "eslintConfig": {
@@ -25,7 +19,6 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.145.0",
     "@sst-app/lambda-env": "*",
     "@sst-app/lambda-utils": "*",
-    "@sst-app/service-one-validators": "*",
     "@trpc/server": "^9.27.0",
     "edgedb": "^0.21.3",
     "superjson": "^1.9.1",

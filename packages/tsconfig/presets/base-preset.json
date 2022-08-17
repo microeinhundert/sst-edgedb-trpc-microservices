@@ -19,6 +19,5 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "strict": true
-  },
-  "exclude": ["node_modules"]
+  }
 }
