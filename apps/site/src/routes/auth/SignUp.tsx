@@ -19,8 +19,10 @@ export function SignUp() {
   } = useForm<SignUpInput>({ resolver });
 
   const signUpMutation = trpc.useMutation(["auth.signUp"], {
-    onSuccess: (_, { email }) => {
-      navigate("/auth/confirmSignUp", { state: { email } });
+    onSuccess: ({ confirmationNeeded }, { email }) => {
+      if (confirmationNeeded) {
+        navigate("/auth/confirmSignUp", { state: { email } });
+      }
     }
   });
 

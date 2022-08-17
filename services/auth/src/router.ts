@@ -45,7 +45,9 @@ export const router = trpc
         ],
       });
 
-      await ctx.auth.send(command);
+      const commandOutput = await ctx.auth.send(command);
+
+      return { confirmationNeeded: !!commandOutput.CodeDeliveryDetails };
     },
   })
 
