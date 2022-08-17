@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { ForgotPasswordInput } from '@sst-app/service-one/src/validators/forgotPassword';
-import { forgotPasswordInputSchema } from '@sst-app/service-one/src/validators/forgotPassword';
+import type { ForgotPasswordInput } from '@sst-app/auth/src/validators/forgotPassword';
+import { forgotPasswordInputSchema } from '@sst-app/auth/src/validators/forgotPassword';
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export function ForgotPassword() {
     formState: { errors },
   } = useForm<ForgotPasswordInput>({ resolver });
 
-  const forgotPasswordMutation = trpc.useMutation(["serviceOne.forgotPassword"], {
+  const forgotPasswordMutation = trpc.useMutation(["auth.forgotPassword"], {
     onSuccess: (_, { email }) => {
       navigate("/auth/confirmForgotPassword", { state: { email } });
     }

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SignUpInput } from "@sst-app/service-one/validators";
-import { signUpInputSchema } from "@sst-app/service-one/validators";
+import type { SignUpInput } from "@sst-app/auth/validators";
+import { signUpInputSchema } from "@sst-app/auth/validators";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export function SignUp() {
     formState: { errors },
   } = useForm<SignUpInput>({ resolver });
 
-  const signUpMutation = trpc.useMutation(["serviceOne.signUp"], {
+  const signUpMutation = trpc.useMutation(["auth.signUp"], {
     onSuccess: (_, { email }) => {
       navigate("/auth/confirmSignUp", { state: { email } });
     }

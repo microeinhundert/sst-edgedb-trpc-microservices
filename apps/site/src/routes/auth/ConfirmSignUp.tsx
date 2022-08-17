@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { ConfirmSignUpInput } from "@sst-app/service-one/validators";
-import { confirmSignUpInputSchema } from "@sst-app/service-one/validators";
+import type { ConfirmSignUpInput } from "@sst-app/auth/validators";
+import { confirmSignUpInputSchema } from "@sst-app/auth/validators";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ export function ConfirmSignUp() {
     formState: { errors },
   } = useForm<ConfirmSignUpInput>({ resolver });
 
-  const confirmSignUpMutation = trpc.useMutation(["serviceOne.confirmSignUp"], {
+  const confirmSignUpMutation = trpc.useMutation(["auth.confirmSignUp"], {
     onSuccess: () => {
       navigate("/");
     },

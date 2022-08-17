@@ -19,7 +19,7 @@
     "root": true
   },
   "dependencies": {
-    "@sst-app/service-one": "*",
+    "@sst-app/auth": "*",
     "@trpc/client": "^9.27.0",
     "@trpc/server": "^9.27.0"
   },

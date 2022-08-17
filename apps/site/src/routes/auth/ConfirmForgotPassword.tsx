@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { ConfirmForgotPasswordInput } from '@sst-app/service-one/src/validators/confirmForgotPassword';
-import { confirmForgotPasswordInputSchema } from '@sst-app/service-one/src/validators/confirmForgotPassword';
+import type { ConfirmForgotPasswordInput } from '@sst-app/auth/src/validators/confirmForgotPassword';
+import { confirmForgotPasswordInputSchema } from '@sst-app/auth/src/validators/confirmForgotPassword';
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ export function ConfirmForgotPassword() {
     formState: { errors },
   } = useForm<ConfirmForgotPasswordInput>({ resolver });
 
-  const confirmForgotPasswordMutation = trpc.useMutation(["serviceOne.confirmForgotPassword"], {
+  const confirmForgotPasswordMutation = trpc.useMutation(["auth.confirmForgotPassword"], {
     onSuccess: (_, { email }) => {
       navigate("/auth/signIn", { state: { email } });
     },

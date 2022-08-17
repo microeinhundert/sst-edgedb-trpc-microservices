@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.7",
-    "@sst-app/service-one": "*",
+    "@sst-app/auth": "*",
     "@sst-app/trpc-mux": "*",
     "@trpc/client": "^9.27.0",
     "@trpc/react": "^9.27.0",

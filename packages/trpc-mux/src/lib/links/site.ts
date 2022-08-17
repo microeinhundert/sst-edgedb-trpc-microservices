@@ -8,6 +8,6 @@ import type { Router } from "../routers/site";
  */
 export function createMuxLinks(baseUrl: string): TRPCLink<Router>[] {
   return createMuxLinksForServers({
-    serviceOne: `${baseUrl}serviceOne`,
+    auth: `${baseUrl}auth`,
   });
 }

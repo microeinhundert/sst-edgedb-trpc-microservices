@@ -37,17 +37,17 @@ export function ServicesStack({ stack }: StackContext) {
   });
 
   /*
-   * Service One
+   * Auth
    */
 
-  const serviceOneFunction = new Function(stack, "ServiceOne", {
-    srcPath: "services/service-one",
+  const authFunction = new Function(stack, "Auth", {
+    srcPath: "services/auth",
     handler: "handlers.main",
   });
 
   api.addRoutes(
     stack,
-    generateTRPCServiceRoutes("serviceOne", serviceOneFunction, {
+    generateTRPCServiceRoutes("auth", authFunction, {
       public: true,
     })
   );

@@ -2,12 +2,12 @@ import type { StackContext } from "@serverless-stack/resources";
 import { Function } from "@serverless-stack/resources";
 
 export function TriggersStack({ stack }: StackContext) {
-  const serviceOnePreSignUpTriggerFunction = new Function(stack, "PreSignUpTrigger", {
-    srcPath: "services/service-one",
+  const authPreSignUpTriggerFunction = new Function(stack, "PreSignUpTrigger", {
+    srcPath: "services/auth",
     handler: "handlers.preSignUp",
   });
 
   return {
-    serviceOnePreSignUpTriggerFunction,
+    authPreSignUpTriggerFunction,
   };
 }
