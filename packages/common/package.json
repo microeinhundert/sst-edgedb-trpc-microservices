@@ -1,5 +1,5 @@
 {
-  "name": "@sst-app/sst-stacks",
+  "name": "@sst-app/common",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,15 +16,10 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/resources": "1.7.0",
-    "@sst-app/sst-constructs": "*",
-    "@sst-app/common": "*",
-    "aws-cdk-lib": "2.32.0",
     "zod": "^3.18.0"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
-    "@sst-app/tsconfig": "*",
-    "@types/node": "^16"
+    "@sst-app/tsconfig": "*"
   }
 }

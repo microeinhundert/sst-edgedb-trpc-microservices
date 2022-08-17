@@ -1,11 +1,10 @@
 import { MIN_PASSWORD_LENGTH_LAX } from "@sst-app/common";
 import { z } from "zod";
 
-export const signUpInputSchema = z
+export const confirmForgotPasswordInputSchema = z
   .object({
-    givenName: z.string().min(1),
-    familyName: z.string().min(1),
     email: z.string().email(),
+    confirmationCode: z.string().length(6),
     password: z.string().min(MIN_PASSWORD_LENGTH_LAX),
     passwordConfirmation: z.string().min(MIN_PASSWORD_LENGTH_LAX),
   })
@@ -14,4 +13,4 @@ export const signUpInputSchema = z
     path: ["passwordConfirmation"],
   });
 
-export type SignUpInput = z.infer<typeof signUpInputSchema>;
+export type ConfirmForgotPasswordInput = z.infer<typeof confirmForgotPasswordInputSchema>;

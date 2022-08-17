@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod/dist/zod.js';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { SignUpInput } from "@sst-app/service-one/validators";
 import { signUpInputSchema } from "@sst-app/service-one/validators";
 import type { SubmitHandler } from "react-hook-form";
@@ -67,7 +67,7 @@ export function SignUp() {
           {errors.passwordConfirmation?.message && <span className="block text-red-500">{errors.passwordConfirmation.message}</span>}
         </div>
 
-        <button type="submit">{signUpMutation.isLoading ? 'Signing Up...' : 'Sign Up'}</button>
+        <button type="submit" className="text-xl">{signUpMutation.isLoading ? 'Signing Up...' : 'Sign Up'}</button>
       </form>
     </div>
   );

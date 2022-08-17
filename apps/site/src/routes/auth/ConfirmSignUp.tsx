@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod/dist/zod.js';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { ConfirmSignUpInput } from "@sst-app/service-one/validators";
 import { confirmSignUpInputSchema } from "@sst-app/service-one/validators";
 import type { SubmitHandler } from "react-hook-form";
@@ -11,10 +11,11 @@ const resolver = zodResolver(confirmSignUpInputSchema);
 
 export function ConfirmSignUp() {
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<ConfirmSignUpInput>({ resolver });
@@ -22,6 +23,11 @@ export function ConfirmSignUp() {
   const confirmSignUpMutation = trpc.useMutation(["serviceOne.confirmSignUp"], {
     onSuccess: () => {
       navigate("/");
+    },
+    onError: (error) => {
+      if (error.data?.stack?.startsWith('CodeMismatchException')) {
+        setError('confirmationCode', { type: "custom", message: "The code you entered is not valid" });
+      }
     }
   });
 
@@ -35,7 +41,7 @@ export function ConfirmSignUp() {
   return (
     <div className="space-y-10 p-10">
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("email", { required: true })} type="hidden" defaultValue={location.state.email} />
+        <input {...register("email", { required: true })} type="hidden" defaultValue={location.state?.email ?? ""} />
 
         <div>
           <label htmlFor="confirmation-code" className="block mb-2">Confirmation Code</label>
@@ -43,7 +49,7 @@ export function ConfirmSignUp() {
           {errors.confirmationCode?.message && <span className="block text-red-500">{errors.confirmationCode.message}</span>}
         </div>
 
-        <button type="submit">{confirmSignUpMutation.isLoading ? 'Confirming Sign Up...' : 'Confirm Sign Up'}</button>
+        <button type="submit" className="text-xl">{confirmSignUpMutation.isLoading ? 'Confirming Sign Up...' : 'Confirm Sign Up'}</button>
       </form>
     </div>
   );

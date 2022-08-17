@@ -19,6 +19,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.145.0",
     "@sst-app/lambda-env": "*",
     "@sst-app/lambda-utils": "*",
+    "@sst-app/common": "*",
     "@trpc/server": "^9.27.0",
     "edgedb": "^0.21.3",
     "superjson": "^1.9.1",
