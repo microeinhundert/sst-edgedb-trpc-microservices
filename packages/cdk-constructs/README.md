@@ -1,3 +1,3 @@
 # CDK Constructs
 
-This package contains CDK constructs used the `sst-stacks` package.
+This package contains CDK constructs used by the `sst-stacks` package.

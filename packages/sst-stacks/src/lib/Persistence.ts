@@ -1,5 +1,5 @@
 import type { StackContext } from "@serverless-stack/resources";
-import { EdgeDB } from "@sst-app/sst-constructs";
+import { EdgeDB } from "@sst-app/cdk-constructs";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 
 import { env } from "./env";

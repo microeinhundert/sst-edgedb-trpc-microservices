@@ -1,4 +1,4 @@
-# SST App
+# SST Microservice Architecture
 
 ## Provisioning Infrastructure
 
