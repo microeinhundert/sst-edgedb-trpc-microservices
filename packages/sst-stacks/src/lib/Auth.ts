@@ -5,12 +5,12 @@ import { PASSWORD_POLICY_LAX } from "@sst-app/common";
 import { TriggersStack } from "./Triggers";
 
 export function AuthStack({ stack }: StackContext) {
-  const { authPreSignUpTriggerFunction } = use(TriggersStack);
+  const { triggerHandlers } = use(TriggersStack);
 
   const auth = new Auth(stack, "Auth", {
     login: ["email"],
     triggers: {
-      preSignUp: authPreSignUpTriggerFunction,
+      preSignUp: triggerHandlers.authPreSignUp,
     },
     cdk: {
       userPool: {

@@ -1,55 +1,37 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { ConfirmSignUpInput } from "@sst-app/auth/validators";
-import { confirmSignUpInputSchema } from "@sst-app/auth/validators";
-import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import { trpc } from "../../utils/trpc";
-
-const resolver = zodResolver(confirmSignUpInputSchema);
+import { useConfirmSignUpForm } from "../../hooks/forms/useConfirmSignUpForm";
 
 export function ConfirmSignUp() {
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const {
-    register,
-    setError,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ConfirmSignUpInput>({ resolver });
-
-  const confirmSignUpMutation = trpc.useMutation(["auth.confirmSignUp"], {
-    onSuccess: () => {
-      navigate("/");
-    },
-    onError: (error) => {
-      if (error.data?.stack?.startsWith('CodeMismatchException')) {
-        setError('confirmationCode', { type: "custom", message: "The code you entered is not valid" });
-      }
-    }
-  });
-
-  const onSubmit: SubmitHandler<ConfirmSignUpInput> = (data) => {
-    confirmSignUpMutation.mutate({
-      email: data.email,
-      confirmationCode: data.confirmationCode,
-    });
-  };
+  const { register, errors, isSubmitting, onSubmit } = useConfirmSignUpForm();
 
   return (
     <div className="space-y-10 p-10">
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("email", { required: true })} type="hidden" defaultValue={location.state?.email ?? ""} />
+      <form className="space-y-6" onSubmit={onSubmit}>
+        <input
+          {...register("email", { required: true })}
+          type="hidden"
+          defaultValue={location.state?.email ?? ""}
+        />
 
         <div>
-          <label htmlFor="confirmation-code" className="block mb-2">Confirmation Code</label>
-          <input id="confirmation-code" {...register("confirmationCode", { required: true })} type="text" />
-          {errors.confirmationCode?.message && <span className="block text-red-500">{errors.confirmationCode.message}</span>}
+          <label htmlFor="confirmation-code" className="mb-2 block">
+            Confirmation Code
+          </label>
+          <input
+            id="confirmation-code"
+            {...register("confirmationCode", { required: true })}
+            type="text"
+          />
+          {errors.confirmationCode?.message && (
+            <span className="block text-red-500">{errors.confirmationCode.message}</span>
+          )}
         </div>
 
-        <button type="submit" className="text-xl">{confirmSignUpMutation.isLoading ? 'Confirming Sign Up...' : 'Confirm Sign Up'}</button>
+        <button type="submit" className="text-xl">
+          {isSubmitting ? "Confirming Sign Up..." : "Confirm Sign Up"}
+        </button>
       </form>
     </div>
   );

@@ -37,7 +37,8 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.7.0",
+    "@serverless-stack/cli": "1.8.0",
+    "@serverless-stack/resources": "1.8.0",
     "@sst-app/eslint-config-custom": "*",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",

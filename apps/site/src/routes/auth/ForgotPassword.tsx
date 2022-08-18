@@ -1,45 +1,29 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { ForgotPasswordInput } from '@sst-app/auth/src/validators/forgotPassword';
-import { forgotPasswordInputSchema } from '@sst-app/auth/src/validators/forgotPassword';
-import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-
-import { trpc } from "../../utils/trpc";
-
-const resolver = zodResolver(forgotPasswordInputSchema);
+import { useForgotPasswordForm } from "../../hooks/forms/useForgotPasswordForm";
 
 export function ForgotPassword() {
-  const navigate = useNavigate();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ForgotPasswordInput>({ resolver });
-
-  const forgotPasswordMutation = trpc.useMutation(["auth.forgotPassword"], {
-    onSuccess: (_, { email }) => {
-      navigate("/auth/confirmForgotPassword", { state: { email } });
-    }
-  });
-
-  const onSubmit: SubmitHandler<ForgotPasswordInput> = (data) => {
-    forgotPasswordMutation.mutate({
-      email: data.email,
-    });
-  };
+  const { register, errors, isSubmitting, onSubmit } = useForgotPasswordForm();
 
   return (
     <div className="space-y-10 p-10">
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-6" onSubmit={onSubmit}>
         <div>
-          <label htmlFor="email" className="block mb-2">Email</label>
-          <input id="email" {...register("email", { required: true })} type="email" autoComplete="email" />
-          {errors.email?.message && <span className="block text-red-500">{errors.email.message}</span>}
+          <label htmlFor="email" className="mb-2 block">
+            Email
+          </label>
+          <input
+            id="email"
+            {...register("email", { required: true })}
+            type="email"
+            autoComplete="email"
+          />
+          {errors.email?.message && (
+            <span className="block text-red-500">{errors.email.message}</span>
+          )}
         </div>
 
-        <button type="submit" className="text-xl">{forgotPasswordMutation.isLoading ? 'Sending Confirmation Code...' : 'Send Confirmation Code'}</button>
+        <button type="submit" className="text-xl">
+          {isSubmitting ? "Sending Confirmation Code..." : "Send Confirmation Code"}
+        </button>
       </form>
     </div>
   );
