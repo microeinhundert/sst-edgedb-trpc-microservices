@@ -1,6 +1,5 @@
 import type { StackContext } from "@serverless-stack/resources";
-import { Function, use } from "@serverless-stack/resources";
-import type { env as functionEnv } from "@sst-app/lambda-env";
+import { Config, Function, use } from "@serverless-stack/resources";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { ApiStack } from "./Api";
@@ -13,12 +12,18 @@ export function ServicesStack({ stack }: StackContext) {
   const { auth } = use(AuthStack);
   const { api } = use(ApiStack);
 
-  const environment: typeof functionEnv = {
-    REGION: stack.region,
-    EDGEDB_DSN_SECRET: edgeDB.connectionSecret.secretArn,
-    USER_POOL_ID: auth.userPoolId,
-    USER_POOL_CLIENT_ID: auth.userPoolClientId,
-  };
+  const REGION = new Config.Parameter(stack, "REGION", {
+    value: stack.region,
+  });
+  const EDGEDB_DSN_SECRET = new Config.Parameter(stack, "EDGEDB_DSN_SECRET", {
+    value: edgeDB.connectionSecret.secretArn,
+  });
+  const USER_POOL_ID = new Config.Parameter(stack, "USER_POOL_ID", {
+    value: auth.userPoolId,
+  });
+  const USER_POOL_CLIENT_ID = new Config.Parameter(stack, "USER_POOL_CLIENT_ID", {
+    value: auth.userPoolClientId,
+  });
 
   stack.setDefaultFunctionProps({
     runtime: "nodejs16.x",
@@ -26,7 +31,7 @@ export function ServicesStack({ stack }: StackContext) {
     bundle: {
       format: "esm",
     },
-    environment,
+    config: [REGION, EDGEDB_DSN_SECRET, USER_POOL_ID, USER_POOL_CLIENT_ID],
     permissions: [
       new PolicyStatement({
         actions: ["secretsmanager:GetSecretValue"],
@@ -41,8 +46,7 @@ export function ServicesStack({ stack }: StackContext) {
    */
 
   const authFunction = new Function(stack, "Auth", {
-    srcPath: "services/auth",
-    handler: "handlers.main",
+    handler: "services/auth/handlers.main",
   });
 
   api.addRoutes(

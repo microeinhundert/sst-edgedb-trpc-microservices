@@ -1,16 +1,12 @@
 import type { StackContext } from "@serverless-stack/resources";
-import { Auth, use } from "@serverless-stack/resources";
+import { Auth } from "@serverless-stack/resources";
 import { PASSWORD_POLICY_LAX } from "@sst-app/common";
 
-import { TriggersStack } from "./Triggers";
-
 export function AuthStack({ stack }: StackContext) {
-  const { triggerHandlers } = use(TriggersStack);
-
   const auth = new Auth(stack, "Auth", {
     login: ["email"],
     triggers: {
-      preSignUp: triggerHandlers.authPreSignUp,
+      preSignUp: "services/auth/handlers.preSignUp",
     },
     cdk: {
       userPool: {

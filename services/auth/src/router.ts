@@ -7,7 +7,7 @@ import {
   RevokeTokenCommand,
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import { env } from "@sst-app/lambda-env";
+import { Config } from "@serverless-stack/node/config";
 import * as trpc from "@trpc/server";
 import superjson from "superjson";
 
@@ -30,7 +30,7 @@ export const router = trpc
     input: signUpInputSchema,
     async resolve({ input, ctx }) {
       const command = new SignUpCommand({
-        ClientId: env.USER_POOL_CLIENT_ID,
+        ClientId: Config.USER_POOL_CLIENT_ID,
         Username: input.email,
         Password: input.password,
         UserAttributes: [
@@ -58,7 +58,7 @@ export const router = trpc
     input: confirmSignUpInputSchema,
     async resolve({ input, ctx }) {
       const command = new ConfirmSignUpCommand({
-        ClientId: env.USER_POOL_CLIENT_ID,
+        ClientId: Config.USER_POOL_CLIENT_ID,
         Username: input.email,
         ConfirmationCode: input.confirmationCode,
       });
@@ -74,7 +74,7 @@ export const router = trpc
     input: signInInputSchema,
     async resolve({ input, ctx }) {
       const command = new InitiateAuthCommand({
-        ClientId: env.USER_POOL_CLIENT_ID,
+        ClientId: Config.USER_POOL_CLIENT_ID,
         AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
         AuthParameters: {
           USERNAME: input.email,
@@ -93,7 +93,7 @@ export const router = trpc
     input: signOutInputSchema,
     async resolve({ input, ctx }) {
       const command = new RevokeTokenCommand({
-        ClientId: env.USER_POOL_CLIENT_ID,
+        ClientId: Config.USER_POOL_CLIENT_ID,
         Token: input.token,
       });
 
@@ -108,7 +108,7 @@ export const router = trpc
     input: forgotPasswordInputSchema,
     async resolve({ input, ctx }) {
       const command = new ForgotPasswordCommand({
-        ClientId: env.USER_POOL_CLIENT_ID,
+        ClientId: Config.USER_POOL_CLIENT_ID,
         Username: input.email,
       });
 
@@ -123,7 +123,7 @@ export const router = trpc
     input: confirmForgotPasswordInputSchema,
     async resolve({ input, ctx }) {
       const command = new ConfirmForgotPasswordCommand({
-        ClientId: env.USER_POOL_CLIENT_ID,
+        ClientId: Config.USER_POOL_CLIENT_ID,
         Username: input.email,
         ConfirmationCode: input.confirmationCode,
         Password: input.password,

@@ -1,4 +1,4 @@
 import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
-import { env } from "@sst-app/lambda-env";
+import { Config } from "@serverless-stack/node/config";
 
-export const client = new CognitoIdentityProviderClient({ region: env.REGION });
+export const client = new CognitoIdentityProviderClient({ region: Config.REGION });

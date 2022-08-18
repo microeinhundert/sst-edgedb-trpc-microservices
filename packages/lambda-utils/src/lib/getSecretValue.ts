@@ -1,7 +1,7 @@
 import { SecretsManager } from "@aws-sdk/client-secrets-manager";
-import { env } from "@sst-app/lambda-env";
+import { Config } from "@serverless-stack/node/config";
 
-const secretsManager = new SecretsManager({ region: env.REGION });
+const secretsManager = new SecretsManager({ region: Config.REGION });
 
 export async function getSecretValue(secretId: string): Promise<string> {
   const secretValue = await secretsManager.getSecretValue({

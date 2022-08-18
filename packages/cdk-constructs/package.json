@@ -1,5 +1,5 @@
 {
-  "name": "@sst-app/lambda-env",
+  "name": "@sst-app/cdk-constructs",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,8 @@
     "root": true
   },
   "dependencies": {
-    "zod": "^3.18.0"
+    "aws-cdk-lib": "2.32.0",
+    "constructs": "^10.1.76"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
