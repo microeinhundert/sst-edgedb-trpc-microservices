@@ -4,23 +4,24 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { ApiStack } from "./Api";
 import { AuthStack } from "./Auth";
+import { ConfigStack } from "./Config";
 import { PersistenceStack } from "./Persistence";
-import { generateTRPCServiceRoutes } from "./utils/api";
+import { generateRoutesForTRPCService } from "./utils/api";
 
 export function ServicesStack({ stack }: StackContext) {
+  const { REGION } = use(ConfigStack);
   const { edgeDB } = use(PersistenceStack);
-  const { auth } = use(AuthStack);
   const { api } = use(ApiStack);
+  const { auth } = use(AuthStack);
 
-  const REGION = new Config.Parameter(stack, "REGION", {
-    value: stack.region,
-  });
   const EDGEDB_DSN_SECRET = new Config.Parameter(stack, "EDGEDB_DSN_SECRET", {
     value: edgeDB.connectionSecret.secretArn,
   });
+
   const USER_POOL_ID = new Config.Parameter(stack, "USER_POOL_ID", {
     value: auth.userPoolId,
   });
+
   const USER_POOL_CLIENT_ID = new Config.Parameter(stack, "USER_POOL_CLIENT_ID", {
     value: auth.userPoolClientId,
   });
@@ -51,7 +52,7 @@ export function ServicesStack({ stack }: StackContext) {
 
   api.addRoutes(
     stack,
-    generateTRPCServiceRoutes("auth", authFunction, {
+    generateRoutesForTRPCService("auth", authFunction, {
       public: true,
     })
   );

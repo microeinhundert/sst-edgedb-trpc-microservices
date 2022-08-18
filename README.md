@@ -1,4 +1,4 @@
-# SST Microservice Architecture
+# SST Microservices Architecture
 
 ## Provisioning Infrastructure
 
@@ -30,7 +30,11 @@ Contains user-facing apps.
 
 ### /services
 
-Contains microservices deployed to AWS Lambda.
+Contains Lambda microservices.
+
+### /functions
+
+Contains Lambda functions not accessible over the public network.
 
 ### /packages
 

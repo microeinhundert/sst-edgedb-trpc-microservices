@@ -1,0 +1,31 @@
+{
+  "name": "@sst-app/pre-sign-up-trigger",
+  "description": "Function for the Cognito preSignUp event",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./handlers.ts",
+  "types": "./handlers.ts",
+  "scripts": {
+    "lint": "eslint 'src/**/*.ts' '*.ts'",
+    "typecheck": "tsc"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@sst-app/eslint-config-custom"
+    ],
+    "root": true
+  },
+  "dependencies": {
+    "@serverless-stack/node": "^1.8.0",
+    "@sst-app/common": "*",
+    "@sst-app/lambda-utils": "*",
+    "edgedb": "^0.21.3"
+  },
+  "devDependencies": {
+    "@sst-app/eslint-config-custom": "*",
+    "@sst-app/tsconfig": "*",
+    "@types/aws-lambda": "^8.10.102",
+    "@types/node": "^16"
+  }
+}
