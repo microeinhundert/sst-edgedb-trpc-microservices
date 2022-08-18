@@ -26,7 +26,7 @@ npm run sst-remove
 
 ### /apps
 
-Contains user facing apps.
+Contains user-facing apps.
 
 ### /services
 
