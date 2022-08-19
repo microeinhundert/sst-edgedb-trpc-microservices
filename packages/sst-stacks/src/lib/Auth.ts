@@ -1,27 +1,26 @@
 import type { StackContext } from "@serverless-stack/resources";
 import { Auth, Config, use } from "@serverless-stack/resources";
 import { PASSWORD_POLICY_LAX } from "@sst-app/common";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { PersistenceStack } from "./Persistence";
 
 export function AuthStack({ stack }: StackContext) {
-  const { edgeDB } = use(PersistenceStack);
-
-  const EDGEDB_DSN_SECRET = new Config.Parameter(stack, "EDGEDB_DSN_SECRET", {
-    value: edgeDB.connectionSecret.secretArn,
-  });
+  const { edgeDBParameters } = use(PersistenceStack);
 
   const auth = new Auth(stack, "Auth", {
     login: ["email"],
     triggers: {
       preSignUp: {
         handler: "functions/pre-sign-up-trigger/handlers.main",
-        runtime: "nodejs16.x",
-        timeout: 10,
-        bundle: {
-          format: "esm",
-        },
-        config: [EDGEDB_DSN_SECRET],
+        config: [edgeDBParameters.EDGEDB_DSN_SECRET_ARN],
+        permissions: [
+          new PolicyStatement({
+            actions: ["secretsmanager:GetSecretValue"],
+            effect: Effect.ALLOW,
+            resources: [edgeDBParameters.EDGEDB_DSN_SECRET_ARN.value],
+          }),
+        ],
       },
     },
     cdk: {
@@ -42,5 +41,14 @@ export function AuthStack({ stack }: StackContext) {
     IdentityPoolId: auth.cognitoIdentityPoolId ?? "",
   });
 
-  return { auth };
+  const authParameters = {
+    AUTH_USER_POOL_ID: new Config.Parameter(stack, "AUTH_USER_POOL_ID", {
+      value: auth.userPoolId,
+    }),
+    AUTH_USER_POOL_CLIENT_ID: new Config.Parameter(stack, "AUTH_USER_POOL_CLIENT_ID", {
+      value: auth.userPoolClientId,
+    }),
+  };
+
+  return { auth, authParameters };
 }

@@ -6,8 +6,8 @@
   "workspaces": [
     "apps/*",
     "functions/*",
-    "services/*",
-    "packages/*"
+    "packages/*",
+    "services/*"
   ],
   "scripts": {
     "build": "turbo run build",
@@ -38,8 +38,8 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.8.0",
-    "@serverless-stack/resources": "1.8.0",
+    "@serverless-stack/cli": "1.8.1",
+    "@serverless-stack/resources": "1.8.1",
     "@sst-app/eslint-config-custom": "*",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",

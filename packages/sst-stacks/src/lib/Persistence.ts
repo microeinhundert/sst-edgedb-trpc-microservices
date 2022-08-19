@@ -1,4 +1,5 @@
 import type { StackContext } from "@serverless-stack/resources";
+import { Config } from "@serverless-stack/resources";
 import { EdgeDB } from "@sst-app/cdk-constructs";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 
@@ -21,5 +22,11 @@ export function PersistenceStack({ stack }: StackContext) {
     },
   });
 
-  return { vpc, edgeDB };
+  const edgeDBParameters = {
+    EDGEDB_DSN_SECRET_ARN: new Config.Parameter(stack, "EDGEDB_DSN_SECRET_ARN", {
+      value: edgeDB.connectionSecret.secretArn,
+    }),
+  };
+
+  return { edgeDB, edgeDBParameters };
 }

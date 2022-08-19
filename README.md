@@ -28,14 +28,14 @@ npm run sst-remove
 
 Contains user-facing apps.
 
-### /services
-
-Contains Lambda microservices.
-
 ### /functions
 
 Contains Lambda functions not accessible over the public network.
 
 ### /packages
 
-Contains packages used by apps and services.
+Contains packages used by apps, services and functions.
+
+### /services
+
+Contains Lambda microservices.

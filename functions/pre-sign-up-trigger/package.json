@@ -1,6 +1,5 @@
 {
   "name": "@sst-app/pre-sign-up-trigger",
-  "description": "Function for the Cognito preSignUp event",
   "version": "0.0.0",
   "private": true,
   "type": "module",

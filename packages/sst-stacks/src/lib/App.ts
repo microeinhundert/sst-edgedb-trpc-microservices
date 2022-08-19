@@ -8,6 +8,14 @@ import { ServicesStack } from "./Services";
 import { SiteStack } from "./Site";
 
 export default function (app: App) {
+  app.setDefaultFunctionProps({
+    runtime: "nodejs16.x",
+    timeout: 10,
+    bundle: {
+      format: "esm",
+    },
+  });
+
   app
     .stack(PersistenceStack)
     .stack(AuthStack)

@@ -1,6 +1,5 @@
 {
   "name": "@sst-app/auth",
-  "description": "Service for managing user authentication",
   "version": "0.0.0",
   "private": true,
   "type": "module",

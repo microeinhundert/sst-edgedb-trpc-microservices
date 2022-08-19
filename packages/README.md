@@ -1,3 +1,3 @@
 # Packages
 
-Contains packages used by apps and services.
+Contains packages used by apps, services and functions.

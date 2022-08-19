@@ -7,3 +7,5 @@ export const PASSWORD_POLICY_LAX = {
   requireDigits: false,
   requireSymbols: false,
 } as const;
+
+export const TRUSTED_EMAIL_DOMAINS = ["gmail.com", "googlemail.com"] as const;
