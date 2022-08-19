@@ -14,7 +14,6 @@ export function useConfirmForgotPasswordForm() {
 
   const {
     register,
-    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<ConfirmForgotPasswordInput>({ resolver });
@@ -22,14 +21,6 @@ export function useConfirmForgotPasswordForm() {
   const mutation = trpc.useMutation(["auth.confirmForgotPassword"], {
     onSuccess: (_, { email }) => {
       navigate("/auth/signIn", { state: { email } });
-    },
-    onError: (error) => {
-      if (error.data?.stack?.startsWith("CodeMismatchException")) {
-        setError("confirmationCode", {
-          type: "custom",
-          message: "The code you entered is not valid",
-        });
-      }
     },
   });
 
@@ -45,7 +36,7 @@ export function useConfirmForgotPasswordForm() {
   return {
     register,
     errors,
-    isSubmitting: mutation.isLoading,
+    mutation,
     onSubmit: handleSubmit(onSubmit),
   };
 }

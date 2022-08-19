@@ -33,7 +33,7 @@ export function useForgotPasswordForm() {
   return {
     register,
     errors,
-    isSubmitting: mutation.isLoading,
+    mutation,
     onSubmit: handleSubmit(onSubmit),
   };
 }

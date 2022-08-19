@@ -14,7 +14,6 @@ export function useConfirmSignUpForm() {
 
   const {
     register,
-    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<ConfirmSignUpInput>({ resolver });
@@ -22,14 +21,6 @@ export function useConfirmSignUpForm() {
   const mutation = trpc.useMutation(["auth.confirmSignUp"], {
     onSuccess: () => {
       navigate("/");
-    },
-    onError: (error) => {
-      if (error.data?.stack?.startsWith("CodeMismatchException")) {
-        setError("confirmationCode", {
-          type: "custom",
-          message: "The code you entered is not valid",
-        });
-      }
     },
   });
 
@@ -43,7 +34,7 @@ export function useConfirmSignUpForm() {
   return {
     register,
     errors,
-    isSubmitting: mutation.isLoading,
+    mutation,
     onSubmit: handleSubmit(onSubmit),
   };
 }
