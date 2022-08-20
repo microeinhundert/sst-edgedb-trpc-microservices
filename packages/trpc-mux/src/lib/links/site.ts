@@ -1,13 +1,14 @@
-import type { TRPCLink } from "@trpc/client";
-
-import { createMuxLinksForServers } from "../createMuxLinksForServers";
-import type { Router } from "../routers/site";
+import { createMuxLinkForServices } from "../createMuxLinkForServices";
+import { router } from "../routers/site";
 
 /**
- * Creates tRPC links for the `site` app.
+ * Creates the tRPC mux link for the `site` app.
  */
-export function createMuxLinks(baseUrl: string): TRPCLink<Router>[] {
-  return createMuxLinksForServers({
-    auth: `${baseUrl}auth`,
-  });
+export function createMuxLink(baseUrl: string) {
+  return createMuxLinkForServices(
+    {
+      auth: `${baseUrl}auth`,
+    },
+    router
+  );
 }
