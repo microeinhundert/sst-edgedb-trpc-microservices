@@ -40,7 +40,9 @@ Remove the infrastructure:
 npm run sst:remove
 ```
 
-## Running EdgeDB Migrations
+## Working with EdgeDB
+
+### Migrations
 
 Before running database migrations, the EdgeDB CLI must be installed locally and linked to the remote EdgeDB instance deployed on AWS.
 To do this, run the following command:
@@ -63,6 +65,8 @@ npm run edgedb:migrate
 
 > Learn more about migrations from the official [EdgeDB Guide](https://www.edgedb.com/docs/guides/migrations/index).
 
+### Query Builder
+
 To generate the EdgeDB query builder, run the following command:
 
 ```console
@@ -71,8 +75,16 @@ npm run edgedb:generate-query-builder
 
 > The query builder will be written to the `edgedb` package.
 
+### Usage
+
 You can import both query builder (e) and client like this:
 
 ```ts
 import { e, client } from "@sst-app/edgedb";
+
+// Run your queries against the client
+e.insert(e.User, {
+  given_name: e.str(given_name),
+  family_name: e.str(family_name),
+}).run(client);
 ```
