@@ -7,9 +7,9 @@
   "types": "./src/index.ts",
   "scripts": {
     "link": "sh scripts/link-edgedb.sh",
+    "generate-query-builder": "sh scripts/generate-query-builder.sh",
     "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
-    "generate-query-builder": "npx edgeql-js --force-overwrite --target ts --output-dir src/lib/queryBuilder",
     "typecheck": "tsc"
   },
   "eslintConfig": {
