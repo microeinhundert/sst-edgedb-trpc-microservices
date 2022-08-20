@@ -70,3 +70,9 @@ npm run edgedb:generate-query-builder
 ```
 
 > The query builder will be written to the `edgedb` package.
+
+You can import both query builder (e) and client like this:
+
+```ts
+import { e, client } from "@sst-app/edgedb";
+```

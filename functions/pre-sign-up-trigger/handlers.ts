@@ -8,12 +8,10 @@ import type { PreSignUpTriggerHandler } from "aws-lambda";
 export const main: PreSignUpTriggerHandler = async (event) => {
   const { email, given_name, family_name } = event.request.userAttributes;
 
-  const query = e.insert(e.User, {
+  e.insert(e.User, {
     given_name: e.str(given_name),
     family_name: e.str(family_name),
-  });
-
-  query.run(client);
+  }).run(client);
 
   // Automatically confirm users who are using
   // one of the trusted email domains

@@ -7,7 +7,7 @@
   "types": "./src/index.ts",
   "scripts": {
     "generate-query-builder": "sh scripts/generate-query-builder.sh",
-    "link": "sh scripts/link-edgedb.sh",
+    "link": "sh scripts/link.sh",
     "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
     "lint": "eslint 'src/**/*.ts'",
