@@ -46,7 +46,7 @@ npm run sst:remove
 
 ## Running EdgeDB Migrations
 
-Before running migrations, the EdgeDB CLI must be installed locally and linked to the remote EdgeDB instance deployed on AWS.
+Before running database migrations, the EdgeDB CLI must be installed locally and linked to the remote EdgeDB instance deployed on AWS.
 To do this, run the following command:
 
 ```console
