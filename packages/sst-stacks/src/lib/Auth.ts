@@ -3,9 +3,11 @@ import { Auth, Config, use } from "@serverless-stack/resources";
 import { PASSWORD_POLICY_LAX } from "@sst-app/common";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
+import { ConfigStack } from "./Config";
 import { PersistenceStack } from "./Persistence";
 
 export function AuthStack({ stack }: StackContext) {
+  const { REGION } = use(ConfigStack);
   const { edgeDBParameters } = use(PersistenceStack);
 
   const auth = new Auth(stack, "Auth", {
@@ -13,7 +15,7 @@ export function AuthStack({ stack }: StackContext) {
     triggers: {
       preSignUp: {
         handler: "functions/pre-sign-up-trigger/handlers.main",
-        config: [edgeDBParameters.EDGEDB_DSN_SECRET_ARN],
+        config: [REGION, edgeDBParameters.EDGEDB_DSN_SECRET_ARN],
         permissions: [
           new PolicyStatement({
             actions: ["secretsmanager:GetSecretValue"],

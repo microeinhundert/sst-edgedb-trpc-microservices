@@ -1,3 +1,3 @@
 # TSConfig
 
-This package contains TypeScript configuration shared across packages, apps and services.
+This package contains TypeScript configuration shared across apps, functions, packages and services.

@@ -1,9 +1,9 @@
+import { client as edgeDBClient } from "@sst-app/edgedb";
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { CreateAWSLambdaContextOptions } from "@trpc/server/adapters/aws-lambda";
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 
-import { client as cognitoClient } from "./cognito";
-import { client as edgeDBClient } from "./edgedb";
+import { client as cognitoClient } from "./cognitoClient";
 
 export const createContext = ({
   event,

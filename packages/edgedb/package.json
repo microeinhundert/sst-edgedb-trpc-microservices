@@ -21,6 +21,11 @@
     },
     "root": true
   },
+  "dependencies": {
+    "@serverless-stack/node": "^1.8.0",
+    "edgedb": "^0.21.3",
+    "@sst-app/lambda-utils": "*"
+  },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",

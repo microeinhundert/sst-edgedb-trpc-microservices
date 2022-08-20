@@ -11,7 +11,7 @@ import { Config } from "@serverless-stack/node/config";
 import * as trpc from "@trpc/server";
 import superjson from "superjson";
 
-import type { Context } from "./utils/trpc";
+import type { Context } from "./utils/trpcContext";
 import { confirmForgotPasswordInputSchema } from "./validators/confirmForgotPassword";
 import { confirmSignUpInputSchema } from "./validators/confirmSignUp";
 import { forgotPasswordInputSchema } from "./validators/forgotPassword";

@@ -11,3 +11,9 @@ npm run generate-query-builder
 ```
 
 > The query builder will be written to the `src/lib/queryBuilder` directory of this package.
+
+You can import the query builder like this:
+
+```ts
+import { e } from "@sst-app/edgedb";
+```

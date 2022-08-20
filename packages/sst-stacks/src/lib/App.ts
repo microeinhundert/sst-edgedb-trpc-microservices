@@ -17,9 +17,9 @@ export default function (app: App) {
   });
 
   app
+    .stack(ConfigStack)
     .stack(PersistenceStack)
     .stack(AuthStack)
-    .stack(ConfigStack)
     .stack(ApiStack)
     .stack(ServicesStack)
     .stack(SiteStack);
