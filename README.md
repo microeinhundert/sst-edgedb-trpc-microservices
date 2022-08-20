@@ -22,33 +22,47 @@ Contains packages used by apps, services and functions.
 
 Contains Lambda microservices.
 
-## Provisioning Infrastructure
+## Deploying Infrastructure
 
 Deploy the infrastructure for development:
 
 ```console
-npm run sst-start
+npm run sst:start
 ```
 
-> While developing locally with `npm run sst-start`, apps must be run locally by running `npm run dev` in the app's root directory.
+> While developing locally with `npm run sst:start`, apps must be run locally by running `npm run dev` in the root directory.
 
 Deploy the infrastructure:
 
 ```console
-npm run sst-deploy
+npm run sst:deploy
 ```
 
 Remove the infrastructure:
 
 ```console
-npm run sst-remove
+npm run sst:remove
 ```
 
 ## Running EdgeDB Migrations
 
 Before running migrations, the EdgeDB CLI must be installed locally and linked to the remote EdgeDB instance deployed on AWS.
-To get credentials for the remote instance, run the following AWS CLI command:
+To do this, run the following command:
 
 ```console
-sh scripts/get-edgedb-dsn.sh
+npm run edgedb:link
 ```
+
+Then, modify `dbschema/default.esdl` to your liking and run the following command to create the migration for your changes:
+
+```console
+npm run edgedb:create-migration
+```
+
+To apply the migration, run the following command:
+
+```console
+npm run edgedb:migrate
+```
+
+> Learn more in the official [EdgeDB Guide](https://www.edgedb.com/docs/guides/migrations/index).
