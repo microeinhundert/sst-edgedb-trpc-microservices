@@ -25,3 +25,6 @@ yarn-error.log*
 
 # Turbo
 .turbo
+
+# EdgeDB Query Builder
+packages/edgedb/src/lib/queryBuilder
