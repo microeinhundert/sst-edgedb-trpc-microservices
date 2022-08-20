@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.32.0",
-    "constructs": "^10.1.76"
+    "constructs": "^10.1.81"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

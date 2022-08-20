@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { OperationLink, TRPCLink } from "@trpc/client";
-import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import { httpBatchLink, TRPCClientError } from "@trpc/client";
 import type { AnyRouter } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 
@@ -8,48 +7,51 @@ import { observable } from "@trpc/server/observable";
  * Creates a tRPC link which routes incoming
  * requests to the right service.
  */
-export function createMuxLinkForServices<K extends string, V extends string, R extends AnyRouter>(
-  services: Record<K, V>,
-  _: R
-): TRPCLink<R> {
+export function createMuxLinkForServices<
+  TRouter extends AnyRouter,
+  TServiceName extends string = string,
+  TServiceUrl extends string = string
+>(services: Record<TServiceName, TServiceUrl>): TRPCLink<TRouter> {
   return (runtime) => {
     return ({ next, op }) => {
-      const links = Object.entries<V>(services).reduce(
+      const links = Object.entries<TServiceUrl>(services).reduce(
         (operationLinks, [serviceName, serviceUrl]) => ({
           ...operationLinks,
           [serviceName]: httpBatchLink({ url: serviceUrl })(runtime),
         }),
-        {} as Record<K, OperationLink<R>>
+        {} as Record<TServiceName, OperationLink<TRouter>>
       );
 
       const pathParts = op.path.split(".");
-      const serviceName = pathParts.shift() as K;
+      const serviceName = pathParts.shift() as TServiceName;
       const path = pathParts.join(".");
 
-      if (serviceName && links[serviceName]) {
+      return observable((observer) => {
+        if (!links[serviceName]) {
+          observer.error(
+            TRPCClientError.from(
+              new Error(`No matching tRPC link exists for service "${serviceName}"`)
+            )
+          );
+        }
+
         const link = links[serviceName];
 
-        link({
+        return link({
           next,
           op: {
             ...op,
             path,
           },
-        });
-      } else {
-        throw new Error(`No tRPC link exists for service "${serviceName}"`);
-      }
-
-      return observable((observice) => {
-        return next(op).subscribe({
+        }).subscribe({
           next(value) {
-            observice.next(value);
+            observer.next(value);
           },
           error(err) {
-            observice.error(err);
+            observer.error(err);
           },
           complete() {
-            observice.complete();
+            observer.complete();
           },
         });
       });
