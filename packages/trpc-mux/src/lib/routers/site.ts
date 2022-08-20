@@ -4,7 +4,7 @@ import { t } from "@sst-app/trpc";
 /**
  * The router for the `site` app.
  */
-export const router = t.router({
+const router = t.router({
   auth: authRouter,
 });
 
