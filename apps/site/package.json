@@ -4,10 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "sst-env -- vite",
     "build": "vite build",
-    "typecheck": "tsc",
-    "lint": "eslint 'src/**/*.{ts,tsx}'"
+    "dev": "sst-env -- vite",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "typecheck": "tsc"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@sst-app/eslint-config-custom"
+    ],
+    "root": true
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.7",
@@ -44,11 +50,5 @@
       "tailwindcss": {},
       "autoprefixer": {}
     }
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@sst-app/eslint-config-custom"
-    ]
   }
 }

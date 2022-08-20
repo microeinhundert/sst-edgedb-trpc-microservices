@@ -6,8 +6,8 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "link": "sh scripts/link-edgedb.sh",
     "generate-query-builder": "sh scripts/generate-query-builder.sh",
+    "link": "sh scripts/link-edgedb.sh",
     "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
     "lint": "eslint 'src/**/*.ts'",
@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "@serverless-stack/node": "^1.8.0",
-    "edgedb": "^0.21.3",
-    "@sst-app/lambda-utils": "*"
+    "@sst-app/lambda-utils": "*",
+    "edgedb": "^0.21.3"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

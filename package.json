@@ -12,19 +12,23 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
-    "lint": "turbo run lint",
-    "edgedb:link": "turbo run link --filter=*/edgedb",
-    "edgedb:generate-query-builder": "turbo run generate-query-builder --filter=*/edgedb",
     "edgedb:create-migration": "turbo run create-migration --filter=*/edgedb",
+    "edgedb:generate-query-builder": "turbo run generate-query-builder --filter=*/edgedb",
+    "edgedb:link": "turbo run link --filter=*/edgedb",
     "edgedb:migrate": "turbo run migrate --filter=*/edgedb",
     "sst:build": "sst build",
     "sst:console": "sst console",
     "sst:deploy": "sst deploy",
     "sst:remove": "sst remove",
     "sst:start": "sst start",
-    "typecheck": "turbo run typecheck",
-    "prepare": "husky install"
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "lint": "turbo run lint",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
+    "typecheck": "turbo run typecheck"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,md,json}": "npm run format"
   },
   "prettier": {
     "arrowParens": "always",
@@ -41,10 +45,6 @@
       "@sst-app/eslint-config-custom"
     ],
     "root": true
-  },
-  "lint-staged": {
-    "*.{ts,tsx,md,json}": "npm run format",
-    "*.ts": "npm run lint"
   },
   "devDependencies": {
     "@serverless-stack/cli": "1.8.1",

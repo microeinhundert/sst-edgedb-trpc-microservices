@@ -2,10 +2,6 @@
 
 ## Directories
 
-### /dbschema
-
-Contains the EdgeDB schema.
-
 ### /apps
 
 Contains user-facing apps.
