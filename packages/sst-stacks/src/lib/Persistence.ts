@@ -23,7 +23,7 @@ export function PersistenceStack({ stack }: StackContext) {
   });
 
   const edgeDBParameters = {
-    EDGEDB_DSN_SECRET_ARN: new Config.Parameter(stack, "EDGEDB_DSN_SECRET_ARN", {
+    EDGEDB_CONNECTION_SECRET_ARN: new Config.Parameter(stack, "EDGEDB_CONNECTION_SECRET_ARN", {
       value: edgeDB.connectionSecret.secretArn,
     }),
   };

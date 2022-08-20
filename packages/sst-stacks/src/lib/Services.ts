@@ -17,7 +17,7 @@ export function ServicesStack({ stack }: StackContext) {
   stack.setDefaultFunctionProps({
     config: [
       REGION,
-      edgeDBParameters.EDGEDB_DSN_SECRET_ARN,
+      edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN,
       authParameters.AUTH_USER_POOL_ID,
       authParameters.AUTH_USER_POOL_CLIENT_ID,
     ],
@@ -25,7 +25,7 @@ export function ServicesStack({ stack }: StackContext) {
       new PolicyStatement({
         actions: ["secretsmanager:GetSecretValue"],
         effect: Effect.ALLOW,
-        resources: [edgeDBParameters.EDGEDB_DSN_SECRET_ARN.value],
+        resources: [edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN.value],
       }),
     ],
   });

@@ -15,12 +15,12 @@ export function AuthStack({ stack }: StackContext) {
     triggers: {
       preSignUp: {
         handler: "functions/pre-sign-up-trigger/handlers.main",
-        config: [REGION, edgeDBParameters.EDGEDB_DSN_SECRET_ARN],
+        config: [REGION, edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN],
         permissions: [
           new PolicyStatement({
             actions: ["secretsmanager:GetSecretValue"],
             effect: Effect.ALLOW,
-            resources: [edgeDBParameters.EDGEDB_DSN_SECRET_ARN.value],
+            resources: [edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN.value],
           }),
         ],
       },

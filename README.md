@@ -49,7 +49,7 @@ To do this, run the following command:
 npm run edgedb:link
 ```
 
-Then, modify `dbschema/default.esdl` to your liking and run the following command to create the migration for your changes:
+Then, modify `default.esdl` inside `packages/edgedb/dbschema` to your liking and run the following command to create the migration for your changes:
 
 ```console
 npm run edgedb:create-migration

@@ -4,7 +4,7 @@ import { getSecretValue } from "@sst-app/lambda-utils";
 // @ts-ignore
 import e, { Cardinality, createClient } from "./lib/queryBuilder";
 
-const connection = JSON.parse(await getSecretValue(Config.EDGEDB_DSN_SECRET_ARN)) as {
+const connection = JSON.parse(await getSecretValue(Config.EDGEDB_CONNECTION_SECRET_ARN)) as {
   dsn: string;
 };
 
