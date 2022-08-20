@@ -65,4 +65,12 @@ To apply the migration, run the following command:
 npm run edgedb:migrate
 ```
 
-> Learn more in the official [EdgeDB Guide](https://www.edgedb.com/docs/guides/migrations/index).
+> Learn more about migrations from the official [EdgeDB Guide](https://www.edgedb.com/docs/guides/migrations/index).
+
+To generate the EdgeDB query builder, run the following command:
+
+```console
+npm run edgedb:generate-query-builder
+```
+
+> The query builder will be written to the `edgedb` package.

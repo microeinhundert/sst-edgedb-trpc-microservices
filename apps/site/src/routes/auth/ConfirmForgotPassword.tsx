@@ -7,7 +7,7 @@ export function ConfirmForgotPassword() {
   const { register, errors, mutation, onSubmit } = useConfirmForgotPasswordForm();
 
   return (
-    <div className="space-y-10 p-10 max-w-md">
+    <div className="max-w-md space-y-10 p-10">
       <form className="space-y-6" onSubmit={onSubmit}>
         <input
           {...register("email", { required: true })}
@@ -62,7 +62,9 @@ export function ConfirmForgotPassword() {
           )}
         </div>
 
-        {mutation.error?.message && <div className="bg-red-50 text-red-500 text-center p-5">{mutation.error.message}</div>}
+        {mutation.error?.message && (
+          <div className="bg-red-50 p-5 text-center text-red-500">{mutation.error.message}</div>
+        )}
 
         <button type="submit" className="text-xl">
           {mutation.isLoading ? "Submitting New Password..." : "Submit New Password"}

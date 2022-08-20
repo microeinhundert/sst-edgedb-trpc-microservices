@@ -1,0 +1,29 @@
+{
+  "name": "@sst-app/edgedb",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "link": "sh scripts/link-edgedb.sh",
+    "create-migration": "edgedb migration create",
+    "migrate": "edgedb migrate",
+    "generate-query-builder": "npx edgeql-js --force-overwrite --target ts --output-dir src/lib/queryBuilder",
+    "typecheck": "tsc"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@sst-app/eslint-config-custom"
+    ],
+    "rules": {
+      "@typescript-eslint/ban-ts-comment": "off"
+    },
+    "root": true
+  },
+  "devDependencies": {
+    "@sst-app/eslint-config-custom": "*",
+    "@sst-app/tsconfig": "*",
+    "@types/node": "^16"
+  }
+}

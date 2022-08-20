@@ -14,14 +14,15 @@
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "lint": "turbo run lint",
+    "edgedb:link": "turbo run link --filter=*/edgedb",
+    "edgedb:create-migration": "turbo run create-migration --filter=*/edgedb",
+    "edgedb:migrate": "turbo run migrate --filter=*/edgedb",
+    "edgedb:generate-query-builder": "turbo run generate-query-builder --filter=*/edgedb",
     "sst:build": "sst build",
     "sst:console": "sst console",
     "sst:deploy": "sst deploy",
     "sst:remove": "sst remove",
     "sst:start": "sst start",
-    "edgedb:link": "sh scripts/link-edgedb.sh",
-    "edgedb:create-migration": "edgedb migration create",
-    "edgedb:migrate": "edgedb migrate",
     "typecheck": "turbo run typecheck"
   },
   "prettier": {
