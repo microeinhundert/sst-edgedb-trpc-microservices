@@ -10,6 +10,7 @@
     "generate-query-builder": "sh scripts/generate-query-builder.sh",
     "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
+    "lint": "eslint 'src/**/*.ts'",
     "typecheck": "tsc"
   },
   "eslintConfig": {

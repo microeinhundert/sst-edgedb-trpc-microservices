@@ -23,7 +23,8 @@
     "sst:deploy": "sst deploy",
     "sst:remove": "sst remove",
     "sst:start": "sst start",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "prepare": "husky install"
   },
   "prettier": {
     "arrowParens": "always",
@@ -41,10 +42,16 @@
     ],
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx,md,json}": "npm run format",
+    "*.ts": "npm run lint"
+  },
   "devDependencies": {
     "@serverless-stack/cli": "1.8.1",
     "@serverless-stack/resources": "1.8.1",
     "@sst-app/eslint-config-custom": "*",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "turbo": "^1.4.3"
