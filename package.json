@@ -12,10 +12,10 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "edgedb:create-migration": "turbo run create-migration --filter=*/edgedb",
-    "edgedb:generate-query-builder": "turbo run generate-query-builder --filter=*/edgedb",
     "edgedb:link": "turbo run link --filter=*/edgedb",
+    "edgedb:create-migration": "turbo run create-migration --filter=*/edgedb",
     "edgedb:migrate": "turbo run migrate --filter=*/edgedb",
+    "edgedb:generate-query-builder": "turbo run generate-query-builder --filter=*/edgedb",
     "sst:build": "sst build",
     "sst:console": "sst console",
     "sst:deploy": "sst deploy",
