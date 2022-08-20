@@ -18,7 +18,7 @@ export function useSignInForm() {
     formState: { errors },
   } = useForm<SignInInput>({ resolver });
 
-  const mutation = trpc.useMutation(["auth.signIn"], {
+  const mutation = trpc.auth.signIn.useMutation({
     onSuccess: () => {
       navigate("/");
     },

@@ -18,7 +18,7 @@ export function useForgotPasswordForm() {
     formState: { errors },
   } = useForm<ForgotPasswordInput>({ resolver });
 
-  const mutation = trpc.useMutation(["auth.forgotPassword"], {
+  const mutation = trpc.auth.forgotPassword.useMutation({
     onSuccess: (_, { email }) => {
       navigate("/auth/confirmForgotPassword", { state: { email } });
     },

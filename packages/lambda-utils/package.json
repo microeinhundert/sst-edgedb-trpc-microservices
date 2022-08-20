@@ -16,7 +16,7 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.145.0",
+    "@aws-sdk/client-secrets-manager": "^3.154.0",
     "@serverless-stack/node": "^1.8.0"
   },
   "devDependencies": {

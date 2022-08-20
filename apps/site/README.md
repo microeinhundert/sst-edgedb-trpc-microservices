@@ -10,4 +10,4 @@ Start the app locally:
 npm run dev
 ```
 
-> Infrastructure must be provisioned by running `npm run sst-start` first.
+> Infrastructure must be provisioned by running `npm run sst:start` in the root directory first.

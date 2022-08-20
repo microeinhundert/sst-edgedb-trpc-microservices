@@ -18,7 +18,7 @@ export function useConfirmSignUpForm() {
     formState: { errors },
   } = useForm<ConfirmSignUpInput>({ resolver });
 
-  const mutation = trpc.useMutation(["auth.confirmSignUp"], {
+  const mutation = trpc.auth.confirmSignUp.useMutation({
     onSuccess: () => {
       navigate("/");
     },

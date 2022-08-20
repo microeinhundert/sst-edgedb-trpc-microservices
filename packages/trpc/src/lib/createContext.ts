@@ -1,9 +1,11 @@
+import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
+import { Config } from "@serverless-stack/node/config";
 import { client as edgeDBClient } from "@sst-app/edgedb";
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { CreateAWSLambdaContextOptions } from "@trpc/server/adapters/aws-lambda";
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 
-import { client as cognitoClient } from "./cognitoClient";
+export const cognitoClient = new CognitoIdentityProviderClient({ region: Config.REGION });
 
 export const createContext = ({
   event,

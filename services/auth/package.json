@@ -16,12 +16,11 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.145.0",
     "@serverless-stack/node": "^1.8.0",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
-    "@trpc/server": "^9.27.0",
-    "superjson": "^1.9.1",
+    "@sst-app/trpc": "*",
+    "@trpc/server": "^10.0.0-alpha.47",
     "zod": "^3.18.0"
   },
   "devDependencies": {
