@@ -27,15 +27,13 @@ export function createMuxLinkForServices<
       const path = pathParts.join(".");
 
       return observable((observer) => {
-        if (!links[serviceName]) {
+        const link = links[serviceName];
+
+        if (!link) {
           observer.error(
-            TRPCClientError.from(
-              new Error(`No matching tRPC link exists for service "${serviceName}"`)
-            )
+            TRPCClientError.from(new Error(`No matching link exists for service "${serviceName}"`))
           );
         }
-
-        const link = links[serviceName];
 
         return link({
           next,

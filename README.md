@@ -26,7 +26,7 @@ Deploy the infrastructure for development:
 npm run sst:start
 ```
 
-> While developing locally with `npm run sst:start`, apps must be run locally by running `npm run dev` in the root directory.
+> While developing Lambdas with `npm run sst:start`, apps must be run locally by running `npm run dev` in the root directory.
 
 Deploy the infrastructure:
 
@@ -87,4 +87,12 @@ e.insert(e.User, {
   given_name: e.str(given_name),
   family_name: e.str(family_name),
 }).run(client);
+```
+
+## Updating SST
+
+To update SST and CDK to the latest version, run the following command:
+
+```console
+npx sst update
 ```
