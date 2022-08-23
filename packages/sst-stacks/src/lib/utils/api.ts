@@ -21,7 +21,7 @@ export function getCorsConfig(isDevStage?: boolean) {
   if (isDevStage) {
     allowOrigins = [
       ...allowOrigins,
-      [80, 8080, 4200].map((port) => `http://127.0.0.1:${port}`),
+      [80, 8080, 3000, 3001].map((port) => `http://127.0.0.1:${port}`),
     ].flat();
   }
 

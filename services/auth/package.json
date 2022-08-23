@@ -20,7 +20,7 @@
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@sst-app/trpc": "*",
-    "@trpc/server": "^10.0.0-alpha.48",
+    "@trpc/server": "10.0.0-alpha.47",
     "zod": "^3.18.0"
   },
   "devDependencies": {
