@@ -1,11 +1,11 @@
 import type { App } from "@serverless-stack/resources";
 
 import { ApiStack } from "./Api";
+import { AppsStack } from "./Apps";
 import { AuthStack } from "./Auth";
 import { ConfigStack } from "./Config";
 import { PersistenceStack } from "./Persistence";
 import { ServicesStack } from "./Services";
-import { SiteStack } from "./Site";
 
 export default function (app: App) {
   app.setDefaultFunctionProps({
@@ -22,5 +22,5 @@ export default function (app: App) {
     .stack(AuthStack)
     .stack(ApiStack)
     .stack(ServicesStack)
-    .stack(SiteStack);
+    .stack(AppsStack);
 }

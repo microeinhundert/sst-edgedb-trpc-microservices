@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts'",
-    "typecheck": "tsc"
+    "lint": "TIMING=1 eslint 'src/**/*.ts'",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.32.0",
-    "constructs": "^10.1.82"
+    "constructs": "^10.1.84"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

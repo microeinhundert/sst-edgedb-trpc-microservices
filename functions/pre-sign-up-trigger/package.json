@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./handlers.ts",
-  "types": "./handlers.ts",
+  "main": "handlers.ts",
+  "types": "handlers.ts",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts' '*.ts'",
-    "typecheck": "tsc"
+    "lint": "TIMING=1 eslint 'src/**/*.ts' '*.ts'",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [

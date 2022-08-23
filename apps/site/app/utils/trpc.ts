@@ -1,11 +1,9 @@
 import type { SiteRouter } from "@sst-app/trpc-mux";
 import { createMuxLinkForSite } from "@sst-app/trpc-mux";
-import { createTRPCClient, createTRPCReact } from "@trpc/react";
+import { createTRPCClient } from "@trpc/client";
 import superjson from "superjson";
 
-export const trpc = createTRPCReact<SiteRouter>();
-
 export const trpcClient = createTRPCClient<SiteRouter>({
-  links: [createMuxLinkForSite(import.meta.env.VITE_API_URL)],
+  links: [createMuxLinkForSite(process.env.API_URL)],
   transformer: superjson,
 });

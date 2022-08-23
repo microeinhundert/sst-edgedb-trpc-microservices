@@ -14,10 +14,15 @@ interface CorsConfig {
 }
 
 export function getCorsConfig(isDevStage?: boolean) {
-  let allowOrigins = [`https://${env.SITE_DOMAIN_NAME}`, `https://${env.API_DOMAIN_NAME}`];
+  let allowOrigins = [env.ADMIN_DOMAIN_NAME, env.SITE_DOMAIN_NAME].map(
+    (domainName) => `https://${domainName}`
+  );
 
   if (isDevStage) {
-    allowOrigins = [...allowOrigins, "http://127.0.0.1:4200"];
+    allowOrigins = [
+      ...allowOrigins,
+      [80, 8080, 4200].map((port) => `http://127.0.0.1:${port}`),
+    ].flat();
   }
 
   return {

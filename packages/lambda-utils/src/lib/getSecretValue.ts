@@ -3,7 +3,7 @@ import { Config } from "@serverless-stack/node/config";
 
 const secretsManager = new SecretsManager({ region: Config.REGION });
 
-export async function getSecretValue(secretId: string): Promise<string> {
+export async function getSecretValue(secretId: string) {
   const secretValue = await secretsManager.getSecretValue({
     SecretId: secretId,
   });

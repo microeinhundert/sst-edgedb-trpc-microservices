@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "commonjs",
-  "main": "./src/index.js",
+  "main": "src/index.js",
   "dependencies": {
     "typescript": "^4.7.4"
   }

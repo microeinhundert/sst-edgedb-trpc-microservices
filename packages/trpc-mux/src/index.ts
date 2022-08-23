@@ -1,2 +1,4 @@
-export { createMuxLink as createMuxLinkForSite } from "./lib/links/site";
-export type { Router as SiteRouter } from "./lib/routers/site";
+export { createMuxLinkForAdmin } from "./lib/links/admin";
+export { createMuxLinkForSite } from "./lib/links/site";
+export type { AdminRouter } from "./lib/routers/admin";
+export type { SiteRouter } from "./lib/routers/site";
