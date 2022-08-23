@@ -2,6 +2,7 @@
   "name": "@sst-app/tsconfig",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "commonjs",
   "main": "src/index.js",
   "dependencies": {

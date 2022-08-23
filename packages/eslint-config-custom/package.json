@@ -2,6 +2,7 @@
   "name": "@sst-app/eslint-config-custom",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "commonjs",
   "main": "src/index.js",
   "dependencies": {
