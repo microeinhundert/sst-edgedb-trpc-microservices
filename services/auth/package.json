@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "index.ts",
+  "types": "index.ts",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts' '*.ts'",
-    "typecheck": "tsc"
+    "lint": "TIMING=1 eslint 'src/**/*.ts' '*.ts'",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [
@@ -20,7 +20,7 @@
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@sst-app/trpc": "*",
-    "@trpc/server": "^10.0.0-alpha.47",
+    "@trpc/server": "10.0.0-alpha.47",
     "zod": "^3.18.0"
   },
   "devDependencies": {

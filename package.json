@@ -47,8 +47,8 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.8.2",
-    "@serverless-stack/resources": "1.8.2",
+    "@serverless-stack/cli": "1.9.0",
+    "@serverless-stack/resources": "1.9.0",
     "@sst-app/eslint-config-custom": "*",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",

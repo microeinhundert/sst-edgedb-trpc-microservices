@@ -1,6 +1,6 @@
-# Site
+# Admin
 
-The user-facing site.
+The user-facing admin ui.
 
 ## Developing Locally
 

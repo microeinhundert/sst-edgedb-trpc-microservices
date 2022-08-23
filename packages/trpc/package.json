@@ -2,12 +2,13 @@
   "name": "@sst-app/trpc",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts'",
-    "typecheck": "tsc"
+    "lint": "TIMING=1 eslint 'src/**/*.ts'",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [
@@ -20,7 +21,7 @@
     "@serverless-stack/node": "^1.8.0",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
-    "@trpc/server": "^10.0.0-alpha.47",
+    "@trpc/server": "10.0.0-alpha.47",
     "superjson": "^1.9.1"
   },
   "devDependencies": {

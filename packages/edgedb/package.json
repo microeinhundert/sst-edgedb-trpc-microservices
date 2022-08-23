@@ -2,16 +2,17 @@
   "name": "@sst-app/edgedb",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "generate-query-builder": "sh scripts/generate-query-builder.sh",
     "link": "sh scripts/link.sh",
     "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
-    "lint": "eslint 'src/**/*.ts'",
-    "typecheck": "tsc"
+    "lint": "TIMING=1 eslint 'src/**/*.ts'",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [

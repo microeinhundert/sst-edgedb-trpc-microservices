@@ -2,12 +2,13 @@
   "name": "@sst-app/trpc-mux",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
-    "lint": "eslint 'src/**/*.ts'",
-    "typecheck": "tsc"
+    "lint": "TIMING=1 eslint 'src/**/*.ts'",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [
@@ -18,8 +19,8 @@
   "dependencies": {
     "@sst-app/auth": "*",
     "@sst-app/trpc": "*",
-    "@trpc/client": "^10.0.0-alpha.47",
-    "@trpc/server": "^10.0.0-alpha.47"
+    "@trpc/client": "10.0.0-alpha.47",
+    "@trpc/server": "10.0.0-alpha.47"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
