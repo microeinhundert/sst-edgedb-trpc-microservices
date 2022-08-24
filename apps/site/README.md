@@ -2,7 +2,7 @@
 
 The user-facing site.
 
-## Developing Locally
+## Developing locally
 
 Start the app locally:
 

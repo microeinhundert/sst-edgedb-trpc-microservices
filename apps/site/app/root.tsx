@@ -1,7 +1,8 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
-import styles from "./styles/app.css";
+// eslint-disable-next-line import/extensions
+import styles from "~/styles/app-compiled.css";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 

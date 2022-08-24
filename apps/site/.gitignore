@@ -1,4 +1,4 @@
 /.cache
 /build
 /public/build
-/app/styles/app.css
+/app/styles/app-compiled.css
