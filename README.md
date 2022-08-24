@@ -133,7 +133,7 @@ export const demoInputSchema = z.object({
 export type DemoInput = z.infer<typeof demoInputSchema>;
 ```
 
-Validators can also be exported in `validators.ts` in the root of the service, which allows apps in the `app` directory to also impprt and use the same zod schema to validate data client-side.
+Validators can also be exported in `validators.ts` in the root of the service, which allows apps in the `app` directory to also import and use the same zod schema to validate data client-side.
 
 ### Creating a query (GET Endpoint)
 
