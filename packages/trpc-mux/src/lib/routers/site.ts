@@ -4,6 +4,8 @@ import { t } from "@sst-app/trpc";
 /**
  * The router for the `site` app.
  */
-const siteRouter = t.mergeRouters(authRouter);
+const siteRouter = t.router({
+  auth: authRouter,
+});
 
 export type SiteRouter = typeof siteRouter;

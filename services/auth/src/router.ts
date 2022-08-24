@@ -8,12 +8,10 @@ import { signOut } from "./procedures/mutations/signOut";
 import { signUp } from "./procedures/mutations/signUp";
 
 export const router = t.router({
-  auth: t.router({
-    signUp,
-    confirmSignUp,
-    signIn,
-    signOut,
-    forgotPassword,
-    confirmForgotPassword,
-  }),
+  signUp,
+  confirmSignUp,
+  signIn,
+  signOut,
+  forgotPassword,
+  confirmForgotPassword,
 });
