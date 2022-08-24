@@ -97,7 +97,7 @@ e.insert(e.User, {
 }).run(client);
 ```
 
-## Creating a new endpoint
+## Creating endpoints
 
 This project uses tRPC for end-to-end type-safe APIs. Each service in the `services` directory exposes its own tRPC router with its own queries and mutations.
 Each app must have its own router in the `trpc-mux` package, which represents the union of all service routers this app needs in order to fulfill its requirements.
