@@ -13,8 +13,6 @@
   },
   "eslintConfig": {
     "extends": [
-      "@remix-run/eslint-config",
-      "@remix-run/eslint-config/node",
       "@sst-app/eslint-config-custom"
     ],
     "root": true
@@ -34,7 +32,6 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^1.6.8",
-    "@remix-run/eslint-config": "^1.6.8",
     "@serverless-stack/static-site-env": "^1.6.6",
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",

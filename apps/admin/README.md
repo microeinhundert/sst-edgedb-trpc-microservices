@@ -2,7 +2,7 @@
 
 The user-facing admin ui.
 
-## Developing Locally
+## Developing locally
 
 Start the app locally:
 
