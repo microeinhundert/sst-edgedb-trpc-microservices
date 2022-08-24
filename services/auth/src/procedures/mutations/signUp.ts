@@ -1,30 +1,27 @@
-import { SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
-import { Config } from "@serverless-stack/node/config";
 import { t } from "@sst-app/trpc";
 
+import { CognitoAuth } from "../../features/cognitoAuth";
 import { signUpInputSchema } from "../../validators/signUp";
 
 /**
  * Sign Up
  */
 export const signUp = t.procedure.input(signUpInputSchema).mutation(async ({ input, ctx }) => {
-  const command = new SignUpCommand({
-    ClientId: Config.AUTH_USER_POOL_CLIENT_ID,
-    Username: input.email,
-    Password: input.password,
-    UserAttributes: [
-      {
-        Name: "given_name",
-        Value: input.givenName,
-      },
-      {
-        Name: "family_name",
-        Value: input.familyName,
-      },
-    ],
-  });
+  const cognitoAuth = new CognitoAuth(ctx);
 
-  const commandOutput = await ctx.auth.send(command);
+  const { confirmationNeeded } = await cognitoAuth.signUp(input);
 
-  return { confirmationNeeded: !!commandOutput.CodeDeliveryDetails };
+  if (confirmationNeeded) {
+    return {
+      confirmationNeeded: true,
+      accessToken: null,
+      refreshToken: null,
+      expiresIn: null,
+      issuedAt: null,
+    };
+  }
+
+  const credentials = await cognitoAuth.signIn(input);
+
+  return { confirmationNeeded: false, ...credentials };
 });

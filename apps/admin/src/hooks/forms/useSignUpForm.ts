@@ -6,11 +6,13 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { trpc } from "../../utils/trpc";
+import { useAuth } from "../useAuth";
 
 const resolver = zodResolver(signUpInputSchema);
 
 export function useSignUpForm() {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const {
     register,
@@ -19,11 +21,11 @@ export function useSignUpForm() {
   } = useForm<SignUpInput>({ resolver });
 
   const mutation = trpc.auth.signUp.useMutation({
-    onSuccess: ({ confirmationNeeded }, { email }) => {
+    onSuccess: ({ confirmationNeeded, ...credentials }, { email }) => {
       if (confirmationNeeded) {
         navigate("/auth/confirmSignUp", { state: { email } });
       } else {
-        navigate("/");
+        auth.signIn(credentials);
       }
     },
   });

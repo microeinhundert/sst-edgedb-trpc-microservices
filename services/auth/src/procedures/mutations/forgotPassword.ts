@@ -1,7 +1,6 @@
-import { ForgotPasswordCommand } from "@aws-sdk/client-cognito-identity-provider";
-import { Config } from "@serverless-stack/node/config";
 import { t } from "@sst-app/trpc";
 
+import { CognitoAuth } from "../../features/cognitoAuth";
 import { forgotPasswordInputSchema } from "../../validators/forgotPassword";
 
 /**
@@ -10,10 +9,9 @@ import { forgotPasswordInputSchema } from "../../validators/forgotPassword";
 export const forgotPassword = t.procedure
   .input(forgotPasswordInputSchema)
   .mutation(async ({ input, ctx }) => {
-    const command = new ForgotPasswordCommand({
-      ClientId: Config.AUTH_USER_POOL_CLIENT_ID,
-      Username: input.email,
-    });
+    const cognitoAuth = new CognitoAuth(ctx);
 
-    await ctx.auth.send(command);
+    const { confirmationNeeded } = await cognitoAuth.forgotPassword(input);
+
+    return { confirmationNeeded };
   });

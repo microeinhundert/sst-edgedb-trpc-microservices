@@ -28,7 +28,8 @@
     "react-router": "^6.4.0-pre.12",
     "react-router-dom": "^6.4.0-pre.12",
     "superjson": "^1.9.1",
-    "zod": "^3.18.0"
+    "zod": "^3.18.0",
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
     "@serverless-stack/static-site-env": "^1.6.6",
