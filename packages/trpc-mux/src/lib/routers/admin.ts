@@ -4,6 +4,8 @@ import { t } from "@sst-app/trpc";
 /**
  * The router for the `admin` app.
  */
-const adminRouter = t.mergeRouters(authRouter);
+const adminRouter = t.router({
+  auth: authRouter,
+});
 
 export type AdminRouter = typeof adminRouter;

@@ -1,14 +1,20 @@
 # SST Microservices Architecture
 
+## Developing locally
+
+To develop the project locally, run `npm run sst:start` and wait for the infrastructure deployment to finish. Don't cancel the command after it has finished deploying! While the command is running, SST provides you with a (https://docs.sst.dev/live-lambda-development)[cloud native local development environment] that gives you instantaneous feedback on edits made in your Lambda function code. Running `npm run sst:console` will also provide you with a (https://docs.sst.dev/console)[web based dashboard] to debug and manage your infrastructure.
+
+After running `npm run sst:start`, you must also migrate the database by running `npm run edgedb:migrate`.
+
 ## Directories
 
 ### /apps
 
-Contains user-facing apps.
+Contains user-facing apps (frontends).
 
 ### /functions
 
-Contains Lambda functions not accessible over the public network.
+Contains Lambda functions not accessible over the public network, like Lambda Triggers or Step Functions.
 
 ### /packages
 
@@ -18,7 +24,7 @@ Contains packages used by apps, services and functions.
 
 Contains Lambda microservices.
 
-## Deploying infrastructure
+## Commands
 
 Deploy the infrastructure for development:
 
@@ -26,7 +32,7 @@ Deploy the infrastructure for development:
 npm run sst:start
 ```
 
-> While developing Lambdas with `npm run sst:start`, apps must be run locally by running `npm run dev` in the root directory.
+> While developing Lambdas locally with `npm run sst:start`, apps must be run locally by running `npm run dev` in the root directory.
 
 Deploy the infrastructure:
 

@@ -1,3 +1,3 @@
 # Apps
 
-Contains user-facing apps.
+Contains user-facing apps (frontends).
