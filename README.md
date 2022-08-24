@@ -88,11 +88,3 @@ e.insert(e.User, {
   family_name: e.str(family_name),
 }).run(client);
 ```
-
-## Updating SST
-
-To update SST and CDK to the latest version, run the following command:
-
-```console
-npx sst update
-```

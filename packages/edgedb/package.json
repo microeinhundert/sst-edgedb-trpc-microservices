@@ -24,7 +24,7 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.8.0",
+    "@serverless-stack/node": "^1.9.0",
     "@sst-app/lambda-utils": "*",
     "edgedb": "^0.21.3"
   },

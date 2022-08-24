@@ -2,11 +2,12 @@
   "name": "site",
   "version": "0.0.0",
   "private": true,
+  "type": "commonjs",
   "scripts": {
     "build": "npm run build:css && remix build",
-    "build:css": "tailwindcss -c tailwind.config.cjs -m -i styles/app.css -o app/styles/app.css",
+    "build:css": "tailwindcss -m -i app/styles/app.css -o app/styles/app-compiled.css",
     "dev": "concurrently \"npm run dev:css\" \"sst-env -- remix dev\"",
-    "dev:css": "tailwindcss -c tailwind.config.cjs -w -i styles/app.css -o app/styles/app.css",
+    "dev:css": "tailwindcss -w -i app/styles/app.css -o app/styles/app-compiled.css",
     "lint": "TIMING=1 eslint 'src/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit"
   },

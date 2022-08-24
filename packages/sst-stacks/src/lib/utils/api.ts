@@ -19,10 +19,9 @@ export function getCorsConfig(isDevStage?: boolean) {
   );
 
   if (isDevStage) {
-    allowOrigins = [
-      ...allowOrigins,
-      [80, 8080, 3000, 3001].map((port) => `http://127.0.0.1:${port}`),
-    ].flat();
+    // 5173 = Vite App
+    // 3000 = Remix App
+    allowOrigins = [...allowOrigins, [5173, 3000].map((port) => `http://127.0.0.1:${port}`)].flat();
   }
 
   return {
