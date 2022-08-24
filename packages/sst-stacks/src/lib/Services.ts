@@ -44,4 +44,19 @@ export function ServicesStack({ stack }: StackContext) {
       public: true,
     })
   );
+
+  /*
+   * Demo
+   */
+
+  const demoFunction = new Function(stack, "Demo", {
+    handler: "services/demo/handlers.main",
+  });
+
+  api.addRoutes(
+    stack,
+    generateRoutesForTRPCService("demo", demoFunction, {
+      public: false,
+    })
+  );
 }

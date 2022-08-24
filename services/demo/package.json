@@ -1,5 +1,5 @@
 {
-  "name": "@sst-app/auth",
+  "name": "@sst-app/demo",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,6 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.154.0",
     "@serverless-stack/node": "^1.9.0",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",

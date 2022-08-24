@@ -10,6 +10,7 @@ export const main: PreSignUpTriggerHandler = async (event) => {
 
   await e
     .insert(e.User, {
+      email: e.str(email),
       given_name: e.str(given_name),
       family_name: e.str(family_name),
     })

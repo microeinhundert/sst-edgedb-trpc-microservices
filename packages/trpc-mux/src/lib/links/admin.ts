@@ -7,5 +7,6 @@ import type { AdminRouter } from "../routers/admin";
 export function createMuxLinkForAdmin(baseUrl: string) {
   return createMuxLinkForServices<AdminRouter>({
     auth: `${baseUrl}auth`,
+    demo: `${baseUrl}demo`,
   });
 }

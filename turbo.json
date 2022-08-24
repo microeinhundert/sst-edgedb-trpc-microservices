@@ -13,21 +13,6 @@
     },
     "dev": {
       "cache": false
-    },
-    "link": {
-      "cache": false
-    },
-    "create-migration": {
-      "dependsOn": ["link"],
-      "cache": false
-    },
-    "migrate": {
-      "dependsOn": ["link"],
-      "cache": false
-    },
-    "generate-query-builder": {
-      "dependsOn": ["link"],
-      "cache": false
     }
   }
 }
