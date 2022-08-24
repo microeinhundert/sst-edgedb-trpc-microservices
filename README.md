@@ -132,7 +132,7 @@ A validation schema which checks if the properties `firstName` and `lastName` ar
 ```ts
 // <your_service>/src/validators/demo.ts
 import { z } from "zod";
-9;
+
 export const demoInputSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
