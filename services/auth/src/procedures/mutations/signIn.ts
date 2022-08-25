@@ -9,7 +9,5 @@ import { signInInputSchema } from "../../validators/signIn";
 export const signIn = t.procedure.input(signInInputSchema).mutation(async ({ input, ctx }) => {
   const cognitoAuth = new CognitoAuth(ctx);
 
-  const credentials = await cognitoAuth.signIn(input);
-
-  return credentials;
+  return cognitoAuth.signIn(input);
 });

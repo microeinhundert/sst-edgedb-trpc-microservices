@@ -7,5 +7,6 @@ import type { SiteRouter } from "../routers/site";
 export function createMuxLinkForSite(baseUrl: string) {
   return createMuxLinkForServices<SiteRouter>({
     auth: `${baseUrl}auth`,
+    demo: `${baseUrl}demo`,
   });
 }

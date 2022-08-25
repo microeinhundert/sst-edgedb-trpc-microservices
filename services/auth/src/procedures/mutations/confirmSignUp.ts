@@ -11,7 +11,5 @@ export const confirmSignUp = t.procedure
   .mutation(async ({ input, ctx }) => {
     const cognitoAuth = new CognitoAuth(ctx);
 
-    await cognitoAuth.confirmSignUp(input);
-
-    return {};
+    return cognitoAuth.confirmSignUp(input);
   });

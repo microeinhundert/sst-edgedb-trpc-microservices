@@ -14,14 +14,11 @@ interface CorsConfig {
 }
 
 export function getCorsConfig(isDevStage?: boolean) {
-  let allowOrigins = [env.ADMIN_DOMAIN_NAME, env.SITE_DOMAIN_NAME].map(
-    (domainName) => `https://${domainName}`
-  );
+  let allowOrigins = [env.SITE_DOMAIN_NAME].map((domainName) => `https://${domainName}`);
 
   if (isDevStage) {
-    // 5173 = Vite App
-    // 3000 = Remix App
-    allowOrigins = [...allowOrigins, [5173, 3000].map((port) => `http://127.0.0.1:${port}`)].flat();
+    // 3000 = Vite App
+    allowOrigins = [...allowOrigins, [3000].map((port) => `http://127.0.0.1:${port}`)].flat();
   }
 
   return {

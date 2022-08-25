@@ -11,7 +11,5 @@ export const forgotPassword = t.procedure
   .mutation(async ({ input, ctx }) => {
     const cognitoAuth = new CognitoAuth(ctx);
 
-    const { confirmationNeeded } = await cognitoAuth.forgotPassword(input);
-
-    return { confirmationNeeded };
+    return cognitoAuth.forgotPassword(input);
   });

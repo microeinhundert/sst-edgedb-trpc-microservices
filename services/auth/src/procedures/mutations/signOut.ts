@@ -9,7 +9,5 @@ import { signOutInputSchema } from "../../validators/signOut";
 export const signOut = t.procedure.input(signOutInputSchema).mutation(async ({ input, ctx }) => {
   const cognitoAuth = new CognitoAuth(ctx);
 
-  await cognitoAuth.signOut(input);
-
-  return {};
+  return cognitoAuth.signOut(input);
 });
