@@ -11,7 +11,7 @@ export function AppsStack({ stack }: StackContext) {
    * Site
    */
 
-  const site = new ViteStaticSite(stack, "Admin", {
+  const site = new ViteStaticSite(stack, "Site", {
     path: "apps/site",
     environment: {
       VITE_API_URL: apiUrl,
