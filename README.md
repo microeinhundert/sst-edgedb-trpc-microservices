@@ -24,14 +24,14 @@ API_DOMAIN_NAME="api.$ROUTE53_ZONE_NAME"
 
 To develop the project locally, run `npm run sst:start` and wait for the infrastructure deployment to finish. Don't cancel the command after it has finished deploying! While the command is running, SST provides you with a [cloud native local development environment](https://docs.sst.dev/live-lambda-development) that gives you instantaneous feedback on edits made in your Lambda function code. Running `npm run sst:console` will also provide you with a [web based dashboard](https://docs.sst.dev/console) to debug and manage your infrastructure.
 
-After running `npm run sst:start`, you must also migrate the database by running `npm run edgedb:migrate`.
+After running `npm run sst:start`, you must also migrate the database by running `npm run edgedb:link` and `npm run edgedb:migrate`.
 
 > Working in a team of multiple developers? Follow [this guide](https://docs.sst.dev/working-with-your-team) to prevent dev environments from conflicting while using a single AWS account.
 
 ## Modifying infrastructure
 
 Infrastructure is deployed to AWS with the help of [SST](https://sst.dev/) and AWS CDK.
-All IaC is located inside the `sst-stacks` package. Custom CDK constructs are located inside the `cdk-constructs` package and only referenced by the `sst-stacks` package.
+All IaC related code is located inside the `sst-stacks` package. Custom CDK constructs are located inside the `cdk-constructs` package and only referenced by the `sst-stacks` package.
 
 ## Working with EdgeDB
 
