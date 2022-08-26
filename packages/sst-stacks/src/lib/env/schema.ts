@@ -11,6 +11,7 @@ export const schema = z.object({
   EDGEDB_INSTANCE_COUNT: z.string(),
   EDGEDB_DOMAIN_NAME: z.string(),
 
+  ADMIN_DOMAIN_NAME: z.string(),
   SITE_DOMAIN_NAME: z.string(),
   API_DOMAIN_NAME: z.string(),
 });

@@ -1,7 +1,21 @@
 {
-  "extends": "@sst-app/tsconfig/presets/vite-app-preset.json",
+  "extends": "@sst-app/tsconfig/presets/remix-app-preset.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "dom.iterable", "es2019"],
+    "strict": true,
+    "target": "es2019",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["app/*"]
+    }
   },
-  "include": ["src/**/*"]
+  "include": ["app/**/*"]
 }

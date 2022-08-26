@@ -1,0 +1,7 @@
+{
+  "extends": "@sst-app/tsconfig/presets/vite-app-preset.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["src/**/*"]
+}

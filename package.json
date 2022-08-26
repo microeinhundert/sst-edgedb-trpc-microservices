@@ -50,7 +50,7 @@
     "@serverless-stack/cli": "1.9.1",
     "@serverless-stack/resources": "1.9.1",
     "@sst-app/eslint-config-custom": "*",
-    "@trpc/server": "10.0.0-alpha.47",
+    "@trpc/server": "10.0.0-proxy-alpha.57",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
