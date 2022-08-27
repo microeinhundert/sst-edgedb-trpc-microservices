@@ -31,7 +31,7 @@ type User = z.infer<typeof userResponseSchema>;
 type ContextSetter<TContextValue> = (newContext: TContextValue | null) => TContextValue | null;
 
 /**
- * Helper funtion for the authentication flow sequence.
+ * Helper function for the authentication flow sequence.
  *
  * @template TContextValue
  * @param {(Record<string, (setter: ContextSetter<TContextValue>) => Promise<void> | void>)} steps
