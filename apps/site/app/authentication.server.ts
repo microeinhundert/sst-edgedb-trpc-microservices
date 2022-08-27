@@ -56,6 +56,35 @@ async function authenticationFlow<TContextValue>(
 }
 
 /**
+ * Appends the credentials as individual `Set-Cookie` headers.
+ *
+ * @param {Headers} headers
+ * @param {Credentials} credentials
+ */
+async function appendCredentialsAsCookieHeaders(headers: Headers, credentials: Credentials) {
+  headers.append(
+    "Set-Cookie",
+    await accessTokenCookie.serialize({
+      access_token: credentials.accessToken,
+    })
+  );
+
+  headers.append(
+    "Set-Cookie",
+    await idTokenCookie.serialize({
+      id_token: credentials.idToken,
+    })
+  );
+
+  headers.append(
+    "Set-Cookie",
+    await refreshTokenCookie.serialize({
+      refresh_token: credentials.refreshToken,
+    })
+  );
+}
+
+/**
  * Gets the access token cookie value.
  *
  * @param {Request} request
@@ -191,35 +220,6 @@ async function getUserInfo(accessToken: string) {
 }
 
 /**
- * Appends the credential cookie headers.
- *
- * @param {Headers} headers
- * @param {Credentials} credentials
- */
-async function appendCredentialCookieHeaders(headers: Headers, credentials: Credentials) {
-  headers.append(
-    "Set-cookie",
-    await accessTokenCookie.serialize({
-      access_token: credentials.accessToken,
-    })
-  );
-
-  headers.append(
-    "Set-cookie",
-    await idTokenCookie.serialize({
-      id_token: credentials.idToken,
-    })
-  );
-
-  headers.append(
-    "Set-cookie",
-    await refreshTokenCookie.serialize({
-      refresh_token: credentials.refreshToken,
-    })
-  );
-}
-
-/**
  * Authenticates the user.
  *
  * @param {Request} request
@@ -236,12 +236,12 @@ export async function authenticate(request: Request) {
     checkCode: async (setUser) => {
       const code = url.searchParams.get("code");
 
-      // If the url has a code, we redirected the user to the cognito and they were authenticated
+      // If the url has a code, we redirected the user to cognito and they were authenticated
       if (code) {
         const credentials = await getCredentials(code, redirectUri);
         if (credentials) {
           setUser(await getUserInfo(credentials.accessToken));
-          appendCredentialCookieHeaders(headers, credentials);
+          appendCredentialsAsCookieHeaders(headers, credentials);
         }
       }
     },
@@ -256,7 +256,7 @@ export async function authenticate(request: Request) {
       if (credentials) {
         const user = setUser(await getUserInfo(credentials.accessToken));
         if (user) {
-          appendCredentialCookieHeaders(headers, credentials);
+          appendCredentialsAsCookieHeaders(headers, credentials);
         }
       }
     },
