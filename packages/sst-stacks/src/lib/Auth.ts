@@ -5,6 +5,7 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { ConfigStack } from "./Config";
 import { PersistenceStack } from "./Persistence";
+import { getAuthCallbackUrls, getAuthLogoutUrls } from "./utils/auth";
 
 export function AuthStack({ stack }: StackContext) {
   const { REGION } = use(ConfigStack);
@@ -28,19 +29,35 @@ export function AuthStack({ stack }: StackContext) {
     cdk: {
       userPool: {
         passwordPolicy: PASSWORD_POLICY_LAX,
+        signInCaseSensitive: false,
+        standardAttributes: {
+          givenName: {
+            required: true,
+            mutable: true,
+          },
+          familyName: {
+            required: true,
+            mutable: true,
+          },
+        },
       },
       userPoolClient: {
+        oAuth: {
+          callbackUrls: getAuthCallbackUrls(stack.stage === "dev"),
+          logoutUrls: getAuthLogoutUrls(stack.stage === "dev"),
+        },
         authFlows: {
           userSrp: true,
+          userPassword: true,
         },
       },
     },
   });
 
-  stack.addOutputs({
-    UserPoolId: auth.userPoolId,
-    UserPoolClientId: auth.userPoolClientId,
-    IdentityPoolId: auth.cognitoIdentityPoolId ?? "",
+  const authDomain = auth.cdk.userPool.addDomain("AuthDomain", {
+    cognitoDomain: {
+      domainPrefix: `${stack.stage}-microeinhundert-cloud`,
+    },
   });
 
   const authParameters = {
@@ -50,7 +67,16 @@ export function AuthStack({ stack }: StackContext) {
     AUTH_USER_POOL_CLIENT_ID: new Config.Parameter(stack, "AUTH_USER_POOL_CLIENT_ID", {
       value: auth.userPoolClientId,
     }),
+    AUTH_BASE_URL: new Config.Parameter(stack, "AUTH_BASE_URL", {
+      value: authDomain.baseUrl(),
+    }),
   };
+
+  stack.addOutputs({
+    UserPoolId: auth.userPoolId,
+    UserPoolClientId: auth.userPoolClientId,
+    BaseUrl: authDomain.baseUrl(),
+  });
 
   return { auth, authParameters };
 }

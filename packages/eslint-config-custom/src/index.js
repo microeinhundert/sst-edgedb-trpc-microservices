@@ -28,15 +28,6 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/consistent-type-imports": "error",
-    "import/extensions": [
-      "error",
-      {
-        js: "never",
-        jsx: "never",
-        ts: "never",
-        tsx: "never",
-      },
-    ],
     "import/first": "error",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",

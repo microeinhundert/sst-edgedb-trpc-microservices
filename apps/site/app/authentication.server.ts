@@ -1,0 +1,282 @@
+import { createCookie, redirect } from "@remix-run/node";
+
+import { env } from "./env";
+import { isProduction } from "./utils/env";
+
+const cookieSettings = {
+  maxAge: 60 * 60 * 30,
+  secure: isProduction,
+  secrets: [env.SESSION_SECRET],
+  httpOnly: true,
+};
+
+const accessTokenCookie = createCookie("accessToken", cookieSettings);
+const idTokenCookie = createCookie("idToken", cookieSettings);
+const refreshTokenCookie = createCookie("refreshToken", cookieSettings);
+
+// TODO: Type
+type User = Record<string, any>;
+
+type Credentials = {
+  accessToken: string;
+  idToken: string;
+  refreshToken: string;
+};
+
+type ContextSetter<TContextValue> = (newContext: TContextValue | null) => TContextValue | null;
+
+/**
+ * Helper funtion for the authentication flow sequence.
+ *
+ * @template TContextValue
+ * @param {(Record<string, (setter: ContextSetter<TContextValue>) => Promise<void> | void>)} steps
+ * @return {(Promise<TContextValue | null>)}
+ */
+async function authenticationFlow<TContextValue>(
+  steps: Record<string, (setter: ContextSetter<TContextValue>) => Promise<void> | void>
+): Promise<TContextValue | null> {
+  let context: TContextValue | null = null;
+
+  for (const [stepIdentifier, step] of Object.entries(steps)) {
+    const contextSetter: ContextSetter<TContextValue> = (newContext) => {
+      return (context = newContext);
+    };
+
+    try {
+      await step.apply(context, [contextSetter]);
+      if (context) {
+        break;
+      }
+    } catch {
+      throw new Error(`An error occured in the authentication flow at step "${stepIdentifier}"`);
+    }
+  }
+
+  return context;
+}
+
+/**
+ * Gets the access token cookie value.
+ *
+ * @param {Request} request
+ * @return {Promise<string | null>}
+ */
+async function getAccessTokenCookieValue(request: Request) {
+  const cookieHeader = request.headers.get("Cookie");
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const parsedAccessTokenCookie = await (accessTokenCookie.parse(cookieHeader) || {});
+  if (!parsedAccessTokenCookie?.access_token) {
+    return null;
+  }
+
+  return String(parsedAccessTokenCookie.access_token);
+}
+
+/**
+ * Gets the refresh token cookie value.
+ *
+ * @param {Request} request
+ * @return {Promise<string | null>}
+ */
+async function getRefreshTokenCookieValue(request: Request) {
+  const cookieHeader = request.headers.get("Cookie");
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const parsedRefreshTokenCookie = await (refreshTokenCookie.parse(cookieHeader) || {});
+  if (!parsedRefreshTokenCookie?.refresh_token) {
+    return null;
+  }
+
+  return String(parsedRefreshTokenCookie.refresh_token);
+}
+
+/**
+ * Gets the credentials.
+ *
+ * @param {string} code
+ * @param {string} redirectUri
+ * @return {Promise<Credentials | null>}
+ */
+async function getCredentials(code: string, redirectUri: string) {
+  const response = await fetch(`${env.AUTH_BASE_URL}/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: env.AUTH_USER_POOL_CLIENT_ID,
+      redirect_uri: redirectUri,
+      code,
+    }),
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const { access_token, id_token, refresh_token } = await response.json();
+
+  return {
+    accessToken: access_token,
+    idToken: id_token,
+    refreshToken: refresh_token,
+  } as Credentials;
+}
+
+/**
+ * Exchanges the old credentials for new ones.
+ *
+ * @param {Request} request
+ * @param {string} redirectUri
+ * @return {Promise<Credentials | null>}
+ */
+async function refreshCredentials(request: Request, redirectUri: string) {
+  const refreshToken = await getRefreshTokenCookieValue(request);
+  if (!refreshToken) {
+    return null;
+  }
+
+  const response = await fetch(`${env.AUTH_BASE_URL}/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      client_id: env.AUTH_USER_POOL_CLIENT_ID,
+      redirect_uri: redirectUri,
+      refresh_token: refreshToken,
+    }),
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const { access_token, id_token, refresh_token } = await response.json();
+
+  return {
+    accessToken: access_token,
+    idToken: id_token,
+    refreshToken: refresh_token,
+  } as Credentials;
+}
+
+/**
+ * Gets the user info.
+ * If this call succeeds, the user is authenticated.
+ *
+ * @param {string} accessToken
+ * @return {Promise<any>}
+ */
+async function getUserInfo(accessToken: string) {
+  const response = await fetch(`${env.AUTH_BASE_URL}/oauth2/userInfo`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return response.json() as User;
+}
+
+/**
+ * Appends the credential cookie headers.
+ *
+ * @param {Headers} headers
+ * @param {Credentials} credentials
+ */
+async function appendCredentialCookieHeaders(headers: Headers, credentials: Credentials) {
+  headers.append(
+    "Set-cookie",
+    await accessTokenCookie.serialize({
+      access_token: credentials.accessToken,
+    })
+  );
+
+  headers.append(
+    "Set-cookie",
+    await idTokenCookie.serialize({
+      id_token: credentials.idToken,
+    })
+  );
+
+  headers.append(
+    "Set-cookie",
+    await refreshTokenCookie.serialize({
+      refresh_token: credentials.refreshToken,
+    })
+  );
+}
+
+/**
+ * Authenticates the user.
+ *
+ * @param {Request} request
+ * @return {Promise<TypedResponse<never>>}
+ */
+export async function authenticate(request: Request) {
+  const url = new URL(request.url);
+  const redirectUri = url.origin + url.pathname;
+  const redirectTo = encodeURIComponent(url.searchParams.get("redirectTo") || "/");
+
+  const headers = new Headers();
+
+  const user = await authenticationFlow<User>({
+    checkCode: async (setUser) => {
+      const code = url.searchParams.get("code");
+
+      // If the url has a code, we redirected the user to the cognito and they were authenticated
+      if (code) {
+        const credentials = await getCredentials(code, redirectUri);
+        if (credentials) {
+          setUser(await getUserInfo(credentials.accessToken));
+          appendCredentialCookieHeaders(headers, credentials);
+        }
+      }
+    },
+    checkAccessToken: async (setUser) => {
+      const accessToken = await getAccessTokenCookieValue(request);
+      if (accessToken) {
+        setUser(await getUserInfo(accessToken));
+      }
+    },
+    refreshCredentials: async (setUser) => {
+      const credentials = await refreshCredentials(request, redirectUri);
+      if (credentials) {
+        const user = setUser(await getUserInfo(credentials.accessToken));
+        if (user) {
+          appendCredentialCookieHeaders(headers, credentials);
+        }
+      }
+    },
+  });
+
+  // We have no user, redirect to cognito login page
+  if (!user) {
+    const redirectSearchParams = new URLSearchParams({
+      client_id: env.AUTH_USER_POOL_CLIENT_ID,
+      response_type: "code",
+      scope: "email",
+      redirect_uri: redirectUri,
+    });
+
+    return redirect(`${env.AUTH_BASE_URL}/login?${redirectSearchParams}`);
+  }
+
+  // We have a user
+  const state = url.searchParams.get("state");
+  const finalRedirectUrl = decodeURIComponent(state || redirectTo);
+
+  return redirect(finalRedirectUrl, { headers });
+}

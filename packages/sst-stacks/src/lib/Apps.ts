@@ -1,5 +1,6 @@
 import type { StackContext } from "@serverless-stack/resources";
-import { RemixSite, use, ViteStaticSite } from "@serverless-stack/resources";
+import { RemixSite, use } from "@serverless-stack/resources";
+import crypto from "crypto";
 
 import { ApiStack } from "./Api";
 import { AuthStack } from "./Auth";
@@ -7,28 +8,7 @@ import { env } from "./env";
 
 export function AppsStack({ stack }: StackContext) {
   const { apiUrl } = use(ApiStack);
-  const { auth } = use(AuthStack);
-
-  /*
-   * Admin
-   */
-
-  const admin = new ViteStaticSite(stack, "Admin", {
-    path: "apps/admin",
-    environment: {
-      VITE_API_URL: apiUrl,
-      VITE_REGION: stack.region,
-      VITE_USER_POOL_ID: auth.userPoolId,
-      VITE_USER_POOL_CLIENT_ID: auth.userPoolClientId,
-      VITE_DOMAIN_NAME: env.ADMIN_DOMAIN_NAME,
-    },
-    customDomain: {
-      domainName: env.ADMIN_DOMAIN_NAME,
-      hostedZone: env.ROUTE53_ZONE_NAME,
-    },
-  });
-
-  const adminUrl = admin.customDomainUrl ?? admin.url;
+  const { authParameters } = use(AuthStack);
 
   /*
    * Site
@@ -39,9 +19,11 @@ export function AppsStack({ stack }: StackContext) {
     environment: {
       API_URL: apiUrl,
       REGION: stack.region,
-      USER_POOL_ID: auth.userPoolId,
-      USER_POOL_CLIENT_ID: auth.userPoolClientId,
       DOMAIN_NAME: env.SITE_DOMAIN_NAME,
+      SESSION_SECRET: crypto.randomBytes(20).toString("hex"),
+      AUTH_USER_POOL_ID: authParameters.AUTH_USER_POOL_ID.value,
+      AUTH_USER_POOL_CLIENT_ID: authParameters.AUTH_USER_POOL_CLIENT_ID.value,
+      AUTH_BASE_URL: authParameters.AUTH_BASE_URL.value,
     },
     customDomain: {
       domainName: env.SITE_DOMAIN_NAME,
@@ -52,9 +34,6 @@ export function AppsStack({ stack }: StackContext) {
   const siteUrl = site.customDomainUrl ?? site.url;
 
   stack.addOutputs({
-    AdminUrl: adminUrl,
     SiteUrl: siteUrl,
   });
-
-  return { admin, adminUrl, site, siteUrl };
 }

@@ -15,8 +15,17 @@ export function ApiStack({ stack }: StackContext) {
       hostedZone: env.ROUTE53_ZONE_NAME,
       path: "v1",
     },
+    authorizers: {
+      jwt: {
+        type: "user_pool",
+        userPool: {
+          id: auth.userPoolId,
+          clientIds: [auth.userPoolClientId],
+        },
+      },
+    },
     defaults: {
-      authorizer: "iam",
+      authorizer: "jwt",
     },
   });
 

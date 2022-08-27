@@ -20,6 +20,7 @@ export function ServicesStack({ stack }: StackContext) {
       edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN,
       authParameters.AUTH_USER_POOL_ID,
       authParameters.AUTH_USER_POOL_CLIENT_ID,
+      authParameters.AUTH_BASE_URL,
     ],
     permissions: [
       new PolicyStatement({
