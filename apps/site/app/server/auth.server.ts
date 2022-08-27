@@ -101,7 +101,7 @@ async function getAccessTokenCookieValue(request: Request) {
     return null;
   }
 
-  const parsedAccessTokenCookie = await (accessTokenCookie.parse(cookieHeader) || {});
+  const parsedAccessTokenCookie = await accessTokenCookie.parse(cookieHeader);
   if (!parsedAccessTokenCookie?.access_token) {
     return null;
   }
@@ -121,7 +121,7 @@ async function getRefreshTokenCookieValue(request: Request) {
     return null;
   }
 
-  const parsedRefreshTokenCookie = await (refreshTokenCookie.parse(cookieHeader) || {});
+  const parsedRefreshTokenCookie = await refreshTokenCookie.parse(cookieHeader);
   if (!parsedRefreshTokenCookie?.refresh_token) {
     return null;
   }
