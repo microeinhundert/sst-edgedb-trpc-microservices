@@ -1,7 +1,7 @@
 import { createCookie, redirect } from "@remix-run/node";
 
-import { env } from "./env";
-import { isProduction } from "./utils/env";
+import { env } from "../env";
+import { isProduction } from "../utils/env";
 
 const cookieSettings = {
   maxAge: 60 * 60 * 30,
