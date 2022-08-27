@@ -48,7 +48,7 @@ async function authenticationFlow<TContextValue>(
         break;
       }
     } catch {
-      throw new Error(`An error occured in the authentication flow at step "${stepIdentifier}"`);
+      throw new Error(`An error occurred in the authentication flow at step "${stepIdentifier}"`);
     }
   }
 
