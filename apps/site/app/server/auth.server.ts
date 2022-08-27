@@ -1,8 +1,8 @@
 import { createCookie, redirect } from "@remix-run/node";
 import { z } from "zod";
 
-import { env } from "../env";
-import { isProduction } from "../utils/env";
+import { env } from "~/env";
+import { isProduction } from "~/utils/env";
 
 const cookieSettings = {
   maxAge: 60 * 60 * 30,
@@ -203,7 +203,7 @@ async function refreshCredentials(request: Request, redirectUri: string) {
  * If this call succeeds, the user is authenticated.
  *
  * @param {string} accessToken
- * @return {Promise<any>}
+ * @return {Promise<User | null>}
  */
 async function getUserInfo(accessToken: string) {
   const response = await fetch(`${env.AUTH_BASE_URL}/oauth2/userInfo`, {
