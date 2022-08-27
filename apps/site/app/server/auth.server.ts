@@ -164,16 +164,11 @@ async function getCredentials(code: string, redirectUri: string) {
 /**
  * Exchanges the old credentials for new ones.
  *
- * @param {Request} request
+ * @param {string} refreshToken
  * @param {string} redirectUri
  * @return {Promise<Credentials | null>}
  */
-async function refreshCredentials(request: Request, redirectUri: string) {
-  const refreshToken = await getRefreshTokenCookieValue(request);
-  if (!refreshToken) {
-    return null;
-  }
-
+async function refreshCredentials(refreshToken: string, redirectUri: string) {
   const response = await fetch(`${env.AUTH_BASE_URL}/oauth2/token`, {
     method: "POST",
     headers: {
@@ -239,16 +234,19 @@ export async function authenticate(request: Request) {
 
   const user = await authenticationFlow<User>({
     checkCode: async (setUser) => {
-      const code = url.searchParams.get("code");
-
       // If the url has a code, we redirected the user to cognito and they were authenticated
-      if (code) {
-        const credentials = await getCredentials(code, redirectUri);
-        if (credentials) {
-          setUser(await getUserInfo(credentials.access_token));
-          appendCredentialsAsCookieHeaders(headers, credentials);
-        }
+      const code = url.searchParams.get("code");
+      if (!code) {
+        return;
       }
+
+      const credentials = await getCredentials(code, redirectUri);
+      if (!credentials) {
+        return;
+      }
+
+      setUser(await getUserInfo(credentials.access_token));
+      appendCredentialsAsCookieHeaders(headers, credentials);
     },
     checkAccessToken: async (setUser) => {
       const accessToken = await getAccessTokenCookieValue(request);
@@ -257,12 +255,19 @@ export async function authenticate(request: Request) {
       }
     },
     refreshCredentials: async (setUser) => {
-      const credentials = await refreshCredentials(request, redirectUri);
-      if (credentials) {
-        const user = setUser(await getUserInfo(credentials.access_token));
-        if (user) {
-          appendCredentialsAsCookieHeaders(headers, credentials);
-        }
+      const refreshToken = await getRefreshTokenCookieValue(request);
+      if (!refreshToken) {
+        return;
+      }
+
+      const credentials = await refreshCredentials(refreshToken, redirectUri);
+      if (!credentials) {
+        return;
+      }
+
+      const user = setUser(await getUserInfo(credentials.access_token));
+      if (user) {
+        appendCredentialsAsCookieHeaders(headers, credentials);
       }
     },
   });
