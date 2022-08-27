@@ -47,8 +47,8 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.9.1",
-    "@serverless-stack/resources": "1.9.1",
+    "@serverless-stack/cli": "1.9.4",
+    "@serverless-stack/resources": "1.9.4",
     "@sst-app/eslint-config-custom": "*",
     "@trpc/server": "10.0.0-proxy-alpha.57",
     "husky": "^8.0.1",

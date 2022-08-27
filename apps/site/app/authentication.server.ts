@@ -269,6 +269,7 @@ export async function authenticate(request: Request) {
       response_type: "code",
       scope: "email",
       redirect_uri: redirectUri,
+      state: redirectTo,
     });
 
     return redirect(`${env.AUTH_BASE_URL}/login?${redirectSearchParams}`);

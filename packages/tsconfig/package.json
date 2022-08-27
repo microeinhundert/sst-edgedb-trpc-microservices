@@ -6,6 +6,6 @@
   "type": "commonjs",
   "main": "src/index.js",
   "dependencies": {
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.2"
   }
 }
