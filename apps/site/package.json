@@ -29,11 +29,9 @@
     "@sst-app/auth": "*",
     "@sst-app/trpc-mux": "*",
     "@trpc/client": "10.0.0-proxy-alpha.57",
-    "@xstate/react": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "superjson": "^1.9.1",
-    "xstate": "^4.33.4",
     "zod": "^3.18.0"
   },
   "devDependencies": {
