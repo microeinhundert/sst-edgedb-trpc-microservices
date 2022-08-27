@@ -42,11 +42,11 @@ async function authenticationFlow<TContextValue>(
 ): Promise<TContextValue | null> {
   let context: TContextValue | null = null;
 
-  for (const [stepIdentifier, step] of Object.entries(steps)) {
-    const contextSetter: ContextSetter<TContextValue> = (newContext) => {
-      return (context = newContext);
-    };
+  const contextSetter: ContextSetter<TContextValue> = (newContext) => {
+    return (context = newContext);
+  };
 
+  for (const [stepIdentifier, step] of Object.entries(steps)) {
     try {
       await step.apply(context, [contextSetter]);
       if (context) {
