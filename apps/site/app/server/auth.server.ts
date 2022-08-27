@@ -1,4 +1,5 @@
 import { createCookie, redirect } from "@remix-run/node";
+import { z } from "zod";
 
 import { env } from "../env";
 import { isProduction } from "../utils/env";
@@ -14,14 +15,18 @@ const accessTokenCookie = createCookie("accessToken", cookieSettings);
 const idTokenCookie = createCookie("idToken", cookieSettings);
 const refreshTokenCookie = createCookie("refreshToken", cookieSettings);
 
-// TODO: Type
-type User = Record<string, any>;
+const credentialsResponseSchema = z.object({
+  access_token: z.string().min(1),
+  id_token: z.string().min(1),
+  refresh_token: z.string().min(1),
+});
+const userResponseSchema = z.object({
+  given_name: z.string().min(1),
+  family_name: z.string().min(1),
+});
 
-type Credentials = {
-  accessToken: string;
-  idToken: string;
-  refreshToken: string;
-};
+type Credentials = z.infer<typeof credentialsResponseSchema>;
+type User = z.infer<typeof userResponseSchema>;
 
 type ContextSetter<TContextValue> = (newContext: TContextValue | null) => TContextValue | null;
 
@@ -65,21 +70,21 @@ async function appendCredentialsAsCookieHeaders(headers: Headers, credentials: C
   headers.append(
     "Set-Cookie",
     await accessTokenCookie.serialize({
-      access_token: credentials.accessToken,
+      access_token: credentials.access_token,
     })
   );
 
   headers.append(
     "Set-Cookie",
     await idTokenCookie.serialize({
-      id_token: credentials.idToken,
+      id_token: credentials.id_token,
     })
   );
 
   headers.append(
     "Set-Cookie",
     await refreshTokenCookie.serialize({
-      refresh_token: credentials.refreshToken,
+      refresh_token: credentials.refresh_token,
     })
   );
 }
@@ -149,13 +154,11 @@ async function getCredentials(code: string, redirectUri: string) {
     return null;
   }
 
-  const { access_token, id_token, refresh_token } = await response.json();
-
-  return {
-    accessToken: access_token,
-    idToken: id_token,
-    refreshToken: refresh_token,
-  } as Credentials;
+  try {
+    return credentialsResponseSchema.parse(await response.json());
+  } catch {
+    throw new Error("The response returned by Cognito does not adhere to the expected schema");
+  }
 }
 
 /**
@@ -188,13 +191,11 @@ async function refreshCredentials(request: Request, redirectUri: string) {
     return null;
   }
 
-  const { access_token, id_token, refresh_token } = await response.json();
-
-  return {
-    accessToken: access_token,
-    idToken: id_token,
-    refreshToken: refresh_token,
-  } as Credentials;
+  try {
+    return credentialsResponseSchema.parse(await response.json());
+  } catch {
+    throw new Error("The response returned by Cognito does not adhere to the expected schema");
+  }
 }
 
 /**
@@ -216,7 +217,11 @@ async function getUserInfo(accessToken: string) {
     return null;
   }
 
-  return response.json() as User;
+  try {
+    return userResponseSchema.parse(await response.json());
+  } catch {
+    throw new Error("The response returned by Cognito does not adhere to the expected schema");
+  }
 }
 
 /**
@@ -240,7 +245,7 @@ export async function authenticate(request: Request) {
       if (code) {
         const credentials = await getCredentials(code, redirectUri);
         if (credentials) {
-          setUser(await getUserInfo(credentials.accessToken));
+          setUser(await getUserInfo(credentials.access_token));
           appendCredentialsAsCookieHeaders(headers, credentials);
         }
       }
@@ -254,7 +259,7 @@ export async function authenticate(request: Request) {
     refreshCredentials: async (setUser) => {
       const credentials = await refreshCredentials(request, redirectUri);
       if (credentials) {
-        const user = setUser(await getUserInfo(credentials.accessToken));
+        const user = setUser(await getUserInfo(credentials.access_token));
         if (user) {
           appendCredentialsAsCookieHeaders(headers, credentials);
         }
