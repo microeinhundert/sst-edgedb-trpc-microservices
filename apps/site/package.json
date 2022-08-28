@@ -21,6 +21,11 @@
     },
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "@hookform/resolvers": "^2.9.7",
     "@remix-run/node": "^1.7.0",

@@ -16,6 +16,11 @@
     ],
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "zod": "^3.18.0"
   },

@@ -27,8 +27,19 @@
     "pre-commit": "lint-staged",
     "prepare": "husky install"
   },
-  "lint-staged": {
-    "*.{ts,tsx,md,json}": "npm run format"
+  "keywords": [
+    "aws",
+    "sst",
+    "trpc",
+    "lambda",
+    "microservices"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git"
+  },
+  "bugs": {
+    "url": "https://github.com/microeinhundert/sst-edgedb-trpc-microservices/issues"
   },
   "prettier": {
     "arrowParens": "always",
@@ -45,6 +56,9 @@
       "@sst-app/eslint-config-custom"
     ],
     "root": true
+  },
+  "lint-staged": {
+    "*.{ts,tsx,md,json}": "npm run format"
   },
   "devDependencies": {
     "@serverless-stack/cli": "1.9.4",

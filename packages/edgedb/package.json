@@ -23,6 +23,11 @@
     },
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "@serverless-stack/node": "^1.9.4",
     "@sst-app/lambda-utils": "*",

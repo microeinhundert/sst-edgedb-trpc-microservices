@@ -16,6 +16,11 @@
     ],
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.159.0",
     "@serverless-stack/node": "^1.9.4",

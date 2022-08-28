@@ -15,6 +15,11 @@
     ],
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*"

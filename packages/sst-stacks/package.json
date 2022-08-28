@@ -16,6 +16,11 @@
     ],
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "@serverless-stack/resources": "1.9.4",
     "@sst-app/cdk-constructs": "*",

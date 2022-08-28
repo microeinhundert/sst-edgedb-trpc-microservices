@@ -16,6 +16,11 @@
     ],
     "root": true
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
   "dependencies": {
     "aws-cdk-lib": "2.32.0",
     "constructs": "^10.1.88"
