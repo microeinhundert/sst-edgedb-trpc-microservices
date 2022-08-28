@@ -42,7 +42,7 @@ type ContextSetter<TInitialContextValue, TContextValue> = (
  * @param {TInitialContextValue} initialContext
  * @return {(AsyncGenerator<
  *   TInitialContextValue | TContextValue,
- *   TInitialContextValue | TContextValue,
+ *   void,
  *   void
  * >)}
  */
@@ -52,11 +52,7 @@ async function* createAuthenticationFlow<TContextValue, TInitialContextValue = n
     (setter: ContextSetter<TInitialContextValue, TContextValue>) => MaybePromise<void>
   >,
   initialContext: TInitialContextValue
-): AsyncGenerator<
-  TInitialContextValue | TContextValue,
-  TInitialContextValue | TContextValue,
-  void
-> {
+): AsyncGenerator<TInitialContextValue | TContextValue, void, void> {
   let context: TInitialContextValue | TContextValue = initialContext;
 
   const contextSetter: ContextSetter<TInitialContextValue, TContextValue> = (newContext) => {
@@ -80,8 +76,6 @@ async function* createAuthenticationFlow<TContextValue, TInitialContextValue = n
       );
     }
   }
-
-  return context;
 }
 
 /**
