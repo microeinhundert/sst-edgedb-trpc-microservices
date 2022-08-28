@@ -1,59 +1,83 @@
-import { createCookie, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { z } from "zod";
 
+import { credentialsCookie } from "~/cookies.server";
 import { env } from "~/env";
-import { isProduction } from "~/utils/env";
 
-const cookieSettings = {
-  maxAge: 60 * 60 * 30,
-  secure: isProduction,
-  secrets: [env.SESSION_SECRET],
-  httpOnly: true,
-};
-
-const accessTokenCookie = createCookie("accessToken", cookieSettings);
-const idTokenCookie = createCookie("idToken", cookieSettings);
-const refreshTokenCookie = createCookie("refreshToken", cookieSettings);
-
-const credentialsResponseSchema = z.object({
+/**
+ * Schema
+ */
+const credentialsSchema = z.object({
   access_token: z.string().min(1),
   id_token: z.string().min(1),
   refresh_token: z.string().min(1),
-});
-const userResponseSchema = z.object({
-  given_name: z.string().min(1),
-  family_name: z.string().min(1),
+  expires_in: z.number(),
+  expires_at: z.number().optional(),
 });
 
-type Credentials = z.infer<typeof credentialsResponseSchema>;
-type User = z.infer<typeof userResponseSchema>;
-
-type ContextSetter<TContextValue> = (newContext: TContextValue | null) => TContextValue | null;
+const userSchema = z.object({
+  sub: z.string().min(1),
+  email: z.string().email(),
+  username: z.string().min(1),
+});
 
 /**
- * Helper function for the authentication flow sequence.
+ * Types
+ */
+type Credentials = z.infer<typeof credentialsSchema>;
+type User = z.infer<typeof userSchema>;
+
+type MaybePromise<T> = Promise<T> | T;
+
+type ContextSetter<TInitialContextValue, TContextValue> = (
+  newContext: TInitialContextValue | TContextValue
+) => TInitialContextValue | TContextValue;
+
+/**
+ * Helper function to create a authentication flow sequence.
  *
  * @template TContextValue
- * @param {(Record<string, (setter: ContextSetter<TContextValue>) => Promise<void> | void>)} steps
- * @return {(Promise<TContextValue | null>)}
+ * @template TInitialContextValue
+ * @param {(Record<string, (setter: ContextSetter<TInitialContextValue, TContextValue>) => MaybePromise<void>)} stages
+ * @param {TInitialContextValue} initialContext
+ * @return {(AsyncGenerator<
+ *   TInitialContextValue | TContextValue,
+ *   TInitialContextValue | TContextValue,
+ *   void
+ * >)}
  */
-async function authenticationFlow<TContextValue>(
-  steps: Record<string, (setter: ContextSetter<TContextValue>) => Promise<void> | void>
-): Promise<TContextValue | null> {
-  let context: TContextValue | null = null;
+async function* createAuthenticationFlow<TContextValue, TInitialContextValue = null>(
+  stages: Record<
+    string,
+    (setter: ContextSetter<TInitialContextValue, TContextValue>) => MaybePromise<void>
+  >,
+  initialContext: TInitialContextValue
+): AsyncGenerator<
+  TInitialContextValue | TContextValue,
+  TInitialContextValue | TContextValue,
+  void
+> {
+  let context: TInitialContextValue | TContextValue = initialContext;
 
-  const contextSetter: ContextSetter<TContextValue> = (newContext) => {
+  const contextSetter: ContextSetter<TInitialContextValue, TContextValue> = (newContext) => {
     return (context = newContext);
   };
 
-  for (const [stepIdentifier, step] of Object.entries(steps)) {
+  for (const [stageIdentifier, stage] of Object.entries(stages)) {
+    console.log(`Authentication flow at stage "${stageIdentifier}"`);
+
     try {
-      await step.apply(context, [contextSetter]);
-      if (context) {
-        break;
+      await stage.apply({ set: contextSetter }, [contextSetter]);
+      yield context;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `An error occurred in the authentication flow at stage "${stageIdentifier}": ${error.message}`
+        );
       }
-    } catch {
-      throw new Error(`An error occurred in the authentication flow at step "${stepIdentifier}"`);
+      throw new Error(
+        `An unknown error occurred in the authentication flow at stage "${stageIdentifier}"`
+      );
     }
   }
 
@@ -61,72 +85,49 @@ async function authenticationFlow<TContextValue>(
 }
 
 /**
- * Appends the credentials as individual `Set-Cookie` headers.
+ * Appends the credentials cookie.
  *
  * @param {Headers} headers
  * @param {Credentials} credentials
+ * @return {Promise<Headers>}
  */
-async function appendCredentialsAsCookieHeaders(headers: Headers, credentials: Credentials) {
-  headers.append(
+async function appendCredentialsCookie(headers: Headers, credentials: Credentials) {
+  const newHeaders = new Headers(headers);
+
+  newHeaders.append(
     "Set-Cookie",
-    await accessTokenCookie.serialize({
-      access_token: credentials.access_token,
+    await credentialsCookie.serialize({
+      ...credentials,
+      expirest_at: Date.now() + credentials.expires_in,
     })
   );
 
-  headers.append(
-    "Set-Cookie",
-    await idTokenCookie.serialize({
-      id_token: credentials.id_token,
-    })
-  );
-
-  headers.append(
-    "Set-Cookie",
-    await refreshTokenCookie.serialize({
-      refresh_token: credentials.refresh_token,
-    })
-  );
+  return newHeaders;
 }
 
 /**
- * Gets the access token cookie value.
+ * Gets the credentials cookie.
  *
  * @param {Request} request
- * @return {Promise<string | null>}
+ * @return {Promise<Credentials | null>}
  */
-async function getAccessTokenCookieValue(request: Request) {
+async function getCredentialsCookie(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
   if (!cookieHeader) {
     return null;
   }
 
-  const parsedAccessTokenCookie = await accessTokenCookie.parse(cookieHeader);
-  if (!parsedAccessTokenCookie?.access_token) {
+  const cookie = await credentialsCookie.parse(cookieHeader);
+  if (!cookie) {
     return null;
   }
 
-  return String(parsedAccessTokenCookie.access_token);
-}
-
-/**
- * Gets the refresh token cookie value.
- *
- * @param {Request} request
- * @return {Promise<string | null>}
- */
-async function getRefreshTokenCookieValue(request: Request) {
-  const cookieHeader = request.headers.get("Cookie");
-  if (!cookieHeader) {
-    return null;
+  const parsedCookie = credentialsSchema.safeParse(cookie);
+  if (!parsedCookie.success) {
+    throw new Error("Error parsing the credentials cookie");
   }
 
-  const parsedRefreshTokenCookie = await refreshTokenCookie.parse(cookieHeader);
-  if (!parsedRefreshTokenCookie?.refresh_token) {
-    return null;
-  }
-
-  return String(parsedRefreshTokenCookie.refresh_token);
+  return parsedCookie.data;
 }
 
 /**
@@ -150,15 +151,18 @@ async function getCredentials(code: string, redirectUri: string) {
     }),
   });
 
-  if (!response.ok) {
+  if (response.status !== 200) {
     return null;
   }
 
-  try {
-    return credentialsResponseSchema.parse(await response.json());
-  } catch {
-    throw new Error("The response returned by Cognito does not adhere to the expected schema");
+  const parsedResponse = credentialsSchema.safeParse(await response.json());
+  if (!parsedResponse.success) {
+    throw new Error(
+      "The response returned by Cognito does not adhere to the schema expected by `getCredentials`"
+    );
   }
+
+  return parsedResponse.data;
 }
 
 /**
@@ -182,15 +186,18 @@ async function refreshCredentials(refreshToken: string, redirectUri: string) {
     }),
   });
 
-  if (!response.ok) {
+  if (response.status !== 200) {
     return null;
   }
 
-  try {
-    return credentialsResponseSchema.parse(await response.json());
-  } catch {
-    throw new Error("The response returned by Cognito does not adhere to the expected schema");
+  const parsedResponse = credentialsSchema.safeParse(await response.json());
+  if (!parsedResponse.success) {
+    throw new Error(
+      "The response returned by Cognito does not adhere to the schema expected by `refreshCredentials`"
+    );
   }
+
+  return parsedResponse.data;
 }
 
 /**
@@ -208,15 +215,18 @@ async function getUserInfo(accessToken: string) {
     },
   });
 
-  if (!response.ok) {
+  if (response.status !== 200) {
     return null;
   }
 
-  try {
-    return userResponseSchema.parse(await response.json());
-  } catch {
-    throw new Error("The response returned by Cognito does not adhere to the expected schema");
+  const parsedResponse = userSchema.safeParse(await response.json());
+  if (!parsedResponse.success) {
+    throw new Error(
+      "The response returned by Cognito does not adhere to the schema expected by `getUserInfo`"
+    );
   }
+
+  return parsedResponse.data;
 }
 
 /**
@@ -227,62 +237,90 @@ async function getUserInfo(accessToken: string) {
  */
 export async function authenticate(request: Request) {
   const url = new URL(request.url);
-  const redirectUri = url.origin + url.pathname;
+  const redirectUri = `${url.origin}${url.pathname}`;
   const redirectTo = encodeURIComponent(url.searchParams.get("redirectTo") || "/");
 
-  const headers = new Headers();
+  let headers = new Headers();
 
-  const user = await authenticationFlow<User>({
-    checkCode: async (setUser) => {
-      // If the url has a code, we redirected the user to cognito and they were authenticated
-      const code = url.searchParams.get("code");
-      if (!code) {
-        return;
-      }
+  const authenticationFlow = createAuthenticationFlow<User>(
+    {
+      checkCode: async (setUser) => {
+        // If the url has a code, we redirected the user
+        // to cognito and they were authenticated
+        const code = url.searchParams.get("code");
+        if (!code) {
+          return;
+        }
 
-      const credentials = await getCredentials(code, redirectUri);
-      if (!credentials) {
-        return;
-      }
+        const credentials = await getCredentials(code, redirectUri);
+        if (!credentials) {
+          return;
+        }
 
-      setUser(await getUserInfo(credentials.access_token));
-      appendCredentialsAsCookieHeaders(headers, credentials);
+        const user = setUser(await getUserInfo(credentials.access_token));
+        if (!user) {
+          return;
+        }
+
+        headers = await appendCredentialsCookie(headers, credentials);
+      },
+      checkAccessToken: async (setUser) => {
+        const credentials = await getCredentialsCookie(request);
+        if (!credentials?.access_token) {
+          return;
+        }
+
+        // Return if the credentials expired
+        if ((credentials?.expires_at ?? 0) <= Date.now()) {
+          return;
+        }
+
+        setUser(await getUserInfo(credentials.access_token));
+      },
+      refreshCredentials: async (setUser) => {
+        const credentials = await getCredentialsCookie(request);
+        if (!credentials?.refresh_token) {
+          return;
+        }
+
+        const refreshedCredentials = await refreshCredentials(
+          credentials.refresh_token,
+          redirectUri
+        );
+        if (!refreshedCredentials) {
+          return;
+        }
+
+        const user = setUser(await getUserInfo(refreshedCredentials.access_token));
+        if (!user) {
+          return;
+        }
+
+        headers = await appendCredentialsCookie(headers, refreshedCredentials);
+      },
     },
-    checkAccessToken: async (setUser) => {
-      const accessToken = await getAccessTokenCookieValue(request);
-      if (accessToken) {
-        setUser(await getUserInfo(accessToken));
-      }
-    },
-    refreshCredentials: async (setUser) => {
-      const refreshToken = await getRefreshTokenCookieValue(request);
-      if (!refreshToken) {
-        return;
-      }
+    null
+  );
 
-      const credentials = await refreshCredentials(refreshToken, redirectUri);
-      if (!credentials) {
-        return;
-      }
+  let authenticatedUser: User | null = null;
 
-      const user = setUser(await getUserInfo(credentials.access_token));
-      if (user) {
-        appendCredentialsAsCookieHeaders(headers, credentials);
-      }
-    },
-  });
+  for await (const authenticationFlowContext of authenticationFlow) {
+    if (authenticationFlowContext) {
+      authenticatedUser = authenticationFlowContext;
+      break;
+    }
+  }
 
   // We have no user, redirect to cognito login page
-  if (!user) {
+  if (!authenticatedUser) {
     const redirectSearchParams = new URLSearchParams({
       client_id: env.AUTH_USER_POOL_CLIENT_ID,
       response_type: "code",
-      scope: "email",
       redirect_uri: redirectUri,
       state: redirectTo,
     });
 
-    return redirect(`${env.AUTH_BASE_URL}/login?${redirectSearchParams}`);
+    return redirect(`${env.AUTH_BASE_URL}/login?scope=email+openid&${redirectSearchParams}`);
   }
 
   // We have a user
