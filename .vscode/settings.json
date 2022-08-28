@@ -12,5 +12,51 @@
     "**/node_modules": true,
     "**/.turbo": true
   },
+  "eslint.workingDirectories": [
+    {
+      "directory": "apps/site",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "functions/pre-sign-up-trigger",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/cdk-constructs",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/common",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/edgedb",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/lambda-utils",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/sst-stacks",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/trpc",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/trpc-mux",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "services/auth",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "services/demo",
+      "changeProcessCWD": true
+    }
+  ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

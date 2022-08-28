@@ -23,7 +23,7 @@
     "sst:deploy": "sst deploy",
     "sst:remove": "sst remove",
     "sst:start": "sst start",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format": "prettier --write .",
     "pre-commit": "lint-staged",
     "prepare": "husky install"
   },

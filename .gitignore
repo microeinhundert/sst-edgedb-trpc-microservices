@@ -1,7 +1,6 @@
-# Compiled output
-dist
 .build
 .sst
+dist
 
 # Dependencies
 node_modules
@@ -28,6 +27,3 @@ yarn-error.log*
 
 # Turbo
 .turbo
-
-# EdgeDB Query Builder
-packages/edgedb/src/lib/queryBuilder

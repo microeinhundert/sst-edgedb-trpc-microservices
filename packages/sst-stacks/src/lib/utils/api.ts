@@ -27,7 +27,13 @@ export function getCorsConfig(isDevStage?: boolean) {
     allowCredentials: true,
     allowOrigins,
     allowMethods: ["GET", "POST", "OPTIONS"],
-    allowHeaders: ["*"],
+    allowHeaders: [
+      "Content-Type",
+      "Access-Control-Allow-Credentials",
+      "Access-Control-Allow-Origin",
+      "Authorization",
+      "Accept",
+    ],
   } as CorsConfig;
 }
 

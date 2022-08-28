@@ -11,7 +11,7 @@
     "link": "sh scripts/link.sh",
     "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
-    "lint": "TIMING=1 eslint 'src/**/*.ts'",
+    "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {

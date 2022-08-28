@@ -1,9 +1,3 @@
 .build
 .sst
-node_modules
 dist
-public
-assets
-
-# EdgeDB Query Builder
-packages/edgedb/src/lib/queryBuilder
