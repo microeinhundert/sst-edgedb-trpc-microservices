@@ -1,20 +1,26 @@
 import { redirect } from "@remix-run/node";
 import { z } from "zod";
 
-import { credentialsCookie } from "~/cookies.server";
 import { env } from "~/env";
+import { accessTokenCookie, refreshTokenCookie } from "~/server/cookies.server";
 
 /**
  * Schema
  */
 const credentialsSchema = z.object({
   access_token: z.string().min(1),
+  refresh_token: z.string().optional(),
   id_token: z.string().min(1),
-  refresh_token: z.string().min(1),
   expires_in: z.number(),
-  expires_at: z.number().optional(),
 });
-
+const accessTokenSchema = z.object({
+  value: z.string().min(1),
+  expires_at: z.number(),
+});
+const refreshTokenSchema = z.object({
+  value: z.string().min(1),
+  expires_at: z.number(),
+});
 const userSchema = z.object({
   sub: z.string().min(1),
   email: z.string().email(),
@@ -25,13 +31,23 @@ const userSchema = z.object({
  * Types
  */
 type Credentials = z.infer<typeof credentialsSchema>;
+type AccessToken = z.infer<typeof accessTokenSchema>;
+type RefreshToken = z.infer<typeof refreshTokenSchema>;
 type User = z.infer<typeof userSchema>;
-
 type MaybePromise<T> = Promise<T> | T;
-
 type ContextSetter<TInitialContextValue, TContextValue> = (
   newContext: TInitialContextValue | TContextValue
 ) => TInitialContextValue | TContextValue;
+
+/**
+ * Checks if a token has expired.
+ *
+ * @param {{ expires_at: number }} token
+ * @return {boolean}
+ */
+function isTokenExpired(token: { expires_at: number }) {
+  return token.expires_at <= Date.now() / 1000;
+}
 
 /**
  * Helper function to create a authentication flow sequence.
@@ -79,46 +95,79 @@ async function* createAuthenticationFlow<TContextValue, TInitialContextValue = n
 }
 
 /**
- * Appends the credentials cookie.
+ * Appends the access and refresh token cookies.
  *
  * @param {Headers} headers
  * @param {Credentials} credentials
  * @return {Promise<Headers>}
  */
-async function appendCredentialsCookie(headers: Headers, credentials: Credentials) {
+async function appendCookies(headers: Headers, credentials: Credentials) {
   const newHeaders = new Headers(headers);
 
   newHeaders.append(
     "Set-Cookie",
-    await credentialsCookie.serialize({
-      ...credentials,
-      expirest_at: Date.now() + credentials.expires_in,
-    })
+    await accessTokenCookie.serialize({
+      value: credentials.access_token,
+      expires_at: Math.floor(Date.now() / 1000 + credentials.expires_in),
+    } as AccessToken)
+  );
+
+  newHeaders.append(
+    "Set-Cookie",
+    await refreshTokenCookie.serialize({
+      value: credentials.refresh_token ?? "",
+      expires_at: Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 30), // 30 Days
+    } as RefreshToken)
   );
 
   return newHeaders;
 }
 
 /**
- * Gets the credentials cookie.
+ * Gets the access token cookie value.
  *
  * @param {Request} request
- * @return {Promise<Credentials | null>}
+ * @return {Promise<AccessToken | null>}
  */
-async function getCredentialsCookie(request: Request) {
+async function getAccessTokenCookieValue(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
   if (!cookieHeader) {
     return null;
   }
 
-  const cookie = await credentialsCookie.parse(cookieHeader);
+  const cookie = await accessTokenCookie.parse(cookieHeader);
   if (!cookie) {
     return null;
   }
 
-  const parsedCookie = credentialsSchema.safeParse(cookie);
+  const parsedCookie = accessTokenSchema.safeParse(cookie);
   if (!parsedCookie.success) {
-    throw new Error("Error parsing the credentials cookie");
+    throw new Error("Error parsing the access token cookie");
+  }
+
+  return parsedCookie.data;
+}
+
+/**
+ * Gets the refresh token cookie value.
+ *
+ * @param {Request} request
+ * @return {Promise<RefreshToken | null>}
+ */
+async function getRefreshTokenCookieValue(request: Request) {
+  const cookieHeader = request.headers.get("Cookie");
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const cookie = await refreshTokenCookie.parse(cookieHeader);
+  if (!cookie) {
+    return null;
+  }
+
+  const parsedCookie = refreshTokenSchema.safeParse(cookie);
+  if (!parsedCookie.success) {
+    throw new Error("Error parsing the refresh token cookie");
   }
 
   return parsedCookie.data;
@@ -227,12 +276,11 @@ async function getUserInfo(accessToken: string) {
  * Authenticates the user.
  *
  * @param {Request} request
- * @return {Promise<TypedResponse<never>>}
+ * @return {Promise<User>}
  */
 export async function authenticate(request: Request) {
   const url = new URL(request.url);
-  const redirectUri = `${url.origin}${url.pathname}`;
-  const redirectTo = encodeURIComponent(url.searchParams.get("redirectTo") || "/");
+  const redirectUri = `${url.origin}/auth/callback/`;
 
   let headers = new Headers();
 
@@ -256,31 +304,33 @@ export async function authenticate(request: Request) {
           return;
         }
 
-        headers = await appendCredentialsCookie(headers, credentials);
+        headers = await appendCookies(headers, credentials);
       },
       checkAccessToken: async (setUser) => {
-        const credentials = await getCredentialsCookie(request);
-        if (!credentials?.access_token) {
+        const accessToken = await getAccessTokenCookieValue(request);
+        if (!accessToken) {
           return;
         }
 
-        // Return if the credentials expired
-        if ((credentials?.expires_at ?? 0) <= Date.now()) {
+        if (isTokenExpired(accessToken)) {
+          console.log("The access token expired");
           return;
         }
 
-        setUser(await getUserInfo(credentials.access_token));
+        setUser(await getUserInfo(accessToken.value));
       },
       refreshCredentials: async (setUser) => {
-        const credentials = await getCredentialsCookie(request);
-        if (!credentials?.refresh_token) {
+        const refreshToken = await getRefreshTokenCookieValue(request);
+        if (!refreshToken) {
           return;
         }
 
-        const refreshedCredentials = await refreshCredentials(
-          credentials.refresh_token,
-          redirectUri
-        );
+        if (isTokenExpired(refreshToken)) {
+          console.log("The refresh token expired");
+          return;
+        }
+
+        const refreshedCredentials = await refreshCredentials(refreshToken.value, redirectUri);
         if (!refreshedCredentials) {
           return;
         }
@@ -290,7 +340,7 @@ export async function authenticate(request: Request) {
           return;
         }
 
-        headers = await appendCredentialsCookie(headers, refreshedCredentials);
+        headers = await appendCookies(headers, refreshedCredentials);
       },
     },
     null
@@ -311,15 +361,17 @@ export async function authenticate(request: Request) {
       client_id: env.AUTH_USER_POOL_CLIENT_ID,
       response_type: "code",
       redirect_uri: redirectUri,
-      state: redirectTo,
+      state: request.url,
     });
-
-    return redirect(`${env.AUTH_BASE_URL}/login?scope=email+openid&${redirectSearchParams}`);
+    throw redirect(`${env.AUTH_BASE_URL}/login?scope=email+openid&${redirectSearchParams}`);
   }
 
   // We have a user
   const state = url.searchParams.get("state");
-  const finalRedirectUrl = decodeURIComponent(state || redirectTo);
+  if (state) {
+    const finalRedirectUrl = decodeURIComponent(state);
+    throw redirect(finalRedirectUrl, { headers });
+  }
 
-  return redirect(finalRedirectUrl, { headers });
+  return authenticatedUser;
 }

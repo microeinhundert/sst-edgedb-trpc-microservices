@@ -6,7 +6,7 @@
   "main": "index.ts",
   "types": "index.ts",
   "scripts": {
-    "lint": "TIMING=1 eslint . --ext=.ts,.tsx '*.ts'",
+    "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
