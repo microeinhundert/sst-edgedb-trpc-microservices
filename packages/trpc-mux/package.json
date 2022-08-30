@@ -4,8 +4,14 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
   "scripts": {
     "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
@@ -24,8 +30,8 @@
   "dependencies": {
     "@sst-app/auth": "*",
     "@sst-app/trpc": "*",
-    "@trpc/client": "10.0.0-proxy-alpha.57",
-    "@trpc/server": "10.0.0-proxy-alpha.57"
+    "@trpc/client": "10.0.0-proxy-alpha.59",
+    "@trpc/server": "10.0.0-proxy-alpha.59"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

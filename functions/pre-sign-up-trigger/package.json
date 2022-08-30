@@ -3,8 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "handlers.ts",
-  "types": "handlers.ts",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "default": "./index.ts",
+      "types": "./index.ts"
+    },
+    "./handlers": {
+      "default": "./handlers.ts",
+      "types": "./handlers.ts"
+    }
+  },
   "scripts": {
     "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"

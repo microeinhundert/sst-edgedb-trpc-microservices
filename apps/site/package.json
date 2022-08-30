@@ -17,7 +17,8 @@
     ],
     "rules": {
       "@typescript-eslint/ban-types": "off",
-      "@typescript-eslint/consistent-type-imports": "off"
+      "@typescript-eslint/consistent-type-imports": "off",
+      "turbo/no-undeclared-env-vars": "off"
     },
     "root": true
   },
@@ -33,9 +34,12 @@
     "@remix-run/serve": "^1.7.0",
     "@sst-app/auth": "*",
     "@sst-app/trpc-mux": "*",
-    "@trpc/client": "10.0.0-proxy-alpha.57",
+    "@tanstack/react-query": "^4.2.3",
+    "@trpc/client": "10.0.0-proxy-alpha.59",
+    "@trpc/react": "^10.0.0-proxy-alpha.59",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.34.2",
     "superjson": "^1.9.1",
     "zod": "^3.18.0"
   },

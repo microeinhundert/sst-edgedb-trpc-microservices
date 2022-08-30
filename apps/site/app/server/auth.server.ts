@@ -56,11 +56,7 @@ function isTokenExpired(token: { expires_at: number }) {
  * @template TInitialContextValue
  * @param {(Record<string, (setter: ContextSetter<TInitialContextValue, TContextValue>) => MaybePromise<void>)} stages
  * @param {TInitialContextValue} initialContext
- * @return {(AsyncGenerator<
- *   TInitialContextValue | TContextValue,
- *   void,
- *   void
- * >)}
+ * @return {(AsyncGenerator<TInitialContextValue | TContextValue, void, void>)}
  */
 async function* createAuthenticationFlow<TContextValue, TInitialContextValue = null>(
   stages: Record<

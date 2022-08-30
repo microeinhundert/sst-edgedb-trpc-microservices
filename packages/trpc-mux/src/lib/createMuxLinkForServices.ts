@@ -45,8 +45,9 @@ export function createMuxLinkForServices<
           next(value) {
             observer.next(value);
           },
-          error(err) {
-            observer.error(err);
+          error(error) {
+            console.log(error.message);
+            observer.error(error);
           },
           complete() {
             observer.complete();
