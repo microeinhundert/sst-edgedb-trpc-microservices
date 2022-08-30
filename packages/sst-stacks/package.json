@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "@serverless-stack/resources": "1.9.4",
+    "@serverless-stack/resources": "1.10.1",
     "@sst-app/cdk-constructs": "*",
     "@sst-app/common": "*",
     "aws-cdk-lib": "2.32.0",

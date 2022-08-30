@@ -9,8 +9,8 @@ export async function loader({ request }: LoaderArgs) {
   const helloWorld = await trpcProxyClient.demo.helloWorld.query();
 
   return {
-    helloWorld,
     user,
+    helloWorld,
   };
 }
 
