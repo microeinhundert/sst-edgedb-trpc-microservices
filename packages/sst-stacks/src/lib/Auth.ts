@@ -1,5 +1,5 @@
 import type { StackContext } from "@serverless-stack/resources";
-import { Auth, Config, use } from "@serverless-stack/resources";
+import { Cognito, Config, use } from "@serverless-stack/resources";
 import { PASSWORD_POLICY_LAX } from "@sst-app/common";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
@@ -11,7 +11,7 @@ export function AuthStack({ stack }: StackContext) {
   const { REGION } = use(ConfigStack);
   const { edgeDBParameters } = use(PersistenceStack);
 
-  const auth = new Auth(stack, "Auth", {
+  const auth = new Cognito(stack, "Auth", {
     login: ["email"],
     triggers: {
       preSignUp: {
