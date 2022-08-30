@@ -1,5 +1,5 @@
 import { createMuxLinkForSite } from "@sst-app/trpc-mux";
-import { createTRPCProxyClient } from "@trpc/react";
+import { createTRPCProxyClient } from "@trpc/client";
 import superjson from "superjson";
 
 import { env } from "~/env";

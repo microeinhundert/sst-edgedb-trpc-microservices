@@ -8,7 +8,7 @@ import { env } from "./env";
 
 export function AppsStack({ stack }: StackContext) {
   const { apiUrl } = use(ApiStack);
-  const { authParameters } = use(AuthStack);
+  const { cognitoParameters } = use(AuthStack);
 
   /*
    * Site
@@ -21,9 +21,9 @@ export function AppsStack({ stack }: StackContext) {
       REGION: stack.region,
       DOMAIN_NAME: env.SITE_DOMAIN_NAME,
       SESSION_SECRET: crypto.randomBytes(20).toString("hex"),
-      AUTH_USER_POOL_ID: authParameters.AUTH_USER_POOL_ID.value,
-      AUTH_USER_POOL_CLIENT_ID: authParameters.AUTH_USER_POOL_CLIENT_ID.value,
-      AUTH_BASE_URL: authParameters.AUTH_BASE_URL.value,
+      COGNITO_USER_POOL_ID: cognitoParameters.COGNITO_USER_POOL_ID.value,
+      COGNITO_USER_POOL_CLIENT_ID: cognitoParameters.COGNITO_USER_POOL_CLIENT_ID.value,
+      COGNITO_BASE_URL: cognitoParameters.COGNITO_BASE_URL.value,
     },
     customDomain: {
       domainName: env.SITE_DOMAIN_NAME,

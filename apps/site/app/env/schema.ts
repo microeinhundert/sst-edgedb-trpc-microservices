@@ -8,7 +8,7 @@ export const schema = z.object({
   REGION: z.string(),
   DOMAIN_NAME: z.string(),
   SESSION_SECRET: z.string(),
-  AUTH_USER_POOL_ID: z.string(),
-  AUTH_USER_POOL_CLIENT_ID: z.string(),
-  AUTH_BASE_URL: z.string(),
+  COGNITO_USER_POOL_ID: z.string(),
+  COGNITO_USER_POOL_CLIENT_ID: z.string(),
+  COGNITO_BASE_URL: z.string(),
 });

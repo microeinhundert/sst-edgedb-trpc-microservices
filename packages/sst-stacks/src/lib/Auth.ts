@@ -11,7 +11,7 @@ export function AuthStack({ stack }: StackContext) {
   const { REGION } = use(ConfigStack);
   const { edgeDBParameters } = use(PersistenceStack);
 
-  const auth = new Cognito(stack, "Auth", {
+  const cognito = new Cognito(stack, "Cognito", {
     login: ["email"],
     triggers: {
       preSignUp: {
@@ -54,29 +54,29 @@ export function AuthStack({ stack }: StackContext) {
     },
   });
 
-  const authDomain = auth.cdk.userPool.addDomain("AuthDomain", {
+  const cognitoDomain = cognito.cdk.userPool.addDomain("AuthDomain", {
     cognitoDomain: {
       domainPrefix: `${stack.stage}-microeinhundert-cloud`,
     },
   });
 
-  const authParameters = {
-    AUTH_USER_POOL_ID: new Config.Parameter(stack, "AUTH_USER_POOL_ID", {
-      value: auth.userPoolId,
+  const cognitoParameters = {
+    COGNITO_USER_POOL_ID: new Config.Parameter(stack, "COGNITO_USER_POOL_ID", {
+      value: cognito.userPoolId,
     }),
-    AUTH_USER_POOL_CLIENT_ID: new Config.Parameter(stack, "AUTH_USER_POOL_CLIENT_ID", {
-      value: auth.userPoolClientId,
+    COGNITO_USER_POOL_CLIENT_ID: new Config.Parameter(stack, "COGNITO_USER_POOL_CLIENT_ID", {
+      value: cognito.userPoolClientId,
     }),
-    AUTH_BASE_URL: new Config.Parameter(stack, "AUTH_BASE_URL", {
-      value: authDomain.baseUrl(),
+    COGNITO_BASE_URL: new Config.Parameter(stack, "COGNITO_BASE_URL", {
+      value: cognitoDomain.baseUrl(),
     }),
   };
 
   stack.addOutputs({
-    UserPoolId: auth.userPoolId,
-    UserPoolClientId: auth.userPoolClientId,
-    BaseUrl: authDomain.baseUrl(),
+    UserPoolId: cognito.userPoolId,
+    UserPoolClientId: cognito.userPoolClientId,
+    BaseUrl: cognitoDomain.baseUrl(),
   });
 
-  return { auth, authParameters };
+  return { cognito, cognitoParameters };
 }

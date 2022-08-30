@@ -17,7 +17,7 @@ import type { SignInInput } from "../validators/signIn";
 import type { SignOutInput } from "../validators/signOut";
 import type { SignUpInput } from "../validators/signUp";
 
-const CLIENT_ID = Config.AUTH_USER_POOL_CLIENT_ID;
+const CLIENT_ID = Config.COGNITO_USER_POOL_CLIENT_ID;
 
 export class CognitoAuth {
   constructor(private _ctx: Context) {}

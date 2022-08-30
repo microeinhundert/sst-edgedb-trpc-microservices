@@ -28,7 +28,6 @@
     ]
   },
   "dependencies": {
-    "@hookform/resolvers": "^2.9.7",
     "@remix-run/node": "^1.7.0",
     "@remix-run/react": "^1.7.0",
     "@remix-run/serve": "^1.7.0",
@@ -37,7 +36,6 @@
     "@trpc/client": "10.0.0-proxy-alpha.59",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.34.2",
     "superjson": "^1.9.1",
     "zod": "^3.18.0"
   },

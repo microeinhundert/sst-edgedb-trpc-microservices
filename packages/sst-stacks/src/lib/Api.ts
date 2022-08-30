@@ -6,7 +6,7 @@ import { env } from "./env";
 import { getCorsConfig } from "./utils/api";
 
 export function ApiStack({ stack }: StackContext) {
-  const { auth } = use(AuthStack);
+  const { cognito } = use(AuthStack);
 
   const api = new Api(stack, "Api", {
     cors: getCorsConfig(stack.stage === "dev"),
@@ -19,8 +19,8 @@ export function ApiStack({ stack }: StackContext) {
       jwt: {
         type: "user_pool",
         userPool: {
-          id: auth.userPoolId,
-          clientIds: [auth.userPoolClientId],
+          id: cognito.userPoolId,
+          clientIds: [cognito.userPoolClientId],
         },
       },
     },
@@ -29,7 +29,7 @@ export function ApiStack({ stack }: StackContext) {
     },
   });
 
-  auth.attachPermissionsForAuthUsers(stack, [api]);
+  cognito.attachPermissionsForAuthUsers(stack, [api]);
 
   const apiUrl = api.customDomainUrl ?? api.url;
 

@@ -11,16 +11,16 @@ import { generateRoutesForTRPCService } from "./utils/api";
 export function ServicesStack({ stack }: StackContext) {
   const { REGION } = use(ConfigStack);
   const { edgeDBParameters } = use(PersistenceStack);
-  const { authParameters } = use(AuthStack);
+  const { cognitoParameters } = use(AuthStack);
   const { api } = use(ApiStack);
 
   stack.setDefaultFunctionProps({
     config: [
       REGION,
       edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN,
-      authParameters.AUTH_USER_POOL_ID,
-      authParameters.AUTH_USER_POOL_CLIENT_ID,
-      authParameters.AUTH_BASE_URL,
+      cognitoParameters.COGNITO_USER_POOL_ID,
+      cognitoParameters.COGNITO_USER_POOL_CLIENT_ID,
+      cognitoParameters.COGNITO_BASE_URL,
     ],
     permissions: [
       new PolicyStatement({
