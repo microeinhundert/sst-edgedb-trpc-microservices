@@ -14,7 +14,9 @@ interface CorsConfig {
 }
 
 export function getCorsConfig(isDevStage?: boolean) {
-  let allowOrigins = [env.SITE_DOMAIN_NAME].map((domainName) => `https://${domainName}`);
+  let allowOrigins = [env.PORTAL_DOMAIN_NAME, env.SITE_DOMAIN_NAME].map(
+    (domainName) => `https://${domainName}`
+  );
 
   if (isDevStage) {
     // 3000 = Site App

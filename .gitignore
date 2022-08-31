@@ -14,6 +14,7 @@ coverage
 .DS_Store
 *.pem
 cdk.context.json
+cdk.out
 
 # Debug
 npm-debug.log*

@@ -14,6 +14,10 @@
   },
   "eslint.workingDirectories": [
     {
+      "directory": "apps/portal",
+      "changeProcessCWD": true
+    },
+    {
       "directory": "apps/site",
       "changeProcessCWD": true
     },
@@ -47,10 +51,6 @@
     },
     {
       "directory": "packages/trpc-mux",
-      "changeProcessCWD": true
-    },
-    {
-      "directory": "services/auth",
       "changeProcessCWD": true
     },
     {

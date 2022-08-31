@@ -1,3 +1,3 @@
 # Demo Service
 
-A demo service with IAM authentication.
+A service for demonstration purposes.

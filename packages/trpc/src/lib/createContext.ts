@@ -11,6 +11,8 @@ export const createContext = ({
   event,
   context,
 }: CreateAWSLambdaContextOptions<APIGatewayProxyEventV2WithJWTAuthorizer>) => {
+  // Add data from the request context here,
+  // like the currently authenticated user
   const scopedEdgeDBClient = edgeDBClient.withGlobals({
     current_user_email: "",
   });

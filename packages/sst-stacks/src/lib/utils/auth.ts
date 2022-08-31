@@ -1,7 +1,7 @@
 import { env } from "../env";
 
 export function getAuthCallbackUrls(isDevStage?: boolean) {
-  let callbackUrls = [env.SITE_DOMAIN_NAME].map(
+  let callbackUrls = [env.PORTAL_DOMAIN_NAME, env.SITE_DOMAIN_NAME].map(
     (domainName) => `https://${domainName}/auth/callback/`
   );
 
@@ -15,7 +15,9 @@ export function getAuthCallbackUrls(isDevStage?: boolean) {
 }
 
 export function getAuthLogoutUrls(isDevStage?: boolean) {
-  let logoutUrls = [env.SITE_DOMAIN_NAME].map((domainName) => `https://${domainName}/auth/logout/`);
+  let logoutUrls = [env.PORTAL_DOMAIN_NAME, env.SITE_DOMAIN_NAME].map(
+    (domainName) => `https://${domainName}/auth/logout/`
+  );
 
   if (isDevStage) {
     // 3000 = Site App

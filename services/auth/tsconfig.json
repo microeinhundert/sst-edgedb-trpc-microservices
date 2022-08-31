@@ -1,8 +1,0 @@
-{
-  "extends": "@sst-app/tsconfig/presets/service-preset.json",
-  "compilerOptions": {
-    "baseUrl": "."
-  },
-  "include": ["./**/*"],
-  "exclude": ["node_modules", "dist"]
-}

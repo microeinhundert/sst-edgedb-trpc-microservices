@@ -11,6 +11,25 @@ export function AppsStack({ stack }: StackContext) {
   const { cognitoParameters } = use(AuthStack);
 
   /*
+   * Portal
+   */
+
+  const portal = new RemixSite(stack, "Site", {
+    path: "apps/portal",
+    environment: {
+      VITE_API_URL: apiUrl,
+      VITE_REGION: stack.region,
+      VITE_DOMAIN_NAME: env.PORTAL_DOMAIN_NAME,
+    },
+    customDomain: {
+      domainName: env.PORTAL_DOMAIN_NAME,
+      hostedZone: env.ROUTE53_ZONE_NAME,
+    },
+  });
+
+  const portalUrl = portal.customDomainUrl ?? portal.url;
+
+  /*
    * Site
    */
 
@@ -34,6 +53,7 @@ export function AppsStack({ stack }: StackContext) {
   const siteUrl = site.customDomainUrl ?? site.url;
 
   stack.addOutputs({
+    PortalUrl: portalUrl,
     SiteUrl: siteUrl,
   });
 }

@@ -32,21 +32,6 @@ export function ServicesStack({ stack }: StackContext) {
   });
 
   /*
-   * Auth
-   */
-
-  const authFunction = new Function(stack, "Auth", {
-    handler: "services/auth/handlers.main",
-  });
-
-  api.addRoutes(
-    stack,
-    generateRoutesForTRPCService("auth", authFunction, {
-      public: true,
-    })
-  );
-
-  /*
    * Demo
    */
 
@@ -57,7 +42,7 @@ export function ServicesStack({ stack }: StackContext) {
   api.addRoutes(
     stack,
     generateRoutesForTRPCService("demo", demoFunction, {
-      public: false,
+      public: true,
     })
   );
 }
