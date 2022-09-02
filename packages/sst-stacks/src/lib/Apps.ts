@@ -14,7 +14,7 @@ export function AppsStack({ stack }: StackContext) {
    * Portal
    */
 
-  const portal = new RemixSite(stack, "Site", {
+  const portal = new RemixSite(stack, "Portal", {
     path: "apps/portal",
     environment: {
       VITE_API_URL: apiUrl,
