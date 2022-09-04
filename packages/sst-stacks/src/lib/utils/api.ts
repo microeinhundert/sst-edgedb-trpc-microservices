@@ -19,8 +19,9 @@ export function getCorsConfig(isDevStage?: boolean) {
   );
 
   if (isDevStage) {
+    // 3001 = Portal App
     // 3000 = Site App
-    const allowDevOrigins = [3000].map((port) => `http://localhost:${port}`);
+    const allowDevOrigins = [3001, 3000].map((port) => `http://localhost:${port}`);
     allowOrigins = [...allowOrigins, allowDevOrigins].flat();
   }
 
