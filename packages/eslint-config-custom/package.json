@@ -18,8 +18,8 @@
     "eslint-config-turbo": "^0.0.3",
     "eslint-import-resolver-typescript": "^3.5.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-react": "^7.31.1",
+    "eslint-plugin-react": "^7.31.5",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0"
+    "eslint-plugin-simple-import-sort": "^8.0.0"
   }
 }
