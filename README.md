@@ -1,5 +1,7 @@
 # SST Microservices Architecture
 
+![Infrastructure](assets/infrastructure.png)
+
 ## Prerequisites
 
 Upon deploying the application, the following environment variables must be set:
