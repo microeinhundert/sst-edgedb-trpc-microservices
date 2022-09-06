@@ -3,8 +3,6 @@ import superjson from "superjson";
 
 import type { Context } from "./createContext";
 
-export const t = initTRPC<{
-  ctx: Context;
-}>()({
+export const t = initTRPC.context<Context>().create({
   transformer: superjson,
 });

@@ -61,10 +61,10 @@
     "*.{ts,tsx,md,json}": "npm run format"
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.10.6",
-    "@serverless-stack/resources": "1.10.6",
+    "@serverless-stack/cli": "1.11.0",
+    "@serverless-stack/resources": "1.11.0",
     "@sst-app/eslint-config-custom": "*",
-    "@trpc/server": "10.0.0-proxy-alpha.64",
+    "@trpc/server": "10.0.0-proxy-alpha.72",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",

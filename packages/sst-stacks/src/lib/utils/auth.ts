@@ -6,8 +6,9 @@ export function getAuthCallbackUrls(isDevStage?: boolean) {
   );
 
   if (isDevStage) {
+    // 3001 = Portal App
     // 3000 = Site App
-    const devCallbackUrls = [3000].map((port) => `http://localhost:${port}/auth/callback/`);
+    const devCallbackUrls = [3001, 3000].map((port) => `http://localhost:${port}/auth/callback/`);
     callbackUrls = [...callbackUrls, devCallbackUrls].flat();
   }
 

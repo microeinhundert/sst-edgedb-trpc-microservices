@@ -35,11 +35,11 @@
     ]
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.10.6",
+    "@serverless-stack/node": "^1.11.0",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@sst-app/trpc": "*",
-    "zod": "^3.18.0"
+    "zod": "^3.19.0"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
