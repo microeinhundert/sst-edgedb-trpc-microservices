@@ -28,17 +28,17 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.164.0",
-    "@serverless-stack/node": "^1.11.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.171.0",
+    "@serverless-stack/node": "^1.14.2",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
-    "@trpc/server": "10.0.0-proxy-alpha.72",
-    "superjson": "^1.9.1"
+    "@trpc/server": "10.0.0-proxy-alpha.76",
+    "superjson": "^1.10.0"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
-    "@types/aws-lambda": "^8.10.102",
+    "@types/aws-lambda": "^8.10.104",
     "@types/node": "^16"
   }
 }

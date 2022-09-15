@@ -32,11 +32,11 @@
     "@remix-run/react": "^1.7.0",
     "@remix-run/serve": "^1.7.0",
     "@sst-app/trpc-mux": "*",
-    "@trpc/client": "10.0.0-proxy-alpha.72",
+    "@trpc/client": "10.0.0-proxy-alpha.76",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "superjson": "^1.9.1",
-    "zod": "^3.19.0"
+    "superjson": "^1.10.0",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.7.0",
@@ -46,9 +46,9 @@
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.7",
     "@types/node": "^16",
-    "@types/react": "^18.0.18",
+    "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
-    "concurrently": "^7.3.0",
+    "concurrently": "^7.4.0",
     "tailwindcss": "^3.1.8"
   }
 }

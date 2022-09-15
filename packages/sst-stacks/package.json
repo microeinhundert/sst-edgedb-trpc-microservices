@@ -28,11 +28,11 @@
     ]
   },
   "dependencies": {
-    "@serverless-stack/resources": "1.11.0",
+    "@serverless-stack/resources": "1.14.2",
     "@sst-app/cdk-constructs": "*",
     "@sst-app/common": "*",
-    "aws-cdk-lib": "2.32.0",
-    "zod": "^3.19.0"
+    "aws-cdk-lib": "2.39.1",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

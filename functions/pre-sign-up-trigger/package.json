@@ -37,7 +37,7 @@
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
-    "@types/aws-lambda": "^8.10.102",
+    "@types/aws-lambda": "^8.10.104",
     "@types/node": "^16"
   }
 }

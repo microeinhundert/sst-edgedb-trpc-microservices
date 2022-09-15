@@ -35,9 +35,9 @@
     ]
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.11.0",
+    "@serverless-stack/node": "^1.14.2",
     "@sst-app/lambda-utils": "*",
-    "edgedb": "^0.22.3"
+    "edgedb": "^0.22.7"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
