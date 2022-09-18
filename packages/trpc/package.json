@@ -4,17 +4,22 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
     ".": {
       "default": "./src/index.ts",
       "types": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -22,17 +27,12 @@
     ],
     "root": true
   },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run lint -- --fix"
-    ]
-  },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.171.0",
     "@serverless-stack/node": "^1.14.2",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
-    "@trpc/server": "10.0.0-proxy-alpha.76",
+    "@trpc/server": "10.0.0-proxy-alpha.81",
     "superjson": "^1.10.0"
   },
   "devDependencies": {

@@ -4,7 +4,6 @@
   "private": true,
   "sideEffects": false,
   "type": "commonjs",
-  "main": "./src/index.js",
   "exports": {
     ".": {
       "default": "./src/index.js"
@@ -22,6 +21,7 @@
       "default": "./presets/vite-app-preset.json"
     }
   },
+  "main": "./src/index.js",
   "dependencies": {
     "typescript": "^4.8.3"
   }

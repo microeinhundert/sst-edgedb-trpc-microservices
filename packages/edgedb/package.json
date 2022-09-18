@@ -4,21 +4,26 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
     ".": {
       "default": "./src/index.ts",
       "types": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
+    "create-migration": "edgedb migration create",
     "generate-query-builder": "sh scripts/generate-query-builder.sh",
     "link": "sh scripts/link.sh",
-    "create-migration": "edgedb migration create",
-    "migrate": "edgedb migrate",
     "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
+    "migrate": "edgedb migrate",
     "typecheck": "tsc --noEmit"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -28,11 +33,6 @@
       "@typescript-eslint/ban-ts-comment": "off"
     },
     "root": true
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run lint -- --fix"
-    ]
   },
   "dependencies": {
     "@serverless-stack/node": "^1.14.2",

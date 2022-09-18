@@ -4,17 +4,22 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
     ".": {
       "default": "./src/index.ts",
       "types": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -22,16 +27,11 @@
     ],
     "root": true
   },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run lint -- --fix"
-    ]
-  },
   "dependencies": {
     "@sst-app/demo": "*",
     "@sst-app/trpc": "*",
-    "@trpc/client": "10.0.0-proxy-alpha.76",
-    "@trpc/server": "10.0.0-proxy-alpha.76"
+    "@trpc/client": "10.0.0-proxy-alpha.81",
+    "@trpc/server": "10.0.0-proxy-alpha.81"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

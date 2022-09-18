@@ -2,6 +2,20 @@
   "name": "sst-app-monorepo",
   "version": "0.0.0",
   "private": true,
+  "keywords": [
+    "aws",
+    "sst",
+    "trpc",
+    "lambda",
+    "microservices"
+  ],
+  "bugs": {
+    "url": "https://github.com/microeinhundert/sst-edgedb-trpc-microservices/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git"
+  },
   "type": "module",
   "workspaces": [
     "apps/*",
@@ -12,34 +26,23 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "edgedb:link": "\"$npm_execpath\" run link -w packages/edgedb",
     "edgedb:create-migration": "\"$npm_execpath\" run create-migration -w packages/edgedb",
-    "edgedb:migrate": "\"$npm_execpath\" run migrate -w packages/edgedb",
     "edgedb:generate-query-builder": "\"$npm_execpath\" run generate-query-builder -w packages/edgedb",
+    "edgedb:link": "\"$npm_execpath\" run link -w packages/edgedb",
+    "edgedb:migrate": "\"$npm_execpath\" run migrate -w packages/edgedb",
+    "format": "prettier --write .",
+    "lint": "turbo run lint",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
     "sst:build": "sst build",
     "sst:console": "sst console",
     "sst:deploy": "sst deploy",
     "sst:remove": "sst remove",
     "sst:start": "sst start",
-    "format": "prettier --write .",
-    "pre-commit": "lint-staged",
-    "prepare": "husky install"
+    "typecheck": "turbo run typecheck"
   },
-  "keywords": [
-    "aws",
-    "sst",
-    "trpc",
-    "lambda",
-    "microservices"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git"
-  },
-  "bugs": {
-    "url": "https://github.com/microeinhundert/sst-edgedb-trpc-microservices/issues"
+  "lint-staged": {
+    "*.{ts,tsx,md,json}": "npm run format"
   },
   "prettier": {
     "arrowParens": "always",
@@ -57,19 +60,16 @@
     ],
     "root": true
   },
-  "lint-staged": {
-    "*.{ts,tsx,md,json}": "npm run format"
-  },
   "devDependencies": {
     "@serverless-stack/cli": "1.14.2",
     "@serverless-stack/resources": "1.14.2",
     "@sst-app/eslint-config-custom": "*",
-    "@trpc/server": "10.0.0-proxy-alpha.76",
+    "@trpc/server": "10.0.0-proxy-alpha.81",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
-    "turbo": "^1.4.6"
+    "turbo": "^1.4.7"
   },
   "engines": {
     "node": ">=16.0.0",

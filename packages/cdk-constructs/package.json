@@ -4,17 +4,22 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
     ".": {
       "default": "./src/index.ts",
       "types": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -22,14 +27,9 @@
     ],
     "root": true
   },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run lint -- --fix"
-    ]
-  },
   "dependencies": {
     "aws-cdk-lib": "2.39.1",
-    "constructs": "^10.1.103"
+    "constructs": "^10.1.106"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
