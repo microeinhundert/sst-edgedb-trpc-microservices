@@ -30,8 +30,8 @@
   "dependencies": {
     "@sst-app/demo": "*",
     "@sst-app/trpc": "*",
-    "@trpc/client": "10.0.0-proxy-alpha.81",
-    "@trpc/server": "10.0.0-proxy-alpha.81"
+    "@trpc/client": "10.0.0-proxy-beta.0",
+    "@trpc/server": "10.0.0-proxy-beta.0"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

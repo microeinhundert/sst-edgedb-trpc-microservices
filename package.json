@@ -61,10 +61,10 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.14.2",
-    "@serverless-stack/resources": "1.14.2",
+    "@serverless-stack/cli": "1.14.4",
+    "@serverless-stack/resources": "1.14.4",
     "@sst-app/eslint-config-custom": "*",
-    "@trpc/server": "10.0.0-proxy-alpha.81",
+    "@trpc/server": "10.0.0-proxy-beta.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",

@@ -13,11 +13,11 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "create-migration": "edgedb migration create",
-    "generate-query-builder": "sh scripts/generate-query-builder.sh",
     "link": "sh scripts/link.sh",
-    "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
+    "create-migration": "edgedb migration create",
     "migrate": "edgedb migrate",
+    "generate-query-builder": "sh scripts/generate-query-builder.sh",
+    "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
@@ -35,7 +35,7 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.14.2",
+    "@serverless-stack/node": "^1.14.4",
     "@sst-app/lambda-utils": "*",
     "edgedb": "^0.22.7"
   },
