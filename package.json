@@ -61,15 +61,15 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.14.4",
-    "@serverless-stack/resources": "1.14.4",
+    "@serverless-stack/cli": "1.15.8",
+    "@serverless-stack/resources": "1.15.8",
     "@sst-app/eslint-config-custom": "*",
-    "@trpc/server": "10.0.0-proxy-beta.0",
+    "@trpc/server": "10.0.0-proxy-beta.12",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
-    "turbo": "^1.4.7"
+    "turbo": "^1.5.5"
   },
   "engines": {
     "node": ">=16.0.0",

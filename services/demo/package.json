@@ -35,7 +35,7 @@
     ]
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.14.4",
+    "@serverless-stack/node": "^1.15.8",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@sst-app/trpc": "*",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
-    "@types/aws-lambda": "^8.10.104",
+    "@types/aws-lambda": "^8.10.106",
     "@types/node": "^16"
   }
 }
