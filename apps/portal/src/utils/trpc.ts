@@ -1,6 +1,6 @@
 import type { PortalRouter } from "@sst-app/trpc-mux";
 import { createMuxLinkForPortal } from "@sst-app/trpc-mux";
-import { createTRPCReact } from "@trpc/react";
+import { createTRPCReact } from "@trpc/react-query";
 import superjson from "superjson";
 
 export const trpc = createTRPCReact<PortalRouter>();

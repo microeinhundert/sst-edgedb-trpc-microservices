@@ -2,6 +2,11 @@
   "name": "@sst-app/lambda-utils",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/lambda-utils"
+  },
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -28,8 +33,8 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.181.0",
-    "@serverless-stack/node": "^1.15.8"
+    "@aws-sdk/client-secrets-manager": "^3.194.0",
+    "@serverless-stack/node": "^1.15.16"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

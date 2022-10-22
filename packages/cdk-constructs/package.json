@@ -2,6 +2,11 @@
   "name": "@sst-app/cdk-constructs",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/cdk-constructs"
+  },
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -29,7 +34,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.39.1",
-    "constructs": "^10.1.119"
+    "constructs": "^10.1.136"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

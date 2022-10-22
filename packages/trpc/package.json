@@ -2,6 +2,11 @@
   "name": "@sst-app/trpc",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/trpc"
+  },
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -28,17 +33,17 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.181.0",
-    "@serverless-stack/node": "^1.15.8",
+    "@aws-sdk/client-cognito-identity-provider": "^3.194.0",
+    "@serverless-stack/node": "^1.15.16",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
-    "@trpc/server": "10.0.0-proxy-beta.12",
-    "superjson": "^1.10.0"
+    "@trpc/server": "10.0.0-proxy-beta.25",
+    "superjson": "^1.11.0"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
-    "@types/aws-lambda": "^8.10.106",
+    "@types/aws-lambda": "^8.10.108",
     "@types/node": "^16"
   }
 }

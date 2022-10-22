@@ -2,6 +2,11 @@
   "name": "@sst-app/eslint-config-custom",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/eslint-config-custom"
+  },
   "sideEffects": false,
   "type": "commonjs",
   "exports": {
@@ -11,14 +16,14 @@
   },
   "main": "./src/index.js",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
-    "eslint": "^8.24.0",
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-turbo": "^0.0.4",
-    "eslint-import-resolver-typescript": "^3.5.1",
+    "eslint-import-resolver-typescript": "^3.5.2",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^8.0.0"
   }

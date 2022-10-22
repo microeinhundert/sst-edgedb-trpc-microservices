@@ -2,6 +2,11 @@
   "name": "@sst-app/edgedb",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/edgedb"
+  },
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -35,11 +40,12 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.15.8",
+    "@serverless-stack/node": "^1.15.16",
     "@sst-app/lambda-utils": "*",
-    "edgedb": "^0.22.8"
+    "edgedb": "^1.0.0"
   },
   "devDependencies": {
+    "@edgedb/generate": "^0.0.2",
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
     "@types/node": "^16"

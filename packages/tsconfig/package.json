@@ -2,6 +2,11 @@
   "name": "@sst-app/tsconfig",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/tsconfig"
+  },
   "sideEffects": false,
   "type": "commonjs",
   "exports": {

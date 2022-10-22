@@ -2,6 +2,11 @@
   "name": "@sst-app/pre-sign-up-trigger",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "functions/pre-sign-up-trigger"
+  },
   "type": "module",
   "main": "./index.ts",
   "types": "./index.ts",
@@ -37,7 +42,7 @@
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
-    "@types/aws-lambda": "^8.10.106",
+    "@types/aws-lambda": "^8.10.108",
     "@types/node": "^16"
   }
 }

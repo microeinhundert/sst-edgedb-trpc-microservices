@@ -2,6 +2,11 @@
   "name": "@sst-app/sst-stacks",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "packages/sst-stacks"
+  },
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -28,7 +33,7 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/resources": "1.15.8",
+    "@serverless-stack/resources": "1.15.16",
     "@sst-app/cdk-constructs": "*",
     "@sst-app/common": "*",
     "aws-cdk-lib": "2.39.1",
