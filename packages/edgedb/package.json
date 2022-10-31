@@ -45,7 +45,7 @@
     "edgedb": "^1.0.0"
   },
   "devDependencies": {
-    "@edgedb/generate": "^0.0.2",
+    "@edgedb/generate": "^0.0.3",
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
     "@types/node": "^16"

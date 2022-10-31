@@ -1,11 +1,11 @@
 {
-  "name": "@sst-app/trpc-mux",
+  "name": "@sst-app/trpc-gateway",
   "version": "0.0.0",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
-    "directory": "packages/trpc-mux"
+    "directory": "packages/trpc-gateway"
   },
   "sideEffects": false,
   "type": "module",
@@ -35,8 +35,8 @@
   "dependencies": {
     "@sst-app/demo": "*",
     "@sst-app/trpc": "*",
-    "@trpc/client": "10.0.0-proxy-beta.25",
-    "@trpc/server": "10.0.0-proxy-beta.25"
+    "@trpc/client": "10.0.0-rc.2",
+    "@trpc/server": "10.0.0-rc.2"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

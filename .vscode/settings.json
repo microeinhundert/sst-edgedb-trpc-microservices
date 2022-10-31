@@ -50,7 +50,7 @@
       "changeProcessCWD": true
     },
     {
-      "directory": "packages/trpc-mux",
+      "directory": "packages/trpc-gateway",
       "changeProcessCWD": true
     },
     {

@@ -33,26 +33,26 @@
     "root": true
   },
   "dependencies": {
-    "@remix-run/node": "^1.7.3",
-    "@remix-run/react": "^1.7.3",
-    "@remix-run/serve": "^1.7.3",
-    "@sst-app/trpc-mux": "*",
-    "@trpc/client": "10.0.0-proxy-beta.25",
+    "@remix-run/node": "^1.7.4",
+    "@remix-run/react": "^1.7.4",
+    "@remix-run/serve": "^1.7.4",
+    "@sst-app/trpc-gateway": "*",
+    "@trpc/client": "10.0.0-rc.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "superjson": "^1.11.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.7.3",
+    "@remix-run/dev": "^1.7.4",
     "@serverless-stack/static-site-env": "^1.6.6",
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.7",
     "@types/node": "^16",
-    "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
     "concurrently": "^7.5.0",
     "tailwindcss": "^3.2.1"
   }

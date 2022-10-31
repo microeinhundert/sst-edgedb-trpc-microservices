@@ -33,7 +33,7 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.194.0",
+    "@aws-sdk/client-secrets-manager": "^3.199.0",
     "@serverless-stack/node": "^1.15.16"
   },
   "devDependencies": {
