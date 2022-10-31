@@ -1,5 +1,5 @@
 import type { OperationLink, TRPCLink } from "@trpc/client";
-import { httpBatchLink, TRPCClientError } from "@trpc/client";
+import { httpBatchLink } from "@trpc/client";
 import type { AnyRouter } from "@trpc/server";
 
 /**
@@ -28,12 +28,6 @@ export function createGatewayLink<
       const path = pathParts.join(".");
 
       const link = links[serviceName];
-
-      if (!link) {
-        throw TRPCClientError.from(
-          new Error(`No matching link exists for service "${serviceName}"`)
-        );
-      }
 
       return link({
         ...ctx,
