@@ -1,30 +1,21 @@
 import type { StackContext } from "@serverless-stack/resources";
 import { Cognito, Config, use } from "@serverless-stack/resources";
 import { PASSWORD_POLICY_LAX } from "@sst-app/common";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { ConfigStack } from "./Config";
-import { PersistenceStack } from "./Persistence";
+import { addPersistenceBindingsAndPermissions } from "./Persistence";
 import { getAuthCallbackUrls, getAuthLogoutUrls } from "./utils/auth";
 
 export function AuthStack({ stack }: StackContext) {
   const { REGION } = use(ConfigStack);
-  const { edgeDBParameters } = use(PersistenceStack);
+
+  addPersistenceBindingsAndPermissions(stack);
+  stack.addDefaultFunctionBinding([REGION]);
 
   const cognito = new Cognito(stack, "Cognito", {
     login: ["email"],
     triggers: {
-      preSignUp: {
-        handler: "functions/pre-sign-up-trigger/handlers.main",
-        config: [REGION, edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN],
-        permissions: [
-          new PolicyStatement({
-            actions: ["secretsmanager:GetSecretValue"],
-            effect: Effect.ALLOW,
-            resources: [edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN.value],
-          }),
-        ],
-      },
+      preSignUp: "functions/pre-sign-up-trigger/handlers.main",
     },
     cdk: {
       userPool: {
@@ -54,7 +45,7 @@ export function AuthStack({ stack }: StackContext) {
     },
   });
 
-  const cognitoDomain = cognito.cdk.userPool.addDomain("AuthDomain", {
+  const cognitoDomain = cognito.cdk.userPool.addDomain("CognitoDomain", {
     cognitoDomain: {
       domainPrefix: `${stack.stage}-microeinhundert-cloud`,
     },

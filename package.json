@@ -33,6 +33,7 @@
     "sst:deploy": "sst deploy",
     "sst:remove": "sst remove",
     "sst:start": "sst start",
+    "sst:bind": "sst bind",
     "edgedb:link": "\"$npm_execpath\" run link -w packages/edgedb",
     "edgedb:create-migration": "\"$npm_execpath\" run create-migration -w packages/edgedb",
     "edgedb:migrate": "\"$npm_execpath\" run migrate -w packages/edgedb",
@@ -61,15 +62,15 @@
     "root": true
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.15.16",
-    "@serverless-stack/resources": "1.15.16",
+    "@serverless-stack/cli": "1.16.0",
+    "@serverless-stack/resources": "1.16.0",
     "@sst-app/eslint-config-custom": "*",
-    "@trpc/server": "10.0.0-rc.2",
+    "@trpc/server": "10.0.0-rc.3",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
-    "turbo": "^1.6.2"
+    "turbo": "^1.6.3"
   },
   "engines": {
     "node": ">=16.0.0",

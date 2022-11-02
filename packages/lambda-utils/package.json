@@ -33,8 +33,8 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.199.0",
-    "@serverless-stack/node": "^1.15.16"
+    "@aws-sdk/client-secrets-manager": "^3.201.0",
+    "@serverless-stack/node": "^1.16.0"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

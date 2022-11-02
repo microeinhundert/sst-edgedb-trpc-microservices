@@ -34,7 +34,7 @@ export function getCorsConfig(isDevStage?: boolean) {
   } as CorsConfig;
 }
 
-export function generateRoutesForTRPCService(
+export function generateServiceRoutes(
   serviceName: string,
   serviceFunction: IFunction,
   options?: { public?: boolean }

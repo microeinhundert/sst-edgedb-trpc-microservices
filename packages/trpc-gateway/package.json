@@ -35,8 +35,8 @@
   "dependencies": {
     "@sst-app/demo": "*",
     "@sst-app/trpc": "*",
-    "@trpc/client": "10.0.0-rc.2",
-    "@trpc/server": "10.0.0-rc.2"
+    "@trpc/client": "10.0.0-rc.3",
+    "@trpc/server": "10.0.0-rc.3"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",

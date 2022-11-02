@@ -1,7 +1,8 @@
-import type { StackContext } from "@serverless-stack/resources";
-import { Config } from "@serverless-stack/resources";
+import type { Stack, StackContext } from "@serverless-stack/resources";
+import { Config, use } from "@serverless-stack/resources";
 import { EdgeDB } from "@sst-app/cdk-constructs";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { env } from "./env";
 
@@ -29,4 +30,18 @@ export function PersistenceStack({ stack }: StackContext) {
   };
 
   return { edgeDB, edgeDBParameters };
+}
+
+export function addPersistenceBindingsAndPermissions(stack: Stack) {
+  const { edgeDBParameters } = use(PersistenceStack);
+
+  stack.addDefaultFunctionPermissions([
+    new PolicyStatement({
+      actions: ["secretsmanager:GetSecretValue"],
+      effect: Effect.ALLOW,
+      resources: [edgeDBParameters.EDGEDB_CONNECTION_SECRET_ARN.value],
+    }),
+  ]);
+
+  stack.addDefaultFunctionBinding(Object.values(edgeDBParameters));
 }

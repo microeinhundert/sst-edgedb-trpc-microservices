@@ -1,10 +1,10 @@
 import type { StackContext } from "@serverless-stack/resources";
-import { RemixSite, use } from "@serverless-stack/resources";
-import crypto from "crypto";
+import { RemixSite, use, ViteStaticSite } from "@serverless-stack/resources";
 
 import { ApiStack } from "./Api";
 import { AuthStack } from "./Auth";
 import { env } from "./env";
+import { generateRandomString } from "./utils/crypto";
 
 export function AppsStack({ stack }: StackContext) {
   const { apiUrl } = use(ApiStack);
@@ -14,12 +14,17 @@ export function AppsStack({ stack }: StackContext) {
    * Portal
    */
 
-  const portal = new RemixSite(stack, "Portal", {
+  const portal = new ViteStaticSite(stack, "Portal", {
     path: "apps/portal",
     environment: {
       VITE_API_URL: apiUrl,
       VITE_REGION: stack.region,
       VITE_DOMAIN_NAME: env.PORTAL_DOMAIN_NAME,
+      VITE_SESSION_SECRET: generateRandomString(),
+      ...Object.entries(cognitoParameters).reduce(
+        (acc, [key, parameter]) => ({ ...acc, [`VITE_${key}`]: parameter.value }),
+        {}
+      ),
     },
     customDomain: {
       domainName: env.PORTAL_DOMAIN_NAME,
@@ -39,10 +44,11 @@ export function AppsStack({ stack }: StackContext) {
       API_URL: apiUrl,
       REGION: stack.region,
       DOMAIN_NAME: env.SITE_DOMAIN_NAME,
-      SESSION_SECRET: crypto.randomBytes(20).toString("hex"),
-      COGNITO_USER_POOL_ID: cognitoParameters.COGNITO_USER_POOL_ID.value,
-      COGNITO_USER_POOL_CLIENT_ID: cognitoParameters.COGNITO_USER_POOL_CLIENT_ID.value,
-      COGNITO_BASE_URL: cognitoParameters.COGNITO_BASE_URL.value,
+      SESSION_SECRET: generateRandomString(),
+      ...Object.entries(cognitoParameters).reduce(
+        (acc, [key, parameter]) => ({ ...acc, [key]: parameter.value }),
+        {}
+      ),
     },
     customDomain: {
       domainName: env.SITE_DOMAIN_NAME,
