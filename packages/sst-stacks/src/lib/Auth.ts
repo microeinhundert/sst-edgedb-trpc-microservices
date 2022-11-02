@@ -3,6 +3,7 @@ import { Cognito, Config, use } from "@serverless-stack/resources";
 import { PASSWORD_POLICY_LAX } from "@sst-app/common";
 
 import { ConfigStack } from "./Config";
+import { env } from "./env";
 import { addPersistenceBindingsAndPermissions } from "./Persistence";
 import { getAuthCallbackUrls, getAuthLogoutUrls } from "./utils/auth";
 
@@ -47,7 +48,7 @@ export function AuthStack({ stack }: StackContext) {
 
   const cognitoDomain = cognito.cdk.userPool.addDomain("CognitoDomain", {
     cognitoDomain: {
-      domainPrefix: `${stack.stage}-microeinhundert-cloud`,
+      domainPrefix: `${stack.stage}-${env.ROUTE53_ZONE_NAME.split(".")[0]}`,
     },
   });
 

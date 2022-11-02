@@ -2,18 +2,16 @@ import type { StackContext } from "@serverless-stack/resources";
 import { Function, use } from "@serverless-stack/resources";
 
 import { ApiStack } from "./Api";
-import { AuthStack } from "./Auth";
 import { ConfigStack } from "./Config";
 import { addPersistenceBindingsAndPermissions } from "./Persistence";
 import { generateServiceRoutes } from "./utils/api";
 
 export function ServicesStack({ stack }: StackContext) {
-  const { cognitoParameters } = use(AuthStack);
   const { REGION } = use(ConfigStack);
   const { api } = use(ApiStack);
 
   addPersistenceBindingsAndPermissions(stack);
-  stack.addDefaultFunctionBinding([REGION, ...Object.values(cognitoParameters)]);
+  stack.addDefaultFunctionBinding([REGION]);
 
   /*
    * Demo
