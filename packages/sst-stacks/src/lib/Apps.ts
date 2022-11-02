@@ -1,38 +1,48 @@
-import type { StackContext } from "@serverless-stack/resources";
+import type { Stack, StackContext } from "@serverless-stack/resources";
 import { RemixSite, use, ViteStaticSite } from "@serverless-stack/resources";
 
 import { ApiStack } from "./Api";
 import { AuthStack } from "./Auth";
 import { env } from "./env";
 import { generateRandomString } from "./utils/crypto";
+import { prefixObjectKeys } from "./utils/general";
 
-export function AppsStack({ stack }: StackContext) {
+function getSiteEnvironment(
+  { domainName, prefix }: { domainName: string; prefix?: string },
+  stack: Stack
+) {
   const { apiUrl } = use(ApiStack);
   const { cognitoParameters } = use(AuthStack);
 
+  const cognitoEnvironment = Object.entries(cognitoParameters).reduce(
+    (environment, [key, parameter]) => ({ ...environment, [key]: parameter.value }),
+    {}
+  );
+
+  const environment = {
+    API_URL: apiUrl,
+    REGION: stack.region,
+    DOMAIN_NAME: domainName,
+    SESSION_SECRET: generateRandomString(),
+    ...cognitoEnvironment,
+  };
+
+  return prefix ? prefixObjectKeys(environment, prefix) : environment;
+}
+
+export function AppsStack({ stack }: StackContext) {
   /*
    * Portal
    */
 
   const portal = new ViteStaticSite(stack, "Portal", {
     path: "apps/portal",
-    environment: {
-      VITE_API_URL: apiUrl,
-      VITE_REGION: stack.region,
-      VITE_DOMAIN_NAME: env.PORTAL_DOMAIN_NAME,
-      VITE_SESSION_SECRET: generateRandomString(),
-      ...Object.entries(cognitoParameters).reduce(
-        (acc, [key, parameter]) => ({ ...acc, [`VITE_${key}`]: parameter.value }),
-        {}
-      ),
-    },
+    environment: getSiteEnvironment({ domainName: env.PORTAL_DOMAIN_NAME, prefix: "VITE" }, stack),
     customDomain: {
       domainName: env.PORTAL_DOMAIN_NAME,
       hostedZone: env.ROUTE53_ZONE_NAME,
     },
   });
-
-  const portalUrl = portal.customDomainUrl ?? portal.url;
 
   /*
    * Site
@@ -40,26 +50,15 @@ export function AppsStack({ stack }: StackContext) {
 
   const site = new RemixSite(stack, "Site", {
     path: "apps/site",
-    environment: {
-      API_URL: apiUrl,
-      REGION: stack.region,
-      DOMAIN_NAME: env.SITE_DOMAIN_NAME,
-      SESSION_SECRET: generateRandomString(),
-      ...Object.entries(cognitoParameters).reduce(
-        (acc, [key, parameter]) => ({ ...acc, [key]: parameter.value }),
-        {}
-      ),
-    },
+    environment: getSiteEnvironment({ domainName: env.SITE_DOMAIN_NAME }, stack),
     customDomain: {
       domainName: env.SITE_DOMAIN_NAME,
       hostedZone: env.ROUTE53_ZONE_NAME,
     },
   });
 
-  const siteUrl = site.customDomainUrl ?? site.url;
-
   stack.addOutputs({
-    PortalUrl: portalUrl,
-    SiteUrl: siteUrl,
+    PortalUrl: portal.customDomainUrl ?? portal.url,
+    SiteUrl: site.customDomainUrl ?? site.url,
   });
 }
