@@ -4,6 +4,10 @@ import { z } from "zod";
 import { accessTokenCookie, refreshTokenCookie } from "~/server/cookies.server";
 import { getEnvVar } from "~/server/env.server";
 
+import { commitSession, getSession } from "./session.server";
+
+const USER_SESSION_KEY = "authenticated_user";
+
 /**
  * Schema
  */
@@ -277,6 +281,12 @@ async function getUserInfo(accessToken: string) {
 export async function authenticate(request: Request) {
   const url = new URL(request.url);
   const redirectUri = `${url.origin}/auth/callback/`;
+  const session = await getSession(request.headers.get("Cookie"));
+
+  // We already have a user stored in the session
+  if (session.get(USER_SESSION_KEY)) {
+    return JSON.parse(session.get(USER_SESSION_KEY));
+  }
 
   let headers = new Headers();
 
@@ -344,32 +354,38 @@ export async function authenticate(request: Request) {
 
   let authenticatedUser: User | null = null;
 
+  // Let's try getting the user
   for await (const authenticationFlowContext of authenticationFlow) {
     if (authenticationFlowContext) {
+      // Set the user session
+      session.set(USER_SESSION_KEY, JSON.stringify(authenticationFlowContext));
+      headers.append("Set-Cookie", await commitSession(session));
       authenticatedUser = authenticationFlowContext;
       break;
     }
   }
 
-  // We have no user, redirect to cognito login page
-  if (!authenticatedUser) {
-    const redirectSearchParams = new URLSearchParams({
-      client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
-      response_type: "code",
-      redirect_uri: redirectUri,
-      state: request.url,
-    });
-    throw redirect(
-      `${getEnvVar("COGNITO_BASE_URL")}/login?scope=email+openid&${redirectSearchParams}`
-    );
-  }
-
   // We have a user
-  const state = url.searchParams.get("state");
-  if (state) {
-    const finalRedirectUrl = decodeURIComponent(state);
-    throw redirect(finalRedirectUrl, { headers });
+  if (authenticatedUser) {
+    const state = url.searchParams.get("state");
+
+    if (state) {
+      const finalRedirectUrl = decodeURIComponent(state);
+      throw redirect(finalRedirectUrl, { headers });
+    }
+
+    throw redirect(request.url, { headers });
   }
 
-  return authenticatedUser;
+  // We have no user
+  const redirectSearchParams = new URLSearchParams({
+    client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
+    response_type: "code",
+    redirect_uri: redirectUri,
+    state: request.url,
+  });
+
+  throw redirect(
+    `${getEnvVar("COGNITO_BASE_URL")}/login?scope=email+openid&${redirectSearchParams}`
+  );
 }
