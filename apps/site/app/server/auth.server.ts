@@ -1,8 +1,8 @@
 import { redirect } from "@remix-run/node";
 import { z } from "zod";
 
-import { env } from "~/env";
 import { accessTokenCookie, refreshTokenCookie } from "~/server/cookies.server";
+import { getEnvVar } from "~/server/env.server";
 
 /**
  * Schema
@@ -177,14 +177,14 @@ async function getRefreshTokenCookieValue(request: Request) {
  * @return {Promise<Credentials | null>}
  */
 async function getCredentials(code: string, redirectUri: string) {
-  const response = await fetch(`${env.COGNITO_BASE_URL}/oauth2/token`, {
+  const response = await fetch(`${getEnvVar("COGNITO_BASE_URL")}/oauth2/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
       grant_type: "authorization_code",
-      client_id: env.COGNITO_USER_POOL_CLIENT_ID,
+      client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
       redirect_uri: redirectUri,
       code,
     }),
@@ -212,14 +212,14 @@ async function getCredentials(code: string, redirectUri: string) {
  * @return {Promise<Credentials | null>}
  */
 async function refreshCredentials(refreshToken: string, redirectUri: string) {
-  const response = await fetch(`${env.COGNITO_BASE_URL}/oauth2/token`, {
+  const response = await fetch(`${getEnvVar("COGNITO_BASE_URL")}/oauth2/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
       grant_type: "refresh_token",
-      client_id: env.COGNITO_USER_POOL_CLIENT_ID,
+      client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
       redirect_uri: redirectUri,
       refresh_token: refreshToken,
     }),
@@ -247,7 +247,7 @@ async function refreshCredentials(refreshToken: string, redirectUri: string) {
  * @return {Promise<User | null>}
  */
 async function getUserInfo(accessToken: string) {
-  const response = await fetch(`${env.COGNITO_BASE_URL}/oauth2/userInfo`, {
+  const response = await fetch(`${getEnvVar("COGNITO_BASE_URL")}/oauth2/userInfo`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -354,12 +354,14 @@ export async function authenticate(request: Request) {
   // We have no user, redirect to cognito login page
   if (!authenticatedUser) {
     const redirectSearchParams = new URLSearchParams({
-      client_id: env.COGNITO_USER_POOL_CLIENT_ID,
+      client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
       response_type: "code",
       redirect_uri: redirectUri,
       state: request.url,
     });
-    throw redirect(`${env.COGNITO_BASE_URL}/login?scope=email+openid&${redirectSearchParams}`);
+    throw redirect(
+      `${getEnvVar("COGNITO_BASE_URL")}/login?scope=email+openid&${redirectSearchParams}`
+    );
   }
 
   // We have a user
