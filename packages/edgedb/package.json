@@ -40,7 +40,7 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.16.0",
+    "@serverless-stack/node": "^1.16.3",
     "@sst-app/lambda-utils": "*",
     "edgedb": "^1.0.1"
   },

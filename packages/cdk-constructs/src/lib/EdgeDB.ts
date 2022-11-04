@@ -167,7 +167,7 @@ export class EdgeDB extends Construct {
 
     fargateService.node.tryRemoveChild("LoadBalancerDNS");
 
-    this._props.domain &&
+    if (this._props.domain) {
       new route53.CnameRecord(this, "CnameRecord", {
         domainName: fargateService.loadBalancer.loadBalancerDnsName,
         recordName: this._props.domain.name,
@@ -177,6 +177,7 @@ export class EdgeDB extends Construct {
         }),
         ttl: Duration.minutes(1),
       });
+    }
 
     return connectionSecret;
   }

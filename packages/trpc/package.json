@@ -33,8 +33,8 @@
     "root": true
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.201.0",
-    "@serverless-stack/node": "^1.16.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.202.0",
+    "@serverless-stack/node": "^1.16.3",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@trpc/server": "10.0.0-rc.3",

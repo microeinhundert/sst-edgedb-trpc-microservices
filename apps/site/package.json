@@ -33,9 +33,9 @@
     "root": true
   },
   "dependencies": {
-    "@remix-run/node": "^1.7.4",
-    "@remix-run/react": "^1.7.4",
-    "@remix-run/serve": "^1.7.4",
+    "@remix-run/node": "^1.7.5",
+    "@remix-run/react": "^1.7.5",
+    "@remix-run/serve": "^1.7.5",
     "@sst-app/trpc-gateway": "*",
     "@trpc/client": "10.0.0-rc.3",
     "react": "^18.2.0",
@@ -44,7 +44,7 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.7.4",
+    "@remix-run/dev": "^1.7.5",
     "@serverless-stack/static-site-env": "^1.6.6",
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
