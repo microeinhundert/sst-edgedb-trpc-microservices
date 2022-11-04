@@ -40,12 +40,6 @@ if (!schemaParseResult.success) {
 const env = schemaParseResult.data;
 
 export function getEnvVar(key: keyof typeof env) {
-  if (typeof process === "undefined") {
-    throw new Error(
-      "You cannot use `getEnvVar` to access environment variables client-side, use `getGlobalEnvVar` instead"
-    );
-  }
-
   const value = env[key];
 
   if (typeof value === "undefined") {

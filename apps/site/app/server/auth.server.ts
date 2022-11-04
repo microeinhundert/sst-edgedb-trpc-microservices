@@ -54,7 +54,7 @@ function isTokenExpired(token: { expires_at: number }) {
 }
 
 /**
- * Helper function to create a authentication flow sequence.
+ * Creates a authentication flow sequence.
  *
  * @template TContextValue
  * @template TInitialContextValue
