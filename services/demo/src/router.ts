@@ -1,7 +1,7 @@
-import { t } from "@sst-app/trpc";
+import { createRouter } from "@sst-app/trpc";
 
 import { helloWorld } from "./procedures/queries/helloWorld";
 
-export const router = t.router({
+export const router = createRouter({
   helloWorld,
 });

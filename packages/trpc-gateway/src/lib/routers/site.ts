@@ -1,10 +1,10 @@
 import { router as demoRouter } from "@sst-app/demo";
-import { t } from "@sst-app/trpc";
+import { createRouter } from "@sst-app/trpc";
 
 /**
  * The router for the `site` app.
  */
-const siteRouter = t.router({
+const siteRouter = createRouter({
   demo: demoRouter,
 });
 

@@ -3,6 +3,8 @@ import superjson from "superjson";
 
 import type { Context } from "./createContext";
 
-export const t = initTRPC.context<Context>().create({
+const t = initTRPC.context<Context>().create({
   transformer: superjson,
 });
+
+export const { router: createRouter, procedure } = t;

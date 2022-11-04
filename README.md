@@ -99,10 +99,10 @@ Mutations typically look like this:
 
 ```ts
 // <your_service>/src/procedures/mutations/demo.ts
-import { t } from "@sst-app/trpc";
+import { procedure } from "@sst-app/trpc";
 import { demoInputSchema } from "../../validators/demo";
 
-export const demoMutation = t.procedure.input(demoInputSchema).mutation(async ({ input, ctx }) => {
+export const demoMutation = procedure.input(demoInputSchema).mutation(async ({ input, ctx }) => {
   // Do something, like writing to the database
 
   // Access the typed input
@@ -140,10 +140,10 @@ Queries typically look like this:
 
 ```ts
 // <your_service>/src/procedures/queries/demo.ts
-import { t } from "@sst-app/trpc";
+import { procedure } from "@sst-app/trpc";
 import { demoInputSchema } from "../../validators/demo";
 
-export const demoQuery = t.procedure.input(demoInputSchema).query(async ({ input, ctx }) => {
+export const demoQuery = procedure.input(demoInputSchema).query(async ({ input, ctx }) => {
   // Do something, like reading from the database
 
   // Return your data

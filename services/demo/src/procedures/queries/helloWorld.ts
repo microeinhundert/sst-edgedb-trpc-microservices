@@ -1,8 +1,8 @@
-import { t } from "@sst-app/trpc";
+import { procedure } from "@sst-app/trpc";
 
 /**
  * Hello World
  */
-export const helloWorld = t.procedure.query(() => {
+export const helloWorld = procedure.query(() => {
   return { message: "Hello World" };
 });
