@@ -4,9 +4,7 @@ import { z } from "zod";
 import { accessTokenCookie, refreshTokenCookie } from "~/server/cookies.server";
 import { getEnvVar } from "~/server/env.server";
 
-import { commitSession, getSession } from "./session.server";
-
-const USER_SESSION_KEY = "authenticated_user";
+import { commitSession, destroySession, getSession } from "./session.server";
 
 /**
  * Schema
@@ -201,7 +199,7 @@ async function getCredentials(code: string, redirectUri: string) {
   const parsedResponse = credentialsSchema.safeParse(await response.json());
   if (!parsedResponse.success) {
     throw new Error(
-      "The response returned by Cognito does not adhere to the schema expected by `getCredentials`"
+      "The response returned by Cognito does not match the schema expected by `getCredentials`"
     );
   }
 
@@ -236,7 +234,7 @@ async function refreshCredentials(refreshToken: string, redirectUri: string) {
   const parsedResponse = credentialsSchema.safeParse(await response.json());
   if (!parsedResponse.success) {
     throw new Error(
-      "The response returned by Cognito does not adhere to the schema expected by `refreshCredentials`"
+      "The response returned by Cognito does not match the schema expected by `refreshCredentials`"
     );
   }
 
@@ -265,30 +263,27 @@ async function getUserInfo(accessToken: string) {
   const parsedResponse = userSchema.safeParse(await response.json());
   if (!parsedResponse.success) {
     throw new Error(
-      "The response returned by Cognito does not adhere to the schema expected by `getUserInfo`"
+      "The response returned by Cognito does not match the schema expected by `getUserInfo`"
     );
   }
 
   return parsedResponse.data;
 }
 
+type AuthenticateCallbacks = { onUser?: (user: User, headers: Headers) => MaybePromise<void> };
+
 /**
  * Authenticates the user.
  *
  * @param {Request} request
+ * @param {AuthenticateCallbacks} [callbacks]
  * @return {Promise<User>}
  */
-export async function authenticate(request: Request) {
+export async function authenticate(request: Request, callbacks?: AuthenticateCallbacks) {
   const url = new URL(request.url);
   const redirectUri = `${url.origin}/auth/callback/`;
-  const session = await getSession(request.headers.get("Cookie"));
 
-  // We already have a user stored in the session
-  if (session.get(USER_SESSION_KEY)) {
-    return JSON.parse(session.get(USER_SESSION_KEY));
-  }
-
-  let headers = new Headers();
+  let headers = new Headers(request.headers);
 
   const authenticationFlow = createAuthenticationFlow<User>(
     {
@@ -352,26 +347,23 @@ export async function authenticate(request: Request) {
     null
   );
 
-  let authenticatedUser: User | null = null;
+  let user: User | null = null;
 
   // Let's try getting the user
   for await (const authenticationFlowContext of authenticationFlow) {
     if (authenticationFlowContext) {
-      // Set the user session
-      session.set(USER_SESSION_KEY, JSON.stringify(authenticationFlowContext));
-      headers.append("Set-Cookie", await commitSession(session));
-      authenticatedUser = authenticationFlowContext;
+      await callbacks?.onUser?.(authenticationFlowContext, headers);
+      user = authenticationFlowContext;
       break;
     }
   }
 
   // We have a user
-  if (authenticatedUser) {
+  if (user) {
     const state = url.searchParams.get("state");
 
     if (state) {
-      const finalRedirectUrl = decodeURIComponent(state);
-      throw redirect(finalRedirectUrl, { headers });
+      throw redirect(decodeURIComponent(state), { headers });
     }
 
     throw redirect(request.url, { headers });
@@ -388,4 +380,49 @@ export async function authenticate(request: Request) {
   throw redirect(
     `${getEnvVar("COGNITO_BASE_URL")}/login?scope=email+openid&${redirectSearchParams}`
   );
+}
+
+/**
+ * Ensures the user is authenticated.
+ *
+ * @export
+ * @param {Request} request
+ * @return {Promise<User | null>}
+ */
+export async function ensureAuthenticated(request: Request) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const sessionKey = "authenticated_user";
+
+  const userFromSession = session.get(sessionKey);
+  if (userFromSession) {
+    return JSON.parse(userFromSession) as User;
+  }
+
+  await authenticate(request, {
+    onUser: async (user, headers) => {
+      // Set the user session
+      session.set(sessionKey, JSON.stringify(user));
+      headers.append("Set-Cookie", await commitSession(session));
+    },
+  });
+
+  return null;
+}
+
+/**
+ * Unauthenticates the user.
+ *
+ * @param {Request} request
+ * @param {string} [redirectTo]
+ * @return {Promise<void>}
+ */
+export async function unauthenticate(request: Request, redirectTo?: string) {
+  const headers = new Headers(request.headers);
+  const session = await getSession(headers.get("Cookie"));
+
+  headers.append("Set-Cookie", await accessTokenCookie.serialize(""));
+  headers.append("Set-Cookie", await refreshTokenCookie.serialize(""));
+  headers.append("Set-Cookie", await destroySession(session));
+
+  throw redirect(redirectTo ?? "/", { headers });
 }
