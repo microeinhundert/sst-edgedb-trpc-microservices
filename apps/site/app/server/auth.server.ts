@@ -99,7 +99,7 @@ async function* createAuthenticationFlow<TContextValue, TInitialContextValue = n
  * @param {Credentials} credentials
  * @return {Promise<Headers>}
  */
-async function appendCookies(headers: Headers, credentials: Credentials) {
+async function appendCredentialCookies(headers: Headers, credentials: Credentials) {
   const newHeaders = new Headers(headers);
 
   newHeaders.append(
@@ -117,6 +117,23 @@ async function appendCookies(headers: Headers, credentials: Credentials) {
       expires_at: Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 30), // 30 Days
     } as RefreshToken)
   );
+
+  return newHeaders;
+}
+
+/**
+ * Clears the access and refresh token cookies as well as the session.
+ *
+ * @param {Headers} headers
+ * @return {Promise<Headers>}
+ */
+async function clearSessionCookies(headers: Headers) {
+  const newHeaders = new Headers(headers);
+  const session = await getSession(headers.get("Cookie"));
+
+  newHeaders.append("Set-Cookie", await accessTokenCookie.serialize(""));
+  newHeaders.append("Set-Cookie", await refreshTokenCookie.serialize(""));
+  newHeaders.append("Set-Cookie", await destroySession(session));
 
   return newHeaders;
 }
@@ -279,7 +296,7 @@ type AuthenticateCallbacks = { onUser?: (user: User, headers: Headers) => MaybeP
  * @param {AuthenticateCallbacks} [callbacks]
  * @return {Promise<User>}
  */
-export async function authenticate(request: Request, callbacks?: AuthenticateCallbacks) {
+export async function authenticateUser(request: Request, callbacks?: AuthenticateCallbacks) {
   const url = new URL(request.url);
   const redirectUri = `${url.origin}/auth/callback/`;
 
@@ -305,7 +322,7 @@ export async function authenticate(request: Request, callbacks?: AuthenticateCal
           return;
         }
 
-        headers = await appendCookies(headers, credentials);
+        headers = await appendCredentialCookies(headers, credentials);
       },
       checkAccessToken: async (setUser) => {
         const accessToken = await getAccessTokenCookieValue(request);
@@ -341,7 +358,7 @@ export async function authenticate(request: Request, callbacks?: AuthenticateCal
           return;
         }
 
-        headers = await appendCookies(headers, refreshedCredentials);
+        headers = await appendCredentialCookies(headers, refreshedCredentials);
       },
     },
     null
@@ -389,7 +406,7 @@ export async function authenticate(request: Request, callbacks?: AuthenticateCal
  * @param {Request} request
  * @return {Promise<User | null>}
  */
-export async function ensureAuthenticated(request: Request) {
+export async function ensureUserAuthenticated(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
   const sessionKey = "authenticated_user";
 
@@ -398,7 +415,7 @@ export async function ensureAuthenticated(request: Request) {
     return JSON.parse(userFromSession) as User;
   }
 
-  await authenticate(request, {
+  await authenticateUser(request, {
     onUser: async (user, headers) => {
       // Set the user session
       session.set(sessionKey, JSON.stringify(user));
@@ -410,19 +427,25 @@ export async function ensureAuthenticated(request: Request) {
 }
 
 /**
- * Unauthenticates the user.
+ * Logs the user out.
  *
  * @param {Request} request
- * @param {string} [redirectTo]
  * @return {Promise<void>}
  */
-export async function unauthenticate(request: Request, redirectTo?: string) {
-  const headers = new Headers(request.headers);
-  const session = await getSession(headers.get("Cookie"));
+export async function logoutUser(request: Request) {
+  const url = new URL(request.url);
+  const redirectUri = `${url.origin}/auth/callback/`;
 
-  headers.append("Set-Cookie", await accessTokenCookie.serialize(""));
-  headers.append("Set-Cookie", await refreshTokenCookie.serialize(""));
-  headers.append("Set-Cookie", await destroySession(session));
+  const redirectSearchParams = new URLSearchParams({
+    client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
+    response_type: "code",
+    redirect_uri: redirectUri,
+  });
 
-  throw redirect(redirectTo ?? "/", { headers });
+  throw redirect(
+    `${getEnvVar("COGNITO_BASE_URL")}/logout?scope=email+openid&${redirectSearchParams}`,
+    {
+      headers: await clearSessionCookies(request.headers),
+    }
+  );
 }
