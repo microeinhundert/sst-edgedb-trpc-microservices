@@ -1,5 +1,5 @@
 import { redirect } from "@remix-run/node";
-import { IssueCredentialsOutput, UserInfoOutput } from "@sst-app/auth/validators";
+import type { UserInfoOutput } from "@sst-app/auth/validators";
 import { createAuthenticationFlow } from "@sst-app/auth-utils";
 import type { MaybePromise } from "@sst-app/types";
 import { z } from "zod";
@@ -13,12 +13,7 @@ import { commitSession, destroySession, getSession } from "./session.server";
 /**
  * Schemas
  */
-const accessTokenSchema = z.object({
-  value: z.string().min(1),
-  expires_at: z.number(),
-});
-
-const refreshTokenSchema = z.object({
+const tokenSchema = z.object({
   value: z.string().min(1),
   expires_at: z.number(),
 });
@@ -26,10 +21,7 @@ const refreshTokenSchema = z.object({
 /**
  * Types
  */
-type AccessToken = z.infer<typeof accessTokenSchema>;
-type RefreshToken = z.infer<typeof refreshTokenSchema>;
-
-type Credentials = IssueCredentialsOutput;
+type Token = z.infer<typeof tokenSchema>;
 type User = UserInfoOutput;
 
 /**
@@ -40,42 +32,56 @@ function isTokenExpired(token: { expires_at: number }) {
 }
 
 /**
- * Appends the access and refresh token cookies.
+ * Sets the access token cookie.
  */
-async function appendCredentialCookies(headers: Headers, credentials: Credentials) {
-  const newHeaders = new Headers(headers);
+async function setAccessTokenCookie(
+  headers: Headers,
+  payload: { access_token: string; expires_in: number }
+) {
+  const token: Token = {
+    value: payload.access_token,
+    expires_at: Math.floor(Date.now() / 1000 + payload.expires_in),
+  };
 
-  newHeaders.append(
-    "Set-Cookie",
-    await accessTokenCookie.serialize({
-      value: credentials.access_token,
-      expires_at: Math.floor(Date.now() / 1000 + credentials.expires_in),
-    } as AccessToken)
-  );
+  headers.append("Set-Cookie", await accessTokenCookie.serialize(token));
+}
 
-  newHeaders.append(
-    "Set-Cookie",
-    await refreshTokenCookie.serialize({
-      value: credentials.refresh_token ?? "",
-      expires_at: Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 30), // 30 Days
-    } as RefreshToken)
-  );
+/**
+ * Clears the access token cookie.
+ */
+async function clearAccessTokenCookie(headers: Headers) {
+  headers.append("Set-Cookie", await accessTokenCookie.serialize(""));
+}
 
-  return newHeaders;
+/**
+ * Sets the refresh token cookie.
+ */
+async function setRefreshTokenCookie(headers: Headers, payload: { refresh_token: string }) {
+  const token: Token = {
+    value: payload.refresh_token,
+    expires_at: Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 30), // 30 Days
+  };
+
+  headers.append("Set-Cookie", await refreshTokenCookie.serialize(token));
+}
+
+/**
+ * Clears the refresh token cookie.
+ */
+async function clearRefreshTokenCookie(headers: Headers) {
+  headers.append("Set-Cookie", await refreshTokenCookie.serialize(""));
 }
 
 /**
  * Clears the access and refresh token cookies as well as the session.
  */
-async function clearSessionCookies(headers: Headers) {
-  const newHeaders = new Headers(headers);
+async function clearCookies(headers: Headers) {
   const session = await getSession(headers.get("Cookie"));
 
-  newHeaders.append("Set-Cookie", await accessTokenCookie.serialize(""));
-  newHeaders.append("Set-Cookie", await refreshTokenCookie.serialize(""));
-  newHeaders.append("Set-Cookie", await destroySession(session));
+  await clearAccessTokenCookie(headers);
+  await clearRefreshTokenCookie(headers);
 
-  return newHeaders;
+  headers.append("Set-Cookie", await destroySession(session));
 }
 
 /**
@@ -87,17 +93,17 @@ async function getAccessTokenCookieValue(request: Request) {
     return null;
   }
 
-  const cookie = await accessTokenCookie.parse(cookieHeader);
-  if (!cookie) {
+  const cookieValue = await accessTokenCookie.parse(cookieHeader);
+  if (!cookieValue) {
     return null;
   }
 
-  const parsedCookie = accessTokenSchema.safeParse(cookie);
-  if (!parsedCookie.success) {
+  const token = tokenSchema.safeParse(cookieValue);
+  if (!token.success) {
     throw new Error("Error parsing the access token cookie");
   }
 
-  return parsedCookie.data;
+  return token.data;
 }
 
 /**
@@ -109,17 +115,17 @@ async function getRefreshTokenCookieValue(request: Request) {
     return null;
   }
 
-  const cookie = await refreshTokenCookie.parse(cookieHeader);
-  if (!cookie) {
+  const cookieValue = await refreshTokenCookie.parse(cookieHeader);
+  if (!cookieValue) {
     return null;
   }
 
-  const parsedCookie = refreshTokenSchema.safeParse(cookie);
-  if (!parsedCookie.success) {
+  const token = tokenSchema.safeParse(cookieValue);
+  if (!token.success) {
     throw new Error("Error parsing the refresh token cookie");
   }
 
-  return parsedCookie.data;
+  return token.data;
 }
 
 type AuthenticateCallbacks = { onUser?: (user: User, headers: Headers) => MaybePromise<void> };
@@ -131,7 +137,7 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
   const url = new URL(request.url);
   const redirectUri = `${url.origin}/auth/callback/`;
 
-  let headers = new Headers(request.headers);
+  const headers = new Headers(request.headers);
 
   const authenticationFlow = createAuthenticationFlow<User>(
     {
@@ -157,7 +163,8 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
           return;
         }
 
-        headers = await appendCredentialCookies(headers, credentials);
+        await setAccessTokenCookie(headers, credentials);
+        await setRefreshTokenCookie(headers, credentials);
       },
       checkAccessToken: async (setUser) => {
         const accessToken = await getAccessTokenCookieValue(request);
@@ -201,14 +208,15 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
           return;
         }
 
-        headers = await appendCredentialCookies(headers, refreshedCredentials);
+        await setAccessTokenCookie(headers, refreshedCredentials);
+        await clearRefreshTokenCookie(headers);
       },
     },
     null,
     {
       onError: async (error) => {
         console.log(error);
-        headers = await clearSessionCookies(headers);
+        await clearCookies(headers);
       },
     }
   );
@@ -241,11 +249,10 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
     response_type: "code",
     redirect_uri: redirectUri,
     state: request.url,
+    scope: "email openid",
   });
 
-  throw redirect(
-    `${getEnvVar("COGNITO_BASE_URL")}/login?scope=email+openid&${redirectSearchParams}`
-  );
+  throw redirect(`${getEnvVar("COGNITO_BASE_URL")}/login?${redirectSearchParams}`);
 }
 
 /**
@@ -282,12 +289,14 @@ export async function logoutUser(request: Request) {
     client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
     response_type: "code",
     redirect_uri: redirectUri,
+    scope: "email openid",
   });
 
-  throw redirect(
-    `${getEnvVar("COGNITO_BASE_URL")}/logout?scope=email+openid&${redirectSearchParams}`,
-    {
-      headers: await clearSessionCookies(request.headers),
-    }
-  );
+  const headers = new Headers();
+
+  await clearCookies(headers);
+
+  throw redirect(`${getEnvVar("COGNITO_BASE_URL")}/logout?${redirectSearchParams}`, {
+    headers,
+  });
 }

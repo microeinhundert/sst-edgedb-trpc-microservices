@@ -7,7 +7,6 @@ export const refreshCredentialsInputSchema = z.object({
 
 export const refreshCredentialsOutputSchema = z.object({
   access_token: z.string().min(1),
-  refresh_token: z.string().optional(),
   id_token: z.string().min(1),
   expires_in: z.number(),
 });

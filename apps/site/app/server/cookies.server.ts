@@ -5,7 +5,7 @@ import { isProduction } from "~/utils/env";
 
 export const sessionCookie = createCookie("session", {
   domain: isProduction ? getEnvVar("DOMAIN_NAME") : undefined,
-  maxAge: 1000 * 60 * 60 * 24 * 30, // 30 Days
+  maxAge: 1000 * 60 * 60 * 24 * 60, // 60 Days
   secure: isProduction,
   sameSite: isProduction ? "strict" : "lax",
   secrets: [getEnvVar("SESSION_SECRET")],
@@ -14,7 +14,7 @@ export const sessionCookie = createCookie("session", {
 
 export const accessTokenCookie = createCookie("access_token", {
   domain: isProduction ? getEnvVar("DOMAIN_NAME") : undefined,
-  maxAge: 1000 * 60 * 60 * 24 * 30, // 30 Days
+  maxAge: 1000 * 60 * 60 * 24 * 60, // 60 Days
   secure: isProduction,
   sameSite: isProduction ? "strict" : "lax",
   secrets: [getEnvVar("SESSION_SECRET")],
@@ -23,7 +23,7 @@ export const accessTokenCookie = createCookie("access_token", {
 
 export const refreshTokenCookie = createCookie("refresh_token", {
   domain: isProduction ? getEnvVar("DOMAIN_NAME") : undefined,
-  maxAge: 1000 * 60 * 60 * 24 * 30, // 30 Days
+  maxAge: 1000 * 60 * 60 * 24 * 60, // 60 Days
   secure: isProduction,
   sameSite: isProduction ? "strict" : "lax",
   secrets: [getEnvVar("SESSION_SECRET")],

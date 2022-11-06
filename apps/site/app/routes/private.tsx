@@ -1,4 +1,5 @@
-import { DataFunctionArgs, json } from "@remix-run/node";
+import type { DataFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
 import { ensureUserAuthenticated } from "~/server/auth.server";
