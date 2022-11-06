@@ -6,6 +6,7 @@ import type { SiteRouter } from "../routers/site";
  */
 export function createSiteGatewayLink(baseUrl: string) {
   return createGatewayLink<SiteRouter>({
+    auth: `${baseUrl}auth`,
     demo: `${baseUrl}demo`,
   });
 }

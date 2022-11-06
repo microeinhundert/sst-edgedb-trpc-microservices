@@ -1,103 +1,46 @@
 import { redirect } from "@remix-run/node";
+import { IssueCredentialsOutput, UserInfoOutput } from "@sst-app/auth/validators";
+import { createAuthenticationFlow } from "@sst-app/auth-utils";
+import type { MaybePromise } from "@sst-app/types";
 import { z } from "zod";
 
 import { accessTokenCookie, refreshTokenCookie } from "~/server/cookies.server";
 import { getEnvVar } from "~/server/env.server";
+import { trpcClient } from "~/utils/trpc";
 
 import { commitSession, destroySession, getSession } from "./session.server";
 
 /**
- * Schema
+ * Schemas
  */
-const credentialsSchema = z.object({
-  access_token: z.string().min(1),
-  refresh_token: z.string().optional(),
-  id_token: z.string().min(1),
-  expires_in: z.number(),
-});
 const accessTokenSchema = z.object({
   value: z.string().min(1),
   expires_at: z.number(),
 });
+
 const refreshTokenSchema = z.object({
   value: z.string().min(1),
   expires_at: z.number(),
-});
-const userSchema = z.object({
-  sub: z.string().min(1),
-  email: z.string().email(),
-  username: z.string().min(1),
 });
 
 /**
  * Types
  */
-type Credentials = z.infer<typeof credentialsSchema>;
 type AccessToken = z.infer<typeof accessTokenSchema>;
 type RefreshToken = z.infer<typeof refreshTokenSchema>;
-type User = z.infer<typeof userSchema>;
-type MaybePromise<T> = Promise<T> | T;
-type ContextSetter<TInitialContextValue, TContextValue> = (
-  newContext: TInitialContextValue | TContextValue
-) => TInitialContextValue | TContextValue;
+
+type Credentials = IssueCredentialsOutput;
+type User = UserInfoOutput;
 
 /**
  * Checks if a token has expired.
- *
- * @param {{ expires_at: number }} token
- * @return {boolean}
  */
 function isTokenExpired(token: { expires_at: number }) {
   return token.expires_at <= Date.now() / 1000;
 }
 
 /**
- * Creates a authentication flow sequence.
- *
- * @template TContextValue
- * @template TInitialContextValue
- * @param {(Record<string, (setter: ContextSetter<TInitialContextValue, TContextValue>) => MaybePromise<void>)} stages
- * @param {TInitialContextValue} initialContext
- * @return {(AsyncGenerator<TInitialContextValue | TContextValue, void, void>)}
- */
-async function* createAuthenticationFlow<TContextValue, TInitialContextValue = null>(
-  stages: Record<
-    string,
-    (setter: ContextSetter<TInitialContextValue, TContextValue>) => MaybePromise<void>
-  >,
-  initialContext: TInitialContextValue
-): AsyncGenerator<TInitialContextValue | TContextValue, void, void> {
-  let context: TInitialContextValue | TContextValue = initialContext;
-
-  const contextSetter: ContextSetter<TInitialContextValue, TContextValue> = (newContext) => {
-    return (context = newContext);
-  };
-
-  for (const [stageIdentifier, stage] of Object.entries(stages)) {
-    console.log(`Authentication flow at stage "${stageIdentifier}"`);
-
-    try {
-      await stage.apply({ set: contextSetter }, [contextSetter]);
-      yield context;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(
-          `An error occurred in the authentication flow at stage "${stageIdentifier}": ${error.message}`
-        );
-      }
-      throw new Error(
-        `An unknown error occurred in the authentication flow at stage "${stageIdentifier}"`
-      );
-    }
-  }
-}
-
-/**
  * Appends the access and refresh token cookies.
- *
- * @param {Headers} headers
- * @param {Credentials} credentials
- * @return {Promise<Headers>}
  */
 async function appendCredentialCookies(headers: Headers, credentials: Credentials) {
   const newHeaders = new Headers(headers);
@@ -123,9 +66,6 @@ async function appendCredentialCookies(headers: Headers, credentials: Credential
 
 /**
  * Clears the access and refresh token cookies as well as the session.
- *
- * @param {Headers} headers
- * @return {Promise<Headers>}
  */
 async function clearSessionCookies(headers: Headers) {
   const newHeaders = new Headers(headers);
@@ -140,9 +80,6 @@ async function clearSessionCookies(headers: Headers) {
 
 /**
  * Gets the access token cookie value.
- *
- * @param {Request} request
- * @return {Promise<AccessToken | null>}
  */
 async function getAccessTokenCookieValue(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
@@ -165,9 +102,6 @@ async function getAccessTokenCookieValue(request: Request) {
 
 /**
  * Gets the refresh token cookie value.
- *
- * @param {Request} request
- * @return {Promise<RefreshToken | null>}
  */
 async function getRefreshTokenCookieValue(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
@@ -188,113 +122,10 @@ async function getRefreshTokenCookieValue(request: Request) {
   return parsedCookie.data;
 }
 
-/**
- * Gets the credentials.
- *
- * @param {string} code
- * @param {string} redirectUri
- * @return {Promise<Credentials | null>}
- */
-async function getCredentials(code: string, redirectUri: string) {
-  const response = await fetch(`${getEnvVar("COGNITO_BASE_URL")}/oauth2/token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      grant_type: "authorization_code",
-      client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
-      redirect_uri: redirectUri,
-      code,
-    }),
-  });
-
-  if (response.status !== 200) {
-    return null;
-  }
-
-  const parsedResponse = credentialsSchema.safeParse(await response.json());
-  if (!parsedResponse.success) {
-    throw new Error(
-      "The response returned by Cognito does not match the schema expected by `getCredentials`"
-    );
-  }
-
-  return parsedResponse.data;
-}
-
-/**
- * Exchanges the old credentials for new ones.
- *
- * @param {string} refreshToken
- * @param {string} redirectUri
- * @return {Promise<Credentials | null>}
- */
-async function refreshCredentials(refreshToken: string, redirectUri: string) {
-  const response = await fetch(`${getEnvVar("COGNITO_BASE_URL")}/oauth2/token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      client_id: getEnvVar("COGNITO_USER_POOL_CLIENT_ID"),
-      redirect_uri: redirectUri,
-      refresh_token: refreshToken,
-    }),
-  });
-
-  if (response.status !== 200) {
-    return null;
-  }
-
-  const parsedResponse = credentialsSchema.safeParse(await response.json());
-  if (!parsedResponse.success) {
-    throw new Error(
-      "The response returned by Cognito does not match the schema expected by `refreshCredentials`"
-    );
-  }
-
-  return parsedResponse.data;
-}
-
-/**
- * Gets the user info.
- * If this call succeeds, the user is authenticated.
- *
- * @param {string} accessToken
- * @return {Promise<User | null>}
- */
-async function getUserInfo(accessToken: string) {
-  const response = await fetch(`${getEnvVar("COGNITO_BASE_URL")}/oauth2/userInfo`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (response.status !== 200) {
-    return null;
-  }
-
-  const parsedResponse = userSchema.safeParse(await response.json());
-  if (!parsedResponse.success) {
-    throw new Error(
-      "The response returned by Cognito does not match the schema expected by `getUserInfo`"
-    );
-  }
-
-  return parsedResponse.data;
-}
-
 type AuthenticateCallbacks = { onUser?: (user: User, headers: Headers) => MaybePromise<void> };
 
 /**
  * Authenticates the user.
- *
- * @param {Request} request
- * @param {AuthenticateCallbacks} [callbacks]
- * @return {Promise<User>}
  */
 export async function authenticateUser(request: Request, callbacks?: AuthenticateCallbacks) {
   const url = new URL(request.url);
@@ -312,12 +143,16 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
           return;
         }
 
-        const credentials = await getCredentials(code, redirectUri);
-        if (!credentials) {
-          return;
-        }
+        const credentials = await trpcClient.auth.credentials.issue.mutate({
+          code,
+          redirectUri,
+        });
 
-        const user = setUser(await getUserInfo(credentials.access_token));
+        const user = setUser(
+          await trpcClient.auth.userInfo.query({
+            accessToken: credentials.access_token,
+          })
+        );
         if (!user) {
           return;
         }
@@ -335,7 +170,11 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
           return;
         }
 
-        setUser(await getUserInfo(accessToken.value));
+        setUser(
+          await trpcClient.auth.userInfo.query({
+            accessToken: accessToken.value,
+          })
+        );
       },
       refreshCredentials: async (setUser) => {
         const refreshToken = await getRefreshTokenCookieValue(request);
@@ -348,12 +187,16 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
           return;
         }
 
-        const refreshedCredentials = await refreshCredentials(refreshToken.value, redirectUri);
-        if (!refreshedCredentials) {
-          return;
-        }
+        const refreshedCredentials = await trpcClient.auth.credentials.refresh.mutate({
+          refreshToken: refreshToken.value,
+          redirectUri,
+        });
 
-        const user = setUser(await getUserInfo(refreshedCredentials.access_token));
+        const user = setUser(
+          await trpcClient.auth.userInfo.query({
+            accessToken: refreshedCredentials.access_token,
+          })
+        );
         if (!user) {
           return;
         }
@@ -361,7 +204,13 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
         headers = await appendCredentialCookies(headers, refreshedCredentials);
       },
     },
-    null
+    null,
+    {
+      onError: async (error) => {
+        console.log(error);
+        headers = await clearSessionCookies(headers);
+      },
+    }
   );
 
   let user: User | null = null;
@@ -401,10 +250,6 @@ export async function authenticateUser(request: Request, callbacks?: Authenticat
 
 /**
  * Ensures the user is authenticated.
- *
- * @export
- * @param {Request} request
- * @return {Promise<User | null>}
  */
 export async function ensureUserAuthenticated(request: Request) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -428,9 +273,6 @@ export async function ensureUserAuthenticated(request: Request) {
 
 /**
  * Logs the user out.
- *
- * @param {Request} request
- * @return {Promise<void>}
  */
 export async function logoutUser(request: Request) {
   const url = new URL(request.url);

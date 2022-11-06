@@ -1,0 +1,55 @@
+{
+  "name": "@sst-app/auth",
+  "version": "0.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
+    "directory": "services/auth"
+  },
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "default": "./index.ts",
+      "types": "./index.ts"
+    },
+    "./handlers": {
+      "default": "./handlers.ts",
+      "types": "./handlers.ts"
+    },
+    "./validators": {
+      "default": "./validators.ts",
+      "types": "./validators.ts"
+    }
+  },
+  "scripts": {
+    "lint": "TIMING=1 eslint . --ext=.ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@sst-app/eslint-config-custom"
+    ],
+    "root": true
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint -- --fix"
+    ]
+  },
+  "dependencies": {
+    "@serverless-stack/node": "^1.17.1",
+    "@sst-app/common": "*",
+    "@sst-app/edgedb": "*",
+    "@sst-app/trpc": "*",
+    "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "@sst-app/eslint-config-custom": "*",
+    "@sst-app/tsconfig": "*",
+    "@types/aws-lambda": "^8.10.108",
+    "@types/node": "^16"
+  }
+}

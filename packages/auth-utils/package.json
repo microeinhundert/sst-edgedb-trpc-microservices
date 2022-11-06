@@ -1,11 +1,11 @@
 {
-  "name": "@sst-app/trpc-gateway",
+  "name": "@sst-app/auth-utils",
   "version": "0.0.0",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/microeinhundert/sst-edgedb-trpc-microservices.git",
-    "directory": "packages/trpc-gateway"
+    "directory": "packages/auth-utils"
   },
   "sideEffects": false,
   "type": "module",
@@ -33,14 +33,13 @@
     "root": true
   },
   "dependencies": {
-    "@sst-app/demo": "*",
-    "@sst-app/auth": "*",
-    "@sst-app/trpc": "*",
-    "@trpc/client": "10.0.0-rc.3",
-    "@trpc/server": "10.0.0-rc.3"
+    "@aws-sdk/client-secrets-manager": "^3.202.0",
+    "@serverless-stack/node": "^1.17.1"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
-    "@sst-app/tsconfig": "*"
+    "@sst-app/tsconfig": "*",
+    "@sst-app/types": "*",
+    "@types/node": "^16"
   }
 }

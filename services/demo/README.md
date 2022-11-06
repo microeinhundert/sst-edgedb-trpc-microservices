@@ -1,3 +1,3 @@
 # Demo Service
 
-A service for demonstration purposes.
+Service for demonstration purposes.

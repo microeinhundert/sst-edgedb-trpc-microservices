@@ -1,5 +1,4 @@
-import type { ApiRouteProps, Duration } from "@serverless-stack/resources";
-import type { IFunction } from "aws-cdk-lib/aws-lambda";
+import type { ApiRouteProps, Duration, FunctionDefinition } from "@serverless-stack/resources";
 
 import { env } from "../env";
 
@@ -36,7 +35,7 @@ export function getCorsConfig(isDevStage?: boolean) {
 
 export function generateServiceRoutes(
   serviceName: string,
-  serviceFunction: IFunction,
+  serviceFunction: FunctionDefinition,
   options?: { public?: boolean }
 ) {
   type Routes = Record<string, ApiRouteProps<"jwt">>;
