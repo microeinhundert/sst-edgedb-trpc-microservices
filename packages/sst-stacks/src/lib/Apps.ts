@@ -1,5 +1,5 @@
 import type { Stack, StackContext } from "@serverless-stack/resources";
-import { RemixSite, use, ViteStaticSite } from "@serverless-stack/resources";
+import { RemixSite, StaticSite, use } from "@serverless-stack/resources";
 
 import { ApiStack } from "./Api";
 import { AuthStack } from "./Auth";
@@ -35,9 +35,14 @@ export function AppsStack({ stack }: StackContext) {
    * Portal
    */
 
-  const portal = new ViteStaticSite(stack, "Portal", {
+  const portal = new StaticSite(stack, "Portal", {
     path: "apps/portal",
+    buildCommand: "npm run build",
+    buildOutput: "dist",
     environment: getSiteEnvironment({ domainName: env.PORTAL_DOMAIN_NAME, prefix: "VITE" }, stack),
+    vite: {
+      types: "sst-env.d.ts",
+    },
     customDomain: {
       domainName: env.PORTAL_DOMAIN_NAME,
       hostedZone: env.ROUTE53_ZONE_NAME,

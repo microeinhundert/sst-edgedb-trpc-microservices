@@ -1,4 +1,5 @@
 {
   "upgrade": true,
+  "deep": true,
   "reject": ["@serverless-stack/*", "aws-cdk-lib", "@types/node"]
 }
