@@ -20,7 +20,7 @@ export default function Route() {
 
   return (
     <div className="p-10">
-      <h1>Welcome, {data.user.email}</h1>
+      <h1>Welcome, {data.user?.email}</h1>
       <p>{data.helloWorld.message}</p>
       <Link className="font-bold underline" to="/auth/logout">
         Log Out
