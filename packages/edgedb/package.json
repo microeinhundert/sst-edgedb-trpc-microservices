@@ -40,12 +40,12 @@
     "root": true
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.18.0",
+    "@serverless-stack/node": "^1.18.2",
     "@sst-app/lambda-utils": "*",
-    "edgedb": "^1.0.1"
+    "edgedb": "^1.0.2"
   },
   "devDependencies": {
-    "@edgedb/generate": "^0.0.5",
+    "@edgedb/generate": "^0.0.6",
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
     "@types/node": "^16"
