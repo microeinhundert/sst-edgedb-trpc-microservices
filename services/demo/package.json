@@ -40,16 +40,16 @@
     ]
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.18.2",
+    "@serverless-stack/node": "^1.18.4",
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@sst-app/trpc": "*",
-    "zod": "^3.19.1"
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
     "@sst-app/tsconfig": "*",
-    "@types/aws-lambda": "^8.10.108",
+    "@types/aws-lambda": "^8.10.109",
     "@types/node": "^16"
   }
 }

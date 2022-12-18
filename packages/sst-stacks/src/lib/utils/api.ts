@@ -13,12 +13,9 @@ interface CorsConfig {
 }
 
 export function getCorsConfig(isDevStage?: boolean) {
-  let allowOrigins = [env.PORTAL_DOMAIN_NAME, env.SITE_DOMAIN_NAME].map(
-    (domainName) => `https://${domainName}`
-  );
+  let allowOrigins = [env.SITE_DOMAIN_NAME].map((domainName) => `https://${domainName}`);
 
   if (isDevStage) {
-    // 3001 = Portal App
     // 3000 = Site App
     const allowDevOrigins = [3001, 3000].map((port) => `http://127.0.0.1:${port}`);
     allowOrigins = [...allowOrigins, allowDevOrigins].flat();
