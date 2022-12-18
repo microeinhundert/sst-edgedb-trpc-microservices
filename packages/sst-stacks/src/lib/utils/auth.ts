@@ -7,7 +7,7 @@ export function getAuthCallbackUrls(isDevStage?: boolean) {
 
   if (isDevStage) {
     // 3000 = Site App
-    const devCallbackUrls = [3001, 3000].map((port) => `http://localhost:${port}/auth/callback/`);
+    const devCallbackUrls = [3000].map((port) => `http://localhost:${port}/auth/callback/`);
     callbackUrls = [...callbackUrls, devCallbackUrls].flat();
   }
 
@@ -19,7 +19,7 @@ export function getAuthLogoutUrls(isDevStage?: boolean) {
 
   if (isDevStage) {
     // 3000 = Site App
-    const devLogoutUrls = [3001, 3000].map((port) => `http://localhost:${port}/auth/logout/`);
+    const devLogoutUrls = [3000].map((port) => `http://localhost:${port}/auth/logout/`);
     logoutUrls = [...logoutUrls, devLogoutUrls].flat();
   }
 
