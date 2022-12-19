@@ -38,7 +38,7 @@
     "@sst-app/common": "*",
     "@sst-app/edgedb": "*",
     "@trpc/server": "10.5.0",
-    "superjson": "^1.12.0"
+    "superjson": "^1.12.1"
   },
   "devDependencies": {
     "@sst-app/eslint-config-custom": "*",
